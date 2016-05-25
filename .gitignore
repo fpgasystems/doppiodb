@@ -1,6 +1,6 @@
 #this makefiles are all generated from Makefile.am
 Makefile
-Makefile.ag
+Makefile.am
 Makefile.in
 Makefile.msc
 
