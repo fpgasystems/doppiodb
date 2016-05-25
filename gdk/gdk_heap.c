@@ -47,6 +47,7 @@
 #include "monetdb_config.h"
 #include "gdk.h"
 #include "gdk_private.h"
+#include "fpga.h"
 
 static void *
 HEAPcreatefile(int farmid, size_t *maxsz, const char *fn)
@@ -102,7 +103,11 @@ HEAPalloc(Heap *h, size_t nitems, size_t itemsize)
 
 	if (h->filename == NULL || h->size < GDK_mmap_minsize) {
 		h->storage = STORE_MEM;
-		h->base = (char *) GDKmallocmax(h->size, &h->size, 0);
+      //TODO replace with call to fpga
+      h->base = (char *) FPGAmallocmax(h->size, &h->size, 0);
+      printf("HEAPalloc, base: %p\n", h->base);
+      fflush(stdout);
+		//h->base = (char *) GDKmallocmax(h->size, &h->size, 0);
 		HEAPDEBUG fprintf(stderr, "#HEAPalloc " SZFMT " " PTRFMT "\n", h->size, PTRFMTCAST h->base);
 	}
 	if (h->filename && h->base == NULL) {
@@ -217,7 +222,9 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 		if (!must_mmap) {
 			void *p = h->base;
 			h->newstorage = h->storage = STORE_MEM;
-			h->base = GDKreallocmax(h->base, size, &h->size, 0);
+         //TODO replace with call to fpga
+         h->base = FPGAreallocmax(h->base, size, &h->size, 0);
+			//h->base = GDKreallocmax(h->base, size, &h->size, 0);
 			HEAPDEBUG fprintf(stderr, "#HEAPextend: extending malloced heap " SZFMT " " SZFMT " " PTRFMT " " PTRFMT "\n", size, h->size, PTRFMTCAST p, PTRFMTCAST h->base);
 			if (h->base)
 				return GDK_SUCCEED; /* success */
@@ -225,6 +232,8 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 		}
 		/* too big: convert it to a disk-based temporary heap */
 		if (h->filename != NULL) {
+         printf("#HEAPextend: extending to disk-based heap");
+         fflush(stdout);
 			int fd;
 			int existing = 0;
 
@@ -318,7 +327,9 @@ HEAPshrink(Heap *h, size_t size)
 	assert(size >= h->free);
 	assert(size <= h->size);
 	if (h->storage == STORE_MEM) {
-		p = GDKreallocmax(h->base, size, &size, 0);
+      //TODO replace with call to fpga
+      p = FPGAreallocmax(h->base, size, &size, 0);
+		//p = GDKreallocmax(h->base, size, &size, 0);
 		HEAPDEBUG fprintf(stderr, "#HEAPshrink: shrinking malloced "
 				  "heap " SZFMT " " SZFMT " " PTRFMT " "
 				  PTRFMT "\n", h->size, size,
@@ -561,7 +572,9 @@ HEAPfree(Heap *h, int remove)
 			HEAPDEBUG fprintf(stderr, "#HEAPfree " SZFMT
 					  " " PTRFMT "\n",
 					  h->size, PTRFMTCAST h->base);
-			GDKfree(h->base);
+         //TODO replace with call to fpga
+         FPGAfree(h->base);
+			//GDKfree(h->base);
 		} else {	/* mapped file, or STORE_PRIV */
 			gdk_return ret = GDKmunmap(h->base, h->size);
 

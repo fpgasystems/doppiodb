@@ -32,6 +32,7 @@
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h>
 #endif
+#include "fpga.h"
 
 /* GDKfilepath returns a newly allocated string containing the path
  * name of a database farm.
@@ -469,7 +470,9 @@ GDKload(int farmid, const char *nme, const char *ext, size_t size, size_t *maxsi
 		int fd = GDKfdlocate(farmid, nme, "rb", ext);
 
 		if (fd >= 0) {
-			char *dst = ret = GDKmalloc(*maxsize);
+         // Call FPGAmalloc instead
+         char *dst = ret = FPGAmalloc(*maxsize);
+			//char *dst = ret = GDKmalloc(*maxsize);
 			ssize_t n_expected, n = 0;
 
 			if (ret) {
@@ -532,6 +535,8 @@ GDKload(int farmid, const char *nme, const char *ext, size_t size, size_t *maxsi
 		}
 		GDKfree(path);
 	}
+   printf("GDKload done");
+   fflush(stdout);
 	return ret;
 }
 
@@ -554,6 +559,8 @@ GDKload(int farmid, const char *nme, const char *ext, size_t size, size_t *maxsi
 static BATstore *
 DESCload(int i)
 {
+printf("DESCload\n");
+fflush(stdout);
 	str s, nme = BBP_physical(i);
 	BATstore *bs;
 	BAT *b = NULL;
@@ -573,6 +580,8 @@ DESCload(int i)
 	if ((ht < 0 && (ht = ATOMindex(s = ATOMunknown_name(ht))) < 0) ||
 	    (tt < 0 && (tt = ATOMindex(s = ATOMunknown_name(tt))) < 0)) {
 		GDKerror("DESCload: atom '%s' unknown, in BAT '%s'.\n", s, nme);
+      printf("DESCload FAIL\n");
+      fflush(stdout);
 		return NULL;
 	}
 	b->htype = ht;
@@ -587,6 +596,9 @@ DESCload(int i)
 	b->batPersistence = (BBP_status(b->batCacheid) & BBPPERSISTENT) ? PERSISTENT : TRANSIENT;
 	b->batCopiedtodisk = 1;
 	DESCclean(b);
+
+   printf("DESCload SUCCESS\n");
+   fflush(stdout);
 	return bs;
 }
 
@@ -722,6 +734,8 @@ BATmsync(BAT *b)
 gdk_return
 BATsave(BAT *bd)
 {
+printf("BATsave\n");
+fflush(stdout);
 	gdk_return err = GDK_SUCCEED;
 	char *nme;
 	BATstore bs;
