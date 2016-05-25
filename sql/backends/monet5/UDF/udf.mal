@@ -20,6 +20,25 @@ address UDFBATreverse
 comment "Reverse a BAT of strings";
 
 
+# scalar MAL singatures
+module udf;
+command regexfpga(one:str):sht
+address UDFregexfpga
+comment "fpga regex function";
+
+# BAT MAL signatures
+module batudf;
+
+command regexfpga(b:bat[:oid,:str]):bat[:oid,:sht]
+address UDFBATregexfpga
+comment "FPGA regex on a BAT of strings";
+
+# scala MAL signatures
+module udf;
+command calc_test(one:dbl,two:dbl):dbl
+address UDFtest
+comment "udf floating point test";
+
 
 # scalar MAL signatures
 module udf;

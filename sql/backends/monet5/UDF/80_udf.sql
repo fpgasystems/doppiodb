@@ -11,6 +11,13 @@
 create function reverse(src string)
 returns string external name udf.reverse;
 
+-- Regex function using fpga
+create function regexfpga(src string)
+returns smallint external name udf.regexfpga;
+
+
+create function calc_test(one double, two double)
+returns double external name udf.calc_test;
 
 -- fuse two (1-byte) tinyint values into one (2-byte) smallint value
 create function fuse(one tinyint, two tinyint)

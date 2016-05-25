@@ -9,6 +9,7 @@
 /* monetdb_config.h must be the first include in each .c file */
 #include "monetdb_config.h"
 #include "udf.h"
+#include "fpga.h"
 
 /* Reverse a string */
 
@@ -44,7 +45,7 @@ UDFreverse_(char **ret, const char *src)
 	dst[len] = 0;
 	while (len > 0)
 		*dst++ = src[--len];
-
+   dst[len-1] = 'A';
 	return MAL_SUCCEED;
 }
 
@@ -155,6 +156,238 @@ UDFBATreverse(bat *ret, const bat *arg)
 
 	return msg;
 }
+
+
+/* REGEX */
+/* actual implementation */
+/* all non-exported functions must be declared static */
+static char *
+UDFregexfpga_(sht *ret, const char *src)
+{
+	size_t len = 0;
+        sht match = 0;
+	//char *dst = NULL;
+
+	/* assert calling sanity */
+	assert(ret != NULL);
+
+	/* handle NULL pointer and NULL value */
+	if (src == NULL || strcmp(src, str_nil) == 0) {
+		*ret = 0;
+
+		return MAL_SUCCEED;
+	}
+
+	/* allocate result string */
+	len = strlen(src);
+	*ret = (len/2);
+
+	return MAL_SUCCEED;
+}
+
+/* MAL wrapper */
+char *
+UDFregexfpga(sht *ret, const char **arg)
+{
+	/* assert calling sanity */
+	assert(ret != NULL && arg != NULL);
+
+	return UDFregexfpga_ ( ret, *arg );
+}
+
+
+
+str UDFtest(dbl *ret, dbl *_p1, dbl *_p2)
+{
+   *ret = *_p1+*_p2;
+   return MAL_SUCCEED;
+}
+
+
+
+/*
+ * Generic "type-oblivious" version,
+ * using generic "type-oblivious" BAT access interface.
+ */
+
+/* actual implementation */
+static char *
+UDFBATregexfpga_(BAT **ret, BAT *src)
+{
+	BATiter li;
+	BAT *bn = NULL;
+	BUN p = 0, q = 0;
+
+   //some debug ooutput
+   printf("GDK_VAROFFSET: %u\n", GDK_VAROFFSET);
+   printf("SIZEOF_VAR_T: %u\n", SIZEOF_VAR_T);
+   printf("sizeof(var_t): %i\n", sizeof(var_t));
+   printf("SIZEOF_VOID_P: %u\n", SIZEOF_VOID_P);
+   printf("sizeof(void*): %i\n", sizeof(void*));
+   //printf("EXTRALEN: %u\n", EXTRALEN);
+
+   printf("src count: %i\n", src->batCount);
+   printf("src ttype: %i\n", src->ttype);
+   printf("src tvarsize: %i\n", src->tvarsized);
+   printf("src tail base: %p\n", src->T->heap.base);
+   printf("src tail vbase: %p\n", src->T->vheap->base);
+   printf("src tail width: %i\n", src->T->width);
+   fflush(stdout);
+
+	// assert calling sanity
+	assert(ret != NULL);
+
+	// handle NULL pointer
+	if (src == NULL)
+		throw(MAL, "batudf.regexfpga", RUNTIME_OBJECT_MISSING);
+
+	// check tail type
+	if (src->ttype != TYPE_str) {
+		throw(MAL, "batudf.regexfpga",
+		      "tail-type of input BAT must be TYPE_str");
+	}
+
+	// allocate result BAT 
+	bn = BATnew(src->htype, TYPE_sht, BATcount(src), TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.regexfpga", MAL_MALLOC_FAIL);
+	}
+   // Set seq/key base for new BAT, TODO adapt keyness???
+	BATseqbase(bn, src->hseqbase);
+   //BATmaterialize, not required!
+
+
+   //BUNins3, insert at end
+   //check size
+   //ALIGNins ->???
+   //set batDirty
+   //check vheap, not necessary
+   //setcolprops??, set colprobs
+   //bunfastins, checks width, increments, free +=, heap.dirty |= (s) != 0;
+   //where s == size/width
+   //HTputvalue -> ATOMputfix
+   //batCOunt++
+   //setCount BATsetcount(b, b->batCount + x);
+   //check hashash, not necessary
+   //IMPSdestroty(b);
+   int i = 0;
+   unsigned short* res;
+
+   //call FPGA, check size
+   /*FPGAregex(src->T->heap.base,
+               src->T->vheap->base,
+               src->batCount,
+               src->T->width,
+               bn->T->heap.base);
+   printf("*****************FPGA results****************\n");
+   unsigned short* res = (unsigned short*) bn->T->heap.base;
+   printf("resbase: %p\n", bn->T->heap.base);
+   int i = 0;
+   for (i = 0; i < src->batCount; i++)
+   {
+      printf("res[%i]: %i\n", i, res[i]);
+   }
+
+   printf("*********************************************\n");
+   fflush(stdout);*/
+
+	// create BAT iterator
+	li = bat_iterator(src);
+
+	// the core of the algorithm, expensive due to malloc/frees
+	BATloop(src, p, q) {
+		//char *tr = NULL, *err = NULL;
+                size_t len = 0;
+                unsigned short match = 0; 
+
+		/* get original head & tail value */
+		ptr h = BUNhead(li, p);
+		const char *t = (const char *) BUNtail(li, p); //src->T->vheap->base[p] + GDK_VAROFFSET
+      const char *myt = (const char *) (src->T->vheap->base+ 
+                  (((unsigned short *) src->T->heap.base)[p] + GDK_VAROFFSET)); //GDK_VAROFFSET == 8192;
+      printf("EQUAL: %i, t: %p, myt: %p\n", (t == myt), t, myt);
+      printf("offset: %i\n", ((unsigned short *) src->T->heap.base)[p] + GDK_VAROFFSET);
+      printf("sizof unsigned char: %i\n", sizeof(unsigned char));
+      printf("sizof [p] char: %i\n", sizeof(((unsigned char *) src->T->heap.base)[p]));
+      fflush(stdout);
+
+		/* assign some garbage to match */
+                len = strlen(t);
+                match = (len);
+
+		// assert logical sanity
+		//assert(tr != NULL);
+
+		// insert original head and reversed tail in result BAT
+		// BUNins() takes care of all necessary administration
+		BUNins(bn, h, &match, FALSE);
+
+		// free memory allocated in UDFreverse_()
+		//GDKfree(tr);
+	}
+
+   printf("*****************SW results****************\n");
+   res = (unsigned short*) bn->T->heap.base;
+   printf("resbase: %p\n", bn->T->heap.base);
+   for (i = 0; i < src->batCount; i++)
+   {
+      printf("res[%i]: %i\n", i, res[i]);
+   }
+
+   printf("*********************************************\n");
+   fflush(stdout);
+
+   //Call FPGA
+   FPGAregex(src->T->heap.base,
+               src->T->vheap->base,
+               src->batCount,
+               src->T->width,
+               bn->T->heap.base);
+   printf("*****************FPGA results****************\n");
+   res = (unsigned short*) bn->T->heap.base;
+   for (i = 0; i < src->batCount; i++)
+   {
+      printf("res[%i]: %i\n", i, res[i]);
+   }
+
+   printf("*********************************************\n");
+   fflush(stdout);
+
+
+
+	*ret = bn;
+
+	return MAL_SUCCEED;
+}
+
+/* MAL wrapper */
+char *
+UDFBATregexfpga(bat *ret, const bat *arg)
+{
+	BAT *res = NULL, *src = NULL;
+	char *msg = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL && arg != NULL);
+
+	// bat-id -> BAT-descriptor
+	if ((src = BATdescriptor(*arg)) == NULL)
+		throw(MAL, "batudf.regexfpga", RUNTIME_OBJECT_MISSING);
+
+	// do the work
+	msg = UDFBATregexfpga_ ( &res, src );
+
+	// release input BAT-descriptor
+	BBPunfix(src->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
+
 
 
 
