@@ -1,0 +1,69 @@
+RELEASE NOTES
+MonetDB JDBC driver version 2.19 (Liberica/MCL-1.13)
+Fabian Groffen <fabian@monetdb.org>
+
+Release date: 2016-01-05
+
+
+This JDBC driver is designed for use with MonetDB, a main-memory
+database.  For more information see http://www.monetdb.org/.
+
+Within the current implementation not all functionalities of the JDBC
+interface are available.  It is believed, however, that this
+implementation is rich enough to be suitable for a majority of
+application settings.
+Note that this driver is JDBC4 compatible, and hence cannot be compiled
+with Java 1.5 and earlier.
+
+Below a list of supported features can be found.  Please read this list
+if you intend to use this driver.  If you feel some features are
+missing, please let us know at our bugtracker:
+  http://bugs.monetdb.org/
+Feel free to file bugs there as well.
+
+
+Currently implemented:
+  * java.sql.Driver interface
+  * javax.sql.DataSource interface (not tested)
+  * java.sql.Connection interface
+    The next features are not implemented:
+    - createStatement with result set holdability
+    - nativeSQL (there is no query parsing for JDBC escapes yet)
+    - prepareCall (CallableStatement not supported)
+    - prepareStatement with column indices or names
+    - setCatalog (there is no catalog management yet)
+    - setHoldability (close/hold cursors over commit is not
+      configurable)
+    - isReadOnly/setReadOnly (updateable result sets are not supported at
+      all)
+
+    NOTE: be sure to check for warnings after setting concurrencies or
+          isolation levels; MonetDB currently does not support anything
+          else but "fully serializable" transactions.
+  * java.sql.Statement interface
+    The next features are not implemented:
+    - cancel/getQueryTimeout/setQueryTimeout (query execution cannot be
+      terminated, once started)
+    - execute with column indices or names
+    - executeUpdate with column indices or names
+    - getMaxFieldSize/setMaxFieldSize
+    - setCursorName
+    - setEscapeProcessing
+  * java.sql.PreparedStatement interface
+    The next features are not implemented:
+    - setArray
+    - setAsciiStream, setBinaryStream, setUnicodeStream
+    - setBlob
+    - setRef, setURI
+  * java.sql.ResultSet interface
+    The next features are not implemented:
+    - getArray
+    - getAsciiStream, getBinaryStream, getUnicodeStream
+    - getRef, getURL
+    - all methods related to updateable result sets
+  * java.sql.ResultSetMetaData interface
+  * java.sql.DatabaseMetaData interface
+  * java.sql.SavePoint interface
+
+- Auto-commit behaviour is defined by the server which handles the
+  auto-commit.  This is in general in line with the JDBC standard.
