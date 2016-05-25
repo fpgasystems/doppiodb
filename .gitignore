@@ -1,6 +1,33 @@
-
+#this makefiles are all generated from Makefile.am
 Makefile
 Makefile.ag
 Makefile.in
 Makefile.msc
 
+#executables
+Mdiff
+MkillUsers
+Mlog
+Mtimeout
+libtool
+mserver5*
+monetdb
+monetdbd*
+
+
+
+#some dirs
+examples/
+mapiclient/
+build/
+*.gem
+home/
+java/
+*.jar
+*.java
+*.cache
+*.lst
+*.status
+*.py
+rpm.mk
+stamp-h1
