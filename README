@@ -3,15 +3,25 @@ General Information
 This clone is based on MonetDB version 11.21.19
 
 
+
+
 Installation
 =================
 Run make in /common/fpga
-Run ./configure --prefix=$HOME/MonetDB
 Run ./boostrap
+Run ./configure --prefix=$HOME/MonetDB
 Run make
 Run make install
 
 Your installation can be found in $HOME/MonetDB
+
+Potentially missing packages:
+---------------------------
+pkg-config: apt-get install pkg-config
+bison: apt-get install bison
+openssl: apt-get install libssl-dev
+PCRE library: apt-get install libpcre3 libpcre3-dev
+libxml2: apt-get install libxml2-dev
 
 
 The MonetDB Database System

@@ -11,18 +11,14 @@ Mlog
 Mtimeout
 libtool
 mserver5*
-monetdb
 monetdbd*
 
 
 
 #some dirs
-examples/
-mapiclient/
 build/
 *.gem
 home/
-java/
 *.jar
 *.java
 *.cache
