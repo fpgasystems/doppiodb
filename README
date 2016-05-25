@@ -1,3 +1,19 @@
+General Information
+===================
+This clone is based on MonetDB version 11.21.19
+
+
+Installation
+=================
+Run make in /common/fpga
+Run ./boostrap
+Run ./configure --prefix=$HOME/MonetDB
+Run make
+Run make install
+
+Your installation can be found in $HOME/MonetDB
+
+
 The MonetDB Database System
 ===========================
 
