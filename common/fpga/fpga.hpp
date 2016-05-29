@@ -14,7 +14,7 @@
 using namespace AAL;
 
 struct REGEX_CNTXT {
-union {
+   union {
       btUnsigned64bitInt          qword0[8];       // make it a whole cacheline
       struct {
          union {                                   // first qword
@@ -34,14 +34,17 @@ union {
          //btUnsigned32bitInt      tail_width;
 
       };
-                               };
-      union {
+   };
+   //cache line for config
+   uint8_t              config[64];
+
+   union {
          btUnsigned64bitInt          qword1[8];       // make it a whole cacheline
          struct {
             btUnsigned32bitInt       Status;          ///< Bit0 true if done
             //#define  VAFU2_CNTXT_STATUS_DONE   0x00000001      ///< Bit0 selector
          };
       };
-}; // struct REGEX_CNTXT
+   }; // struct REGEX_CNTXT
 
 #endif /* !FILE_FPGA_INCLUDED */

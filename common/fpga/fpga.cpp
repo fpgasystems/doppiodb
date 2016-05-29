@@ -671,11 +671,20 @@ void FPGAregex(void* base,
    printf("base: %p\n", vbase);
    fflush(stdout);
 
+   //pattern1
+   uint8_t cfgBytes[64] = {83, 116, 114, 97, 115, 115, 101, 126, 126, 126, 126, 126, 126, 126, 126, 126, 0, 126, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
    volatile REGEX_CNTXT *pREGEX_cntxt = reinterpret_cast<REGEX_CNTXT*>(fp_base_address);
    pREGEX_cntxt->pDest = retBase;
    pREGEX_cntxt->pBase = base;
    pREGEX_cntxt->pVBase = vbase;
    pREGEX_cntxt->tail_width = width;
+
+   //set config cache line
+   for (int i = 0; i < 64; i++)
+   {
+      pREGEX_cntxt->config[i] = cfgBytes[i];
+   }
    //triggers execution on FPGA
    pREGEX_cntxt->num_bat = count;
 
