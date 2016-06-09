@@ -12,7 +12,7 @@ create function reverse(src string)
 returns string external name udf.reverse;
 
 -- Regex function using fpga
-create function regexfpga(src string)
+create function regexfpga(regex string, src string)
 returns smallint external name udf.regexfpga;
 
 

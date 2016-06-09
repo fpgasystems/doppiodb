@@ -22,14 +22,13 @@ comment "Reverse a BAT of strings";
 
 # scalar MAL singatures
 module udf;
-command regexfpga(one:str):sht
+command regexfpga(regex:str, src:str):sht
 address UDFregexfpga
 comment "fpga regex function";
 
 # BAT MAL signatures
 module batudf;
-
-command regexfpga(b:bat[:oid,:str]):bat[:oid,:sht]
+command regexfpga(regex:str, b:bat[:oid,:str]):bat[:oid,:sht]
 address UDFBATregexfpga
 comment "FPGA regex on a BAT of strings";
 

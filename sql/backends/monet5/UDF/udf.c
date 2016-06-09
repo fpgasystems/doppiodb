@@ -187,10 +187,11 @@ UDFregexfpga_(sht *ret, const char *src)
 
 /* MAL wrapper */
 char *
-UDFregexfpga(sht *ret, const char **arg)
+UDFregexfpga(sht *ret, const char **regex, const char **arg)
 {
 	/* assert calling sanity */
 	assert(ret != NULL && arg != NULL);
+   printf("regex: %s\n", *regex);
 
 	return UDFregexfpga_ ( ret, *arg );
 }
@@ -273,24 +274,6 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
    int i = 0;
    unsigned short* res;
 
-   //call FPGA, check size
-   /*FPGAregex(src->T->heap.base,
-               src->T->vheap->base,
-               src->batCount,
-               src->T->width,
-               bn->T->heap.base);
-   printf("*****************FPGA results****************\n");
-   unsigned short* res = (unsigned short*) bn->T->heap.base;
-   printf("resbase: %p\n", bn->T->heap.base);
-   int i = 0;
-   for (i = 0; i < src->batCount; i++)
-   {
-      printf("res[%i]: %i\n", i, res[i]);
-   }
-
-   printf("*********************************************\n");
-   fflush(stdout);*/
-
 	// create BAT iterator
 	li = bat_iterator(src);
 
@@ -304,9 +287,19 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
 		ptr h = BUNhead(li, p);
 		const char *t = (const char *) BUNtail(li, p); //src->T->vheap->base[p] + GDK_VAROFFSET
       const char *myt = (const char *) (src->T->vheap->base+ 
-                  (((unsigned short *) src->T->heap.base)[p] + GDK_VAROFFSET)); //GDK_VAROFFSET == 8192;
+                  (((unsigned int *) src->T->heap.base)[p]));
+      if (src->T->width == 1 || src->T->width == 2)
+      {
+       myt = (const char *) (src->T->vheap->base+ 
+                  (((unsigned int *) src->T->heap.base)[p] + GDK_VAROFFSET)); //GDK_VAROFFSET == 8192;
+      }
       printf("EQUAL: %i, t: %p, myt: %p\n", (t == myt), t, myt);
-      printf("offset: %i\n", ((unsigned short *) src->T->heap.base)[p] + GDK_VAROFFSET);
+      if(src->T->width == 1 || src->T->width == 2) {
+         printf("offset: %i\n", ((unsigned int *) src->T->heap.base)[p] + GDK_VAROFFSET);
+      }
+      else {
+         printf("offset: %i\n", ((unsigned int *) src->T->heap.base)[p]);
+      }
       printf("sizof unsigned char: %i\n", sizeof(unsigned char));
       printf("sizof [p] char: %i\n", sizeof(((unsigned char *) src->T->heap.base)[p]));
       fflush(stdout);
@@ -327,7 +320,7 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
 	}
 
    printf("*****************SW results****************\n");
-   res = (unsigned short*) bn->T->heap.base;
+   res = (signed short*) bn->T->heap.base;
    printf("resbase: %p\n", bn->T->heap.base);
    for (i = 0; i < src->batCount; i++)
    {
@@ -344,7 +337,7 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
                src->T->width,
                bn->T->heap.base);
    printf("*****************FPGA results****************\n");
-   res = (unsigned short*) bn->T->heap.base;
+   res = (signed short*) bn->T->heap.base;
    for (i = 0; i < src->batCount; i++)
    {
       printf("res[%i]: %i\n", i, res[i]);
@@ -362,13 +355,15 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
 
 /* MAL wrapper */
 char *
-UDFBATregexfpga(bat *ret, const bat *arg)
+UDFBATregexfpga(bat *ret, const char **regex, const bat *arg)
 {
 	BAT *res = NULL, *src = NULL;
 	char *msg = NULL;
 
 	// assert calling sanity
 	assert(ret != NULL && arg != NULL);
+   printf("regex: %s\n", *regex); //TODO check for NULL
+
 
 	// bat-id -> BAT-descriptor
 	if ((src = BATdescriptor(*arg)) == NULL)
