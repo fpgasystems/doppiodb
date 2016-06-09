@@ -19,6 +19,7 @@
 #include "gdk.h"
 #include "gdk_private.h"
 #include "mutils.h"
+#include "fpga.h"
 
 static char GDKdbpathStr[PATHLENGTH] = { "dbpath" };
 
@@ -1200,6 +1201,9 @@ GDKinit(opt *set, int setlen)
 	    strcasecmp(p, "yes") == 0)
 		MT_create_thread(&GDKvmtrim_id, GDKvmtrim, &GDK_mem_maxsize,
 				 MT_THR_JOINABLE);
+
+   /* Initialize FPGA memory */
+   fpga_init();
 
 	return 1;
 }
