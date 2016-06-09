@@ -220,7 +220,7 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
 	BUN p = 0, q = 0;
 
    //some debug ooutput
-   printf("GDK_VAROFFSET: %u\n", GDK_VAROFFSET);
+   /*printf("GDK_VAROFFSET: %u\n", GDK_VAROFFSET);
    printf("SIZEOF_VAR_T: %u\n", SIZEOF_VAR_T);
    printf("sizeof(var_t): %i\n", sizeof(var_t));
    printf("SIZEOF_VOID_P: %u\n", SIZEOF_VOID_P);
@@ -233,7 +233,7 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
    printf("src tail base: %p\n", src->T->heap.base);
    printf("src tail vbase: %p\n", src->T->vheap->base);
    printf("src tail width: %i\n", src->T->width);
-   fflush(stdout);
+   fflush(stdout);*/
 
 	// assert calling sanity
 	assert(ret != NULL);
@@ -274,19 +274,33 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
    int i = 0;
    unsigned short* res;
 
+   // copy OIDS
+   memcpy(bn->H->heap.base, src->H->heap.base, (src->H->width * src->batCount));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * src->batCount);
+   bn->T->heap.free += (bn->T->width * src->batCount);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, src->batCount);
+   //destroy imprints, this breaks the UDF!!
+   //IMPSdestroy(bn);
+
+
 	// create BAT iterator
-	li = bat_iterator(src);
+	//li = bat_iterator(src);
 
 	// the core of the algorithm, expensive due to malloc/frees
-	BATloop(src, p, q) {
+	//BATloop(src, p, q) {
 		//char *tr = NULL, *err = NULL;
-                size_t len = 0;
-                unsigned short match = 0; 
+        //        size_t len = 0;
+        //        unsigned short match = 0; 
 
-		/* get original head & tail value */
-		ptr h = BUNhead(li, p);
-		const char *t = (const char *) BUNtail(li, p); //src->T->vheap->base[p] + GDK_VAROFFSET
-      const char *myt = (const char *) (src->T->vheap->base+ 
+		// get original head & tail value
+		//ptr h = BUNhead(li, p);
+		//const char *t = (const char *) BUNtail(li, p); //src->T->vheap->base[p] + GDK_VAROFFSET
+      /*const char *myt = (const char *) (src->T->vheap->base+ 
                   (((unsigned int *) src->T->heap.base)[p]));
       if (src->T->width == 1 || src->T->width == 2)
       {
@@ -302,24 +316,24 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
       }
       printf("sizof unsigned char: %i\n", sizeof(unsigned char));
       printf("sizof [p] char: %i\n", sizeof(((unsigned char *) src->T->heap.base)[p]));
-      fflush(stdout);
+      fflush(stdout);*/
 
-		/* assign some garbage to match */
-                len = strlen(t);
-                match = (len);
+		// assign some garbage to match
+        //        len = strlen(t);
+        //        match = (len);
 
 		// assert logical sanity
 		//assert(tr != NULL);
 
 		// insert original head and reversed tail in result BAT
 		// BUNins() takes care of all necessary administration
-		BUNins(bn, h, &match, FALSE);
+		//BUNins(bn, h, &match, FALSE);
 
 		// free memory allocated in UDFreverse_()
 		//GDKfree(tr);
-	}
+	//}
 
-   printf("*****************SW results****************\n");
+   /*printf("*****************SW results****************\n");
    res = (signed short*) bn->T->heap.base;
    printf("resbase: %p\n", bn->T->heap.base);
    for (i = 0; i < src->batCount; i++)
@@ -328,7 +342,7 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
    }
 
    printf("*********************************************\n");
-   fflush(stdout);
+   fflush(stdout);*/
 
    //Call FPGA
    FPGAregex(src->T->heap.base,
@@ -336,7 +350,7 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
                src->batCount,
                src->T->width,
                bn->T->heap.base);
-   printf("*****************FPGA results****************\n");
+   /*printf("*****************FPGA results****************\n");
    res = (signed short*) bn->T->heap.base;
    for (i = 0; i < src->batCount; i++)
    {
@@ -344,7 +358,7 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
    }
 
    printf("*********************************************\n");
-   fflush(stdout);
+   fflush(stdout);*/
 
 
 
