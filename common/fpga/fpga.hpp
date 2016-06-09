@@ -10,6 +10,7 @@
 #include <aalsdk/kernel/vafu2defs.h>      // AFU structure definitions (brings in spl2defs.h)
 
 #include <string.h>
+#include <chrono>
 
 using namespace AAL;
 

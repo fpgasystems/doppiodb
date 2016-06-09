@@ -1,6 +1,6 @@
 
 all:
-	libtool --mode=compile g++ -O2 -Wall -D__AAL_USER__=1 -fPIC -shared -lOSAL -lAAS -lxlrt -c fpga.cpp
+	libtool --mode=compile g++ -std=c++11 -O2 -Wall -D__AAL_USER__=1 -fPIC -shared -lOSAL -lAAS -lxlrt -c fpga.cpp
 	libtool --mode=link gcc -o libfpga.la fpga.lo
 
 clean:

@@ -2,6 +2,7 @@
 #include "fpga.h"
 #endif
 #include "fpga.hpp"
+#include <unistd.h>
 
 
 
@@ -70,8 +71,8 @@
 // UN-COMMENT appropriate #define in order to enable either Hardware or ASE.
 //    DEFAULT is to use Software Simulation.
 //****************************************************************************
-// #define  HWAFU
-#define  ASEAFU
+ #define  HWAFU
+//#define  ASEAFU
 
 using namespace AAL;
 
@@ -568,20 +569,19 @@ void HelloSPLLBApp::_DumpCL(void *pCL,  // pointer to cache-line to print
 //TODO maybe call this from BBPinit
 extern "C" {
 void fpga_init() {
+   if (!runtimeClient)
+   {
+	   runtimeClient = new RuntimeClient();
+	   theApp = new HelloSPLLBApp((RuntimeClient*)runtimeClient);
 
-	runtimeClient = new RuntimeClient();
-	theApp = new HelloSPLLBApp((RuntimeClient*)runtimeClient);
+	   if (!((RuntimeClient*)runtimeClient)->isOK()) {
+		   ERR("Runtime Failed to Start");
+		   exit(1);
+	   }
+	   ((HelloSPLLBApp*)theApp)->run();
 
-
-
-	if (!((RuntimeClient*)runtimeClient)->isOK()) {
-		ERR("Runtime Failed to Start");
-		exit(1);
-	}
-	((HelloSPLLBApp*)theApp)->run();
-
-	MSG("FPGA INIT DONE");
-	//return Result;
+	   MSG("FPGA INIT DONE");
+   }
 }
 
 void* FPGAmalloc(size_t size)
@@ -593,15 +593,15 @@ void* FPGAmalloc(size_t size)
    //Round up to cache lines
    size_t numCL = (size + 63) / 64;
    size_t mysize = numCL * 64;
-   printf("FPGAmalloc reqsize: %u, mysize: %u, curr: %p, base: %p, size: %u\n", size, mysize, fp_curr_address, fp_base_address, fp_workspace_size);
-   fflush(stdout);
+   //printf("FPGAmalloc reqsize: %u, mysize: %u, curr: %p, base: %p, size: %u\n", size, mysize, fp_curr_address, fp_base_address, fp_workspace_size);
+   //fflush(stdout);
    if ((fp_curr_address + mysize) <= (fp_base_address + fp_workspace_size))
    {
       void* addr = fp_curr_address;
       fp_curr_address += mysize;
       MSG("FPGA ALLOC: SUCCESS");
-      printf("addr: %p\n", addr);
-      fflush(stdout);
+      //printf("addr: %p\n", addr);
+      //fflush(stdout);
       return addr;
    }
       
@@ -619,16 +619,16 @@ void* FPGAmallocmax(size_t size, size_t *maxsize, int emergency)
    //*maxsize = (size + 63) / 64;
    size_t numCL = (size + 63) / 64;
    size_t mysize = numCL * 64;
-   printf("FPGAmallocmax reqsize: %u, mysize: %u, curr: %p, base: %p, size: %u\n", size, mysize, fp_curr_address, fp_base_address, fp_workspace_size);
-   fflush(stdout);
+   //printf("FPGAmallocmax reqsize: %u, mysize: %u, curr: %p, base: %p, size: %u\n", size, mysize, fp_curr_address, fp_base_address, fp_workspace_size);
+   //fflush(stdout);
    if ((fp_curr_address + mysize) <= (fp_base_address + fp_workspace_size))
    {
       void* addr = fp_curr_address;
       fp_curr_address += mysize;
       *maxsize = mysize;
       MSG("FPGA ALLOC: SUCCESS");
-      printf("addr: %p\n", addr);
-      fflush(stdout);
+      //printf("addr: %p\n", addr);
+      //fflush(stdout);
       return addr;
    }
       
@@ -667,9 +667,9 @@ void FPGAregex(void* base,
                void* retBase)
 {
    MSG("Processing on FPGA...");
-   printf("base: %p\n", base);
-   printf("base: %p\n", vbase);
-   fflush(stdout);
+   //printf("base: %p\n", base);
+   //printf("base: %p\n", vbase);
+   //fflush(stdout);
 
    //pattern1
    uint8_t cfgBytes[64] = {83, 116, 114, 97, 115, 115, 101, 126, 126, 126, 126, 126, 126, 126, 126, 126, 0, 126, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -687,12 +687,23 @@ void FPGAregex(void* base,
    }
    //triggers execution on FPGA
    pREGEX_cntxt->num_bat = count;
+   auto start_time = std::chrono::high_resolution_clock::now();
 
 
    SleepMicro(1);
-   while (pREGEX_cntxt->num_bat != 0)
+   int timeOutCount = 0;
+   while (pREGEX_cntxt->num_bat != 0 && (timeOutCount < 1000))
    {
       SleepMicro(1);
+      //sleep(1);
+      timeOutCount++;
+   }
+   auto end_time = std::chrono::high_resolution_clock::now();
+   std::cout << "TIME in HW: " << std::dec << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() << "us" << std::endl;
+
+   if (timeOutCount >= 1000)
+   {
+      printf("TIME OUT reached when using FPGA.\n");
    }
 
    MSG("FPGA done.");
@@ -700,94 +711,5 @@ void FPGAregex(void* base,
    return;
 }
 
-/*void fpga_free() {
-	((HelloSPLLBApp*)theApp)->stop();
-}
-
-int fpga_process(char* name, int nlen) {
-	char namecopy[nlen + 1];
-	memcpy(namecopy, name, nlen);
-	namecopy[nlen] = 0;
-
-	for (int idx = 0; idx < 8; idx++) {
-
-		if (tbl_nlen[idx] == nlen && strcmp(namecopy, tbl_name[idx]) == 0) {
-
-			MSG("Running...");
-
-			volatile VAFU2_CNTXT *pVAFU2_cntxt = reinterpret_cast<VAFU2_CNTXT *>(fp_virtual_pointer);
-
-			pVAFU2_cntxt->pSource = (void*) (tbl_offs[idx]+fp_virtual_pointer);
-			pVAFU2_cntxt->num_cl = (tbl_len[idx]/8192);
-			pVAFU2_cntxt->pDest = fp_virtual_output_area;
-
-			/*printf("vp: %16lx -- offs: %ld\n", fp_virtual_pointer, tbl_offs[idx]);
-
-			printf("   0: ");
-			for (int x=0; x<8192; x++) {
-
-				printf("%2x ", ((uint8_t*)(pVAFU2_cntxt->pSource))[x]);
-				if (x%64==63) {
-					printf("\n%4d: ",(x+1)/64);
-				}
-			}*/
-
-			/*while (pVAFU2_cntxt->num_cl!=0) {
-				SleepMicro(1);
-			}
-
-
-			MSG("Result:");
-			uint8_t* outPoint = (uint8_t*) (fp_virtual_output_area);
-
-			for (int x=0; x<64*64; x++) {
-
-							printf("%2x ", outPoint[x]);
-							if (x%64==63) {
-								printf("\n%4d: ",(x+1)/64);
-							}
-			}
-
-			return outPoint[0];
-
-
-		}
-
-	}
-
-	return -1;
-
-}
-
-int fpga_set_offset(int offs) {
-	fp_scan_offset = (uint8_t*) offs - ((uint8_t*) fp_virtual_pointer);
-	return 0;
-}
-
-int fpga_set_length(int len) {
-	fp_scan_length = len;
-	return 0;
-}
-
-int fpga_set_tablename(char* name, int nlen) {
-	int idx = 0;
-	while (idx < 8 && tbl_nlen[idx] > 0) {
-		idx++;
-	}
-
-	if (idx == 8)
-		return -1;
-
-	tbl_nlen[idx] = nlen;
-	tbl_name[idx] = new char[nlen + 1];
-	memcpy(tbl_name[idx], name, nlen);
-	tbl_name[idx][nlen] = 0;
-	tbl_offs[idx] = fp_scan_offset;
-	tbl_len[idx] = fp_scan_length;
-
-	printf("scan_offs: %16lx -- scan_len: %16lx\n", fp_scan_offset, fp_scan_length);
-
-	return 1;
-}*/
 
 } //extern C
