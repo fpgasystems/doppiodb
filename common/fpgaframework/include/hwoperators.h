@@ -19,6 +19,19 @@
 
 
 */
+
+//////////////////////////////////////////////////////////////////////////////////////////
+enum OPCODE {
+  REGEX_OP                  = 1,
+  MURMUR_OP                 = 2,
+  TEST_AND_COUNT_OP         = 3,
+  MIN_MAX_SUM_OP            = 4,
+  COPY_32_OP                = 5,
+  COPY_64_OP                = 6,
+  COPY_128_OP               = 7,
+  COPY_256_OP               = 8,
+  COPY_512_OP               = 9
+};
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,10 +39,13 @@
 template <typename T>
 fpga::Thread * fthread_copy(FPGA * my_fpga, FQueue<T> * src, FQueue<T> * dst){
     
-  char name[256] = "";
-  sprintf(name, "copy%d", (int)((sizeof(T) << 3)>>4 ) );
+  int sz = sizeof(T);
+  unsigned int opcode = (sz == 32)?  COPY_32_OP  : 
+                        (sz == 64)?  COPY_64_OP  : 
+                        (sz == 128)? COPY_128_OP : 
+                        (sz == 256)? COPY_256_OP : COPY_512_OP; 
   //---------------------------------- Thread allocation ----------------------------------------//
-  fpga::Thread * t_thread = new fpga::Thread(my_fpga, name);
+  fpga::Thread * t_thread = new fpga::Thread(my_fpga, opcode);
  	
   //----------------------------- Operator specific configuration -------------------------------//
  	t_thread->config_params = reinterpret_cast<struct AFU_CONFIG*> (
@@ -48,13 +64,10 @@ fpga::Thread * fthread_copy(FPGA * my_fpga, FQueue<T> * src, FQueue<T> * dst){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 fpga::Thread * fthread_regex(FPGA * my_fpga, btVirtAddr src, btVirtAddr vsrc, 
-                             btVirtAddr dst, unsigned int long batcount, int tailwidth, int id){
+                             btVirtAddr dst, unsigned int long batcount, int tailwidth){
     
-  char name[256] = "";
-  sprintf(name, "regex%d", id );
-
   //---------------------------------- Thread allocation ----------------------------------------//
-  fpga::Thread * t_thread = new fpga::Thread(my_fpga, name);
+  fpga::Thread * t_thread = new fpga::Thread(my_fpga, REGEX_OP);
   
   //----------------------------- Operator specific configuration -------------------------------//
   // construct thread config parameters
@@ -72,78 +85,6 @@ fpga::Thread * fthread_regex(FPGA * my_fpga, btVirtAddr src, btVirtAddr vsrc,
   {
     t_thread->config_params->config[i] = cfgBytes[i];
   }
-
-  //char *elem = "VARDATA(PG_GETARG_VARCHAR_P(1));   ";
-  //uint16_t cpsize = 35;
-  
-
-  //int endp = 64;
-  //int scnt = 0;
-  //uint16_t* sdata = (uint16_t*) src;
-
-
-  //for (int x = 0; x < batcount; x++) 
- // {
-  //  sdata[x]= x*64; 
-  //}
-  
-  
-  //------------------------------ enqueue the thread on the FPGA queue -------------------------//
-  my_fpga->enqueue_command(t_thread);
-
-  return t_thread;
-}
-
-fpga::Thread * fthread_regex2(FPGA * my_fpga, btVirtAddr src, btVirtAddr dst, unsigned int long numStr, int id){
-    
-  char name[256] = "";
-  sprintf(name, "regex%d", id );
-
-  //---------------------------------- Thread allocation ----------------------------------------//
-  fpga::Thread * t_thread = new fpga::Thread(my_fpga, name);
-  
-  //----------------------------- Operator specific configuration -------------------------------//
-  // construct thread config parameters
-  t_thread->config_params = reinterpret_cast<struct AFU_CONFIG*> ( setupAFU_CONFIG(my_fpga, src, dst, numStr) );
-    //
-  uint8_t cfgBytes[64] = {83, 116, 114, 97, 115, 115, 101, 126, 126, 126, 126, 126, 126, 126, 126, 126, 0, 126, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-      
-    
-      for (int i=0; i<64; i++) {
-        src[i] = cfgBytes[i];
-      }
-
-      
-   
-      char *elem = "VARDATA(PG_GETARG_VARCHAR_P(1));   ";
-      uint16_t cpsize = 35;
-
-      int probSize = 1024;
-
-      int endp = 64;
-      int scnt = 0;
-
-      for (int x = 0; x<numStr; x++) {
-
-        
-
-        uint8_t* sdata = (uint8_t*) src;
-
-        sdata[endp]= cpsize;
-
-        memcpy(sdata + endp+2, elem, cpsize);  
-
-        sdata[endp + 2 + cpsize] = 0;
-     
-        uint16_t pos = (endp)/64 +1;
-
-        sdata[4*1024*1024 - 64*(1+scnt/32) + ((scnt)%32)*2 ] = pos % 256;
-        sdata[4*1024*1024 - 64*(1+scnt/32) + ((scnt)%32)*2 +1 ] = (pos / 256);
-
-        endp += 64;
-        scnt++;   
-      }
-  
   
   //------------------------------ enqueue the thread on the FPGA queue -------------------------//
   my_fpga->enqueue_command(t_thread);

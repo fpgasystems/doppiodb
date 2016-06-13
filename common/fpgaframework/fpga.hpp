@@ -16,7 +16,9 @@
 
 using namespace AAL;
 
-FPGA * my_fpga;
+static FPGA * my_fpga;
+static pthread_mutex_t fpga_mutex;
+int    id;
 
 struct REGEX_CNTXT {
    union {

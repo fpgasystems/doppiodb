@@ -19,11 +19,29 @@ FPGA::FPGA(){
   
   ///////////////////////////////////////////////////////////
   srvAllocated = false;
+  
+  // initialize active operators array
   opCount      = 0;
-  numOfSuppOps = 0;
-
+  
   for(int i = 0; i < MAX_NUM_ALLOWED_OPS; i++)
-    srvOperators[i] = false;
+    activeOperatorsMap[i] = -1;
+  
+  // initialize assigned operators map
+  for(int i = 0; i < NUM_FTHREADS; i++)
+    numAssignedOperators[i] = 0;
+
+  // initialize supported operators array
+  // TEMPORARY SOLUTION WILL GO AWAY SOON (This array is not used even)
+  numOfSuppOps = 9;
+  supportedOperators[0].operatorOpcode = 1;
+  supportedOperators[1].operatorOpcode = 2;
+  supportedOperators[2].operatorOpcode = 3;
+  supportedOperators[3].operatorOpcode = 4;
+  supportedOperators[4].operatorOpcode = 5;
+  supportedOperators[5].operatorOpcode = 6;
+  supportedOperators[6].operatorOpcode = 7;
+  supportedOperators[7].operatorOpcode = 8;
+  supportedOperators[8].operatorOpcode = 9;
 }
 ///////////////////////////////////////////////////////////////////////////////
 FPGA::~FPGA()
@@ -70,28 +88,24 @@ bool FPGA::initiate(){
 /* 
   This function should work like this:
    1- Read the currently configured operators on the FPGA and add them to the list
-   2- Read the library of bitstreams and add them to the list
-
-   FOR NOW, it just has a fixed set of operators written directly in the list
 */
-void FPGA::obtainSupportedOperators(){
+void FPGA::obtainConfiguredOperators(){
+  
+  OneCL * configOpsLine = reinterpret_cast<OneCL*>(srvHndle->m_AFUDSMVirt + ALLOC_OPERATORS_DSM_OFFSET*CL(1));
+  // wait until the FPGA updates configured operators status line
+  bool hasOps = false;
+  while( ! hasOps )
+  {
+    for(int i = 0; i < 16; i++) 
+    {
+      if( hasOps = (configOpsLine->dw[i] != 0) ) break;
+    }
+  }
 
-  // 
-  supportedOperators[0] = "regex1";
-  supportedOperators[1] = "regex2";
-  supportedOperators[2] = "regex3";
-  supportedOperators[3] = "regex4";
-  supportedOperators[4] = "copy64";
-  supportedOperators[5] = "copy128";
-  supportedOperators[6] = "copy256";
-
-  supportedOperators[7] = "murmur";
-  supportedOperators[8] = "test_and_count";
-  supportedOperators[9] = "min_max_sum";
-  supportedOperators[10] = "copy32";
-
-  numOfSuppOps          = 11;
-
+  for(int i = 0; i < NUM_FTHREADS; i++)
+  {
+    configuredOperators[i] = configOpsLine->dw[i];
+  }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
 void setupQueue(FPGA * my_fpga){
@@ -125,10 +139,8 @@ void FPGA::setUpCommandQueue(){
   setCMQ.join();
 
   MSG("cmd_queue = "<< cmd_queue->m_producer_bytes << ", " << cmd_queue->m_producer_done);
-
-  // Make sure that this memory is set
-
 }
+
 //********************************************************************************************************//
 //********************************************************************************************************//
 //********************************************************************************************************//
@@ -167,14 +179,12 @@ void FPGA::enqueue_command(fpga::Thread * t_thread){
   ::memset(&cmd_CL, 0, sizeof(struct OneCL));
 
   // construct code word:
-  unsigned int code = (t_thread->accID  & 0x0000FFFF) | 
-                      (((t_thread->uID + OP_STATUS_DSM_OFFSET) << 16) & 0x00FF0000) | 
-                                                      0x01000000  | 
-                                                      0x80000000;
+  unsigned int code = (t_thread->accID & 0x00FFFFFF) | 0xf0000000;
 
   cmd_CL.dw[0] = (btUnsigned32bitInt)(code);
-  cmd_CL.dw[1] = (btUnsigned32bitInt)(AAL::bt64bitCSR(t_thread->config_params));
-  cmd_CL.dw[2] = (btUnsigned32bitInt)(AAL::bt64bitCSR(t_thread->config_params) >> 32);
+  cmd_CL.dw[1] = (btUnsigned32bitInt)((t_thread->uID + OP_STATUS_DSM_OFFSET));
+  cmd_CL.dw[2] = (btUnsigned32bitInt)(AAL::bt64bitCSR(t_thread->config_params));
+  cmd_CL.dw[3] = (btUnsigned32bitInt)(AAL::bt64bitCSR(t_thread->config_params) >> 32);
   
   while( !cmd_queue->push(cmd_CL) );
 
@@ -197,53 +207,72 @@ void FPGA::enqueue_command(unsigned int code){
   cmd_queue_mutex.unlock();
 }
 //-------------------------------------------------------------------------//
-int FPGA::allocateOp(){
+int FPGA::allocateOp(int AccLocation){
   
-  int idx = -1;
+  if (AccLocation == -1) return -1; 
 
-  op_alloc_mutex.lock();
-
-  if(opCount == MAX_NUM_ALLOWED_OPS)
+  for(int i = 0; i < MAX_NUM_ALLOWED_OPS; i++)
   {
-    for(int i = 0; i < MAX_NUM_ALLOWED_OPS; i++)
-      if( !srvOperators[i] ) 
-      {
-        srvOperators[i] = true;
-        idx = i;
-        break;
-      }    
+    if( activeOperatorsMap[i] == -1 ) 
+    {
+      activeOperatorsMap[i] = AccLocation;
+      return i;
+    }    
   }
-  else 
-  {
-    int id = opCount; 
-    srvOperators[id] = true;
-    opCount += 1;
-    idx = id;
-  }
-
-  op_alloc_mutex.unlock();
-
-  return idx;
-}
-
-//-------------------------------------------------------------------------//
-int FPGA::locateOpAcc(std::string fname){
-
-  // search in the supported opcodes
-  for(int i = 0; i < numOfSuppOps; i++) 
-    if(supportedOperators[i].compare(fname) == 0 ) return i + 1;
-
   return -1;
 }
+
+//-------------------------------------------------------------------------//
+int FPGA::locateOpAcc(unsigned int opcode){
+  
+  // search in the supported opcodes
+  int      loc = -1;
+  int assigned = 1000000;
+  for(int i = 0; i < NUM_FTHREADS; i++) 
+  {
+    if(configuredOperators[i] == opcode ) 
+    {
+      if( numAssignedOperators[i] < assigned )
+      {
+        loc      = i;
+        assigned = numAssignedOperators[i];
+      }
+    }
+  }
+  
+  if(loc != -1) 
+  {
+    numAssignedOperators[loc] += 1;
+  }
+  
+  return loc + 1;
+}
 //-------------------------------------------------------------------------//
 
-HWOperator * FPGA::create_hwop(std::string opName){
+HWOperator * FPGA::create_hwop(unsigned int opcode){
   
-  // allocate operator
-  HWOperator * hwop = new HWOperator;
+  op_alloc_mutex.lock();
+  // allocate FThread for the operator
+  int AccLocation   = locateOpAcc(opcode);
+  
+  // allocate status line for the operator
+  int UniqueID      = allocateOp( AccLocation );
+  
+  if ((UniqueID == -1) & (AccLocation != -1) ) 
+  {
+     numAssignedOperators[AccLocation] -= 1;
 
-  hwop->AccLocation   = locateOpAcc(opName);
-  hwop->UniqueID      = allocateOp();
+     op_alloc_mutex.unlock();
+
+     return NULL;
+  }
+  
+  // 
+  HWOperator * hwop = new HWOperator;
+  hwop->AccLocation = AccLocation;
+  hwop->UniqueID    = UniqueID;
+
+  op_alloc_mutex.unlock();
 
   return hwop;
 }
@@ -263,11 +292,11 @@ void FPGA::terminate(){
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-FPGA * getFPGA(){
+void getFPGA( FPGA * my_fpga){
   
   MSG("Get Hardware Service Handle....");
 
-  FPGA * my_fpga = new FPGA();
+  
 
   // create the interface to AAL Platform
   RuntimeClient *  runtimeClient = new RuntimeClient;
@@ -280,19 +309,19 @@ FPGA * getFPGA(){
   my_fpga->m_manager = new MemoryManagerClient(my_fpga->srvHndle->m_AFUCTXVirt, 
                                                my_fpga->srvHndle->m_AFUCTXPhys, 
                                                my_fpga->srvHndle->m_AFUCTXSize);
-
+  
   MSG("Setup Command Queue");
   my_fpga->setUpCommandQueue();
 
   MSG("Initiate Transaction");
-  if( ! my_fpga->initiate() ) return NULL;
+  if( ! my_fpga->initiate() ) return;
   
   MSG("Get Supported Ops");
-  my_fpga->obtainSupportedOperators();
-
+  my_fpga->obtainConfiguredOperators();
+  
   MSG("Hardware Service Handle Obtained Successfully!");
   
-  return my_fpga;
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -305,21 +334,20 @@ FPGA * getFPGA(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 using namespace fpga;
 
-Thread::Thread(FPGA * t_fpga, char t_name[])
+Thread::Thread(FPGA * t_fpga, unsigned int code)
 {
   //
 
-  HWOperator * hwop = t_fpga->create_hwop( std::string(t_name) );
+  HWOperator * hwop = t_fpga->create_hwop( code );
 
-  name                = new std::string(t_name);
+  name                = new std::string("t_name");
+  opcode              = code;
   parent_fpga         = t_fpga;
   accID               = hwop->AccLocation;
   uID                 = hwop->UniqueID;
   parent_process_ID   = -1;
   config_params       = NULL;
-  status_line         = reinterpret_cast<struct OneCL*>(
-                          t_fpga->srvHndle->m_AFUDSMVirt + (hwop->UniqueID + OP_STATUS_DSM_OFFSET)*CL(1)
-                          );
+  status_line         = reinterpret_cast<struct OneCL*>( t_fpga->m_manager->get_virt_base() + (hwop->UniqueID + OP_STATUS_DSM_OFFSET) * CL(1) );
 
   ::memset(status_line, 0, 64);
 }
@@ -330,6 +358,7 @@ Thread::Thread(Thread * t_thread){
   parent_fpga         = t_thread->parent_fpga;
   accID               = t_thread->accID;
   uID                 = t_thread->uID;
+  opcode              = t_thread->opcode;
   parent_process_ID   = t_thread->parent_process_ID;
   config_params       = t_thread->config_params;
   status_line         = t_thread->status_line;
@@ -346,6 +375,22 @@ bool Thread::join(){
     SleepMicro( 1 );
     status = status_line->dw[0];
   }
+  // Release the operator resources
+  // copy status line to thread local storage
+  OneCL * tmp = status_line;
+  status_line = new OneCL;
+  memcpy(status_line, tmp, 64);
+  ::memset(tmp, 0, 64);
+  // subtract from numAssignedOperators[]
+  parent_fpga->operator_assignment_mutex.lock();
+  parent_fpga->numAssignedOperators[ parent_fpga->activeOperatorsMap[uID] ] -= 1;
+  parent_fpga->operator_assignment_mutex.unlock();
+
+  // reset activeOperators[] entry
+  parent_fpga->op_alloc_mutex.lock();
+  parent_fpga->activeOperatorsMap[ uID ] = -1;
+  parent_fpga->op_alloc_mutex.unlock();
+  //
   return true;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

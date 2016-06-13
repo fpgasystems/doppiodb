@@ -1,7 +1,7 @@
 #ifndef __FPGA_H__
 #define __FPGA_H__
 
-
+#include <pthread.h>
 #include <mutex>
 #include <thread>
 #include <chrono>
@@ -23,32 +23,32 @@
 using namespace AAL;
 
 // Constraints
-#define APP_WORKSPACE_MAXIMUM_SIZE       MB(2048)
-#define MAX_NUM_ALLOWED_OPS              32
-#define MAX_NUM_OF_SUPPORTED_OPS         32
+#define APP_WORKSPACE_MAXIMUM_SIZE       MB(2048)        // Maximum allocatable shared memory space
+#define MAX_NUM_ALLOWED_OPS              1024            // Maximum number of operators that can be allocated
+#define MAX_NUM_OF_SUPPORTED_OPS         32              // Maximum number of supported operators (this is not necessary)
+#define CMD_QUEUE_SIZE                   32              // Maximum size of the command queue 
+#define NUM_FTHREADS                     4               // Maximum number of physical fthreads 
 
-//////////////////////////       DSM Layout        /////////////////////////
+//////////////////////////       DSM Layout (4k)  /////////////////////////
 
 // Framework Status Lines
 #define AFU_ID_DSM_OFFSET                0      // Reserved by AAL
-#define PT_STATUS_DSM_OFFSET             1      
-#define CTX_STATUS_DSM_OFFSET            3
-#define ALLOC_OPERATORS_DSM_OFFSET       4
 
+#define PT_STATUS_DSM_OFFSET             1      // 
+#define CTX_STATUS_DSM_OFFSET            3      // 
+#define ALLOC_OPERATORS_DSM_OFFSET       4      // List of Configured Operators on the FPGA
+
+//////////////////////////       DSM Layout (2M)  /////////////////////////
 // Command Queue
-#define CMD_QUEUE_DSM_OFFSET             8
-
-// FThreads Status Lines
-#define OP_STATUS_DSM_OFFSET             32
-
-////////////////////////////////////////////////////////////////////////////
-#define CMD_QUEUE_SIZE 32
+#define CMD_QUEUE_DSM_OFFSET             0          // Command queue start point offset 
+#define OP_STATUS_DSM_OFFSET             64         // Allocated Operators Status Line offset
 ////////////////////////////////////////////////////////////////////////////
 #define OPERATOR_DONE_STATE              0x04
 #define OPERATOR_IDLE_STATE              0x00
 
 #define CTX_RESET_CMD                    0x00000001
 #define DSM_RESET_CMD                    0x00000002
+
 
 class FPGA;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,12 +59,13 @@ namespace fpga{
 
 class Thread{
 public:
-  Thread(FPGA * fpga, char t_name[]);
+  Thread(FPGA * fpga, unsigned int opcode);
   Thread(Thread * t_thread);
 
   std::string       *   name;
   int                   accID;
   int                   uID;
+  int                   opcode;
   int                   parent_process_ID;
 
   struct AFU_CONFIG *   config_params;
@@ -93,6 +94,16 @@ struct HWOperator{
   unsigned int   AccLocation;
 
 };
+
+struct OperatorFThreadMap
+{
+  unsigned int    operatorOpcode;
+  int             occupiedFThread;
+
+  OperatorFThreadMap(){
+    occupiedFThread = -1;
+  }
+};
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,20 +123,20 @@ public:
   bool            initiate();
   bool            release();
   void            setUpCommandQueue();
-  void            obtainSupportedOperators();
-
+  void            obtainConfiguredOperators();
+  void            resourcesCleaner();
   //-----------------------------------------------------------------//
   //----------------- FPGA Process Services -------------------------//
   //-----------------------------------------------------------------//
   void            enqueue_command(fpga::Thread * opHndle);
   void            enqueue_command(unsigned int code);
-  HWOperator    * create_hwop(std::string opName);
-  int             allocateOp();
-  int             locateOpAcc(std::string fname);
+  HWOperator    * create_hwop(unsigned int opcode);
+  int             allocateOp(int AccLocation);
+  int             locateOpAcc(unsigned int opcode);
   void            terminate();
   void          * malloc(unsigned int size_in_bytes);
   void            free(void * ptr);
-
+  
   //-----------------------------------------------------------------//
   //---------------------- Service member objects -------------------//
   //-----------------------------------------------------------------//
@@ -139,13 +150,23 @@ public:
 
    //
    bool                   srvAllocated;
+   
+   // list of issued operators mapping
    unsigned int           opCount;
-   bool                   srvOperators[MAX_NUM_ALLOWED_OPS];
+   volatile int           activeOperatorsMap[MAX_NUM_ALLOWED_OPS];
    std::mutex             op_alloc_mutex;
    
-   int                    numOfSuppOps;
-   std::string            supportedOperators[MAX_NUM_OF_SUPPORTED_OPS];
+   // List of currently configured operators
+   unsigned int           configuredOperators[NUM_FTHREADS];
 
+   // list of assigned operators to fthreads
+   volatile unsigned int  numAssignedOperators[NUM_FTHREADS];
+   std::mutex             operator_assignment_mutex;
+   // Library of supported operators
+   int                    numOfSuppOps;
+   OperatorFThreadMap     supportedOperators[MAX_NUM_OF_SUPPORTED_OPS];
+  
+   // FPGA command queue
    FQueue<struct OneCL> * cmd_queue;
    std::mutex             cmd_queue_mutex;
 
@@ -209,7 +230,7 @@ FQueue<T>* setupCRB(FPGA * srvHndle, unsigned int capacity){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-FPGA       * getFPGA();
+void         getFPGA(FPGA * my_fpga);
 btVirtAddr   setupAFU_CONFIG(FPGA * srvHndle, btVirtAddr src, btVirtAddr dst, unsigned int param1, unsigned int param2);
 btVirtAddr   setupAFU_CONFIG(FPGA * srvHndle, btVirtAddr src, btVirtAddr dst, unsigned long int numLines = 0);
 

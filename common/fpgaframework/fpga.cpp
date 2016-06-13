@@ -63,8 +63,19 @@
 //TODO maybe call this from BBPinit
 extern "C" {
 void fpga_init() {
-
-	my_fpga = getFPGA();
+  
+  MSG(" Start FPGA Init"); 
+  pthread_mutex_lock(&fpga_mutex);
+  MSG("acquired mutex");
+  if(my_fpga == NULL) 
+  {
+    MSG("fpga object null");
+    my_fpga = new FPGA();
+    MSG("fpga object initial allocation, start thread to fill it");
+    std::thread fpga_allocator( getFPGA, std::ref(my_fpga) );
+    fpga_allocator.join();
+  }
+  pthread_mutex_unlock(&fpga_mutex);
 }
 
 void* FPGAmalloc(size_t size)
@@ -124,10 +135,14 @@ void FPGAregex(void* base,
 
   auto start_time = std::chrono::high_resolution_clock::now();
 
+  //pthread_mutex_lock(&fpga_mutex);
+
+  //id = (id%4)+1;
+
   fpga::Thread regex( fthread_regex(my_fpga, reinterpret_cast<btVirtAddr>(base), 
   	                    reinterpret_cast<btVirtAddr>(vbase), 
-  						reinterpret_cast<btVirtAddr>(retBase), count, width , 1) );
-  
+  						reinterpret_cast<btVirtAddr>(retBase), count, width) );
+  //pthread_mutex_unlock(&fpga_mutex);
   regex.join();
 
   regex.printStatusLine();

@@ -120,6 +120,8 @@ void HWService::OnTransactionStarted( TransactionID const &TranID,
   MSG("Transaction Started");
   m_AFUDSMVirt = AFUDSMVirt;
   m_AFUDSMSize = AFUDSMSize;
+
+  //::memset(m_AFUDSMVirt+64, 0, CL(16));
   //
   m_Sem.Post(1);
 }

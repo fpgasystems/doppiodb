@@ -24,9 +24,9 @@ class MemoryManagerClient{
 public:
 	WorkSpc     * appWkSpc;
 
-	btVirtAddr  baseRegister;
-	btVirtAddr  limitRegister;
-	btVirtAddr  dataBaseRegister;
+	volatile  btVirtAddr  baseRegister;
+	volatile  btVirtAddr  limitRegister;
+	volatile  btVirtAddr  dataBaseRegister;
 
 	MemoryManagerClient(btVirtAddr virBase, btPhysAddr phyBase, btWSSize wsSize ){
 		appWkSpc = new WorkSpc(virBase, phyBase, wsSize);

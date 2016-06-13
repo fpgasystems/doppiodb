@@ -4,6 +4,7 @@
 //#include "include/fpgaapi.h"
 //#define FPGAzalloc FPGAmalloc
 
+
 #ifdef __cplusplus
     extern "C" {
 #endif
@@ -13,7 +14,8 @@
 	extern void* fp_base_address;
 	extern void* fp_curr_address;
    extern size_t fp_workspace_size;
-
+   //extern int    id;
+   //extern pthread_mutex_t fpga_mutex;
 	//extern int* tbl_nlen;
 	//extern char** tbl_name;
 	//extern int* tbl_offs;
