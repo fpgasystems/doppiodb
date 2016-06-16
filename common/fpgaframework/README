@@ -1,0 +1,5 @@
+Makefile using sources from HarpFramework
+=========================================
+Set path of you HarpFramework git directory:
+
+export HARP_FRAMEWORK=~/workspace/harp-framework

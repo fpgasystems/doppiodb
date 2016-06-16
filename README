@@ -3,25 +3,31 @@ General Information
 This clone is based on MonetDB version 11.21.19
 
 
-
-
 Installation
 =================
-Run make in /common/fpga
-Run ./boostrap
-Run ./configure --prefix=$HOME/MonetDB
-Run make
-Run make install
+
+**PREREQUISITE**:
+
+You have to set the location of your harp-framework git repository, e.g.:
+   export HARP_FRAMEWORK=~/workspace/harp-framework
+
+
+Run **make** in /common/fpgaframework
+
+Then run the following commands in *monetdb*:
+   ./boostrap
+   ./configure --prefix=$HOME/MonetDB
+   make
+   make install
 
 Your installation can be found in $HOME/MonetDB
 
-Potentially missing packages:
----------------------------
-pkg-config: apt-get install pkg-config
-bison: apt-get install bison
-openssl: apt-get install libssl-dev
-PCRE library: apt-get install libpcre3 libpcre3-dev
-libxml2: apt-get install libxml2-dev
+**Potentially missing packages:**
+- pkg-config: apt-get install pkg-config
+- bison: apt-get install bison
+- openssl: apt-get install libssl-dev
+- PCRE library: apt-get install libpcre3 libpcre3-dev
+- libxml2: apt-get install libxml2-dev
 
 
 The MonetDB Database System
