@@ -59,6 +59,7 @@
 /// 06/15/2015     JG       Initial version started based on older sample code.@endverbatim
 //****************************************************************************
 #define  ASEAFU
+//#define HWAFU
 
 //TODO maybe call this from BBPinit
 extern "C" {
@@ -116,8 +117,7 @@ void FPGAfree(void *blk)
    ssize_t *s = (ssize_t*) blk;
    if (s == NULL)
       return;
-   //size = GDK_MEM_BLKSIZE(s);
-   //TODO reinsert this chunck
+   my_fpga->free(blk);
 }
 
 //MAYBE add GDK_VAROFFSET
@@ -139,7 +139,7 @@ void FPGAregex(void* base,
 
   //id = (id%4)+1;
 
-  fpga::Thread regex( fthread_regex(my_fpga, reinterpret_cast<btVirtAddr>(base), 
+  Fthread regex( fthread_regex(my_fpga, reinterpret_cast<btVirtAddr>(base), 
   	                    reinterpret_cast<btVirtAddr>(vbase), 
   						reinterpret_cast<btVirtAddr>(retBase), count, width) );
   //pthread_mutex_unlock(&fpga_mutex);
