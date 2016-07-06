@@ -460,19 +460,28 @@ GDKsave(int farmid, const char *nme, const char *ext, void *buf, size_t size, st
 char *
 GDKload(int farmid, const char *nme, const char *ext, size_t size, size_t *maxsize, storage_t mode)
 {
+printf("GDKload entry, mode: %i\n", mode);
+fflush(stdout);
 	char *ret = NULL;
 
 	assert(size <= *maxsize);
 	IODEBUG {
 		fprintf(stderr, "#GDKload: name=%s, ext=%s, mode %d\n", nme, ext ? ext : "", (int) mode);
 	}
-	if (mode == STORE_MEM) {
+	if (mode == STORE_MEM || mode == STORE_FPGA) {
+      printf("GDKload STORE_MEM || STORE_FPGA\n");
+      fflush(stdout);
 		int fd = GDKfdlocate(farmid, nme, "rb", ext);
 
 		if (fd >= 0) {
          // Call FPGAmalloc instead
-         char *dst = ret = FPGAmalloc(*maxsize);
-			//char *dst = ret = GDKmalloc(*maxsize);
+         char *dst;
+         if (mode == STORE_MEM) {
+            dst = ret = GDKmalloc(*maxsize);
+         } else { //STORE_FPGA
+            dst = ret = FPGAmalloc(*maxsize);
+         }
+
 			ssize_t n_expected, n = 0;
 
 			if (ret) {
@@ -514,6 +523,10 @@ GDKload(int farmid, const char *nme, const char *ext, size_t size, size_t *maxsi
 		}
 	} else {
 		char *path;
+      printf("GDKload, FILE\n");
+      printf("size: %i\n", size);
+      fflush(stdout);
+
 
 		/* round up to multiple of GDK_mmap_pagesize with a
 		 * minimum of one */
@@ -535,7 +548,7 @@ GDKload(int farmid, const char *nme, const char *ext, size_t size, size_t *maxsi
 		}
 		GDKfree(path);
 	}
-   printf("GDKload done");
+   printf("GDKload done\n");
    fflush(stdout);
 	return ret;
 }
@@ -602,7 +615,7 @@ fflush(stdout);
 	return bs;
 }
 
-#define STORE_MODE(m,r,e) (((m) == STORE_MEM)?STORE_MEM:((r)&&(e))?STORE_PRIV:STORE_MMAP)
+#define STORE_MODE(m,r,e) (((m) == STORE_MEM)?STORE_MEM:(((m) == STORE_FPGA)?STORE_FPGA:((r)&&(e))?STORE_PRIV:STORE_MMAP))
 int
 DESCsetmodes(BAT *b)
 {
@@ -960,7 +973,7 @@ BATdelete(BAT *b)
 		IMPSdestroy(b);
 	}
 	assert(!b->H->heap.base || !b->T->heap.base || b->H->heap.base != b->T->heap.base);
-	if (b->batCopiedtodisk || (b->H->heap.storage != STORE_MEM)) {
+	if (b->batCopiedtodisk || (b->H->heap.storage != STORE_MEM && b->H->heap.storage != STORE_FPGA)) {
 		if (b->htype != TYPE_void &&
 		    HEAPdelete(&b->H->heap, o, "head") &&
 		    b->batCopiedtodisk)
@@ -968,7 +981,7 @@ BATdelete(BAT *b)
 	} else if (b->H->heap.base) {
 		HEAPfree(&b->H->heap, 1);
 	}
-	if (b->batCopiedtodisk || (b->T->heap.storage != STORE_MEM)) {
+	if (b->batCopiedtodisk || (b->T->heap.storage != STORE_MEM && b->T->heap.storage != STORE_FPGA)) {
 		if (b->ttype != TYPE_void &&
 		    HEAPdelete(&b->T->heap, o, "tail") &&
 		    b->batCopiedtodisk)
@@ -978,7 +991,7 @@ BATdelete(BAT *b)
 	}
 	if (b->H->vheap) {
 		assert(b->H->vheap->parentid == bid);
-		if (b->batCopiedtodisk || (b->H->vheap->storage != STORE_MEM)) {
+		if (b->batCopiedtodisk || (b->H->vheap->storage != STORE_MEM && b->H->vheap->storage != STORE_FPGA)) {
 			if (HEAPdelete(b->H->vheap, o, "hheap") && b->batCopiedtodisk)
 				IODEBUG fprintf(stderr, "#BATdelete(%s): head heap\n", BATgetId(b));
 		} else {
@@ -987,7 +1000,7 @@ BATdelete(BAT *b)
 	}
 	if (b->T->vheap) {
 		assert(b->T->vheap->parentid == bid);
-		if (b->batCopiedtodisk || (b->T->vheap->storage != STORE_MEM)) {
+		if (b->batCopiedtodisk || (b->T->vheap->storage != STORE_MEM && b->T->vheap->storage != STORE_FPGA)) {
 			if (HEAPdelete(b->T->vheap, o, "theap") && b->batCopiedtodisk)
 				IODEBUG fprintf(stderr, "#BATdelete(%s): tail heap\n", BATgetId(b));
 		} else {

@@ -79,6 +79,8 @@ BATcreatedesc(int ht, int tt, int heapnames, int role)
 	assert(role >= 0 && role < 32);
 
 	bs = (BATstore *) GDKzalloc(sizeof(BATstore));
+   printf("BATcreatedesc: %p\n", bs);
+   fflush(stdout);
 
 	if (bs == NULL)
 		return NULL;
@@ -153,19 +155,29 @@ BATcreatedesc(int ht, int tt, int heapnames, int role)
 		}
 
 		if (ATOMneedheap(ht)) {
+         printf("ht needs vheap\n");
+         fflush(stdout);
+
 			if ((bn->H->vheap = (Heap *) GDKzalloc(sizeof(Heap))) == NULL ||
 			    (bn->H->vheap->filename = GDKfilepath(NOFARM, NULL, nme, "hheap")) == NULL)
 				goto bailout;
 			bn->H->vheap->parentid = bn->batCacheid;
 			bn->H->vheap->farmid = BBPselectfarm(role, bn->htype, varheap);
+         printf("BATcreatedesc, ht vheap: %p\n", bs);
+         fflush(stdout);
+
 		}
 
 		if (ATOMneedheap(tt)) {
+
 			if ((bn->T->vheap = (Heap *) GDKzalloc(sizeof(Heap))) == NULL ||
 			    (bn->T->vheap->filename = GDKfilepath(NOFARM, NULL, nme, "theap")) == NULL)
 				goto bailout;
 			bn->T->vheap->parentid = bn->batCacheid;
 			bn->T->vheap->farmid = BBPselectfarm(role, bn->ttype, varheap);
+         printf("BATcreatedesc, tt vheap: %p\n", bs);
+         fflush(stdout);
+
 		}
 	}
 	bn->batDirty = TRUE;
@@ -233,6 +245,8 @@ BATsetdims(BAT *b)
 static BATstore *
 BATnewstorage(int ht, int tt, BUN cap, int role)
 {
+printf("BATnewstorage, cap: %i\n, ht: %s, tt: %s", cap, ATOMname(ht), ATOMname(tt));
+fflush(stdout);
 	BATstore *bs;
 	BAT *bn;
 
@@ -290,6 +304,9 @@ BATnewstorage(int ht, int tt, BUN cap, int role)
 BAT *
 BATnew(int ht, int tt, BUN cap, int role)
 {
+//printf("BATnew, cap: %i\n", cap);
+//fflush(stdout);
+
 	BATstore *bs;
 
 	assert(cap <= BUN_MAX);
@@ -314,6 +331,8 @@ BATnew(int ht, int tt, BUN cap, int role)
 BAT *
 BATattach(int tt, const char *heapfile, int role)
 {
+printf("BATattach");
+fflush(stdout);
 	BATstore *bs;
 	BAT *bn;
 	struct stat st;
@@ -367,7 +386,7 @@ BATattach(int tt, const char *heapfile, int role)
 	}
 	bn->batRestricted = BAT_READ;
 	bn->T->heap.size = (size_t) st.st_size;
-	bn->T->heap.newstorage = bn->T->heap.storage = (bn->T->heap.size < GDK_mmap_minsize) ? STORE_MEM : STORE_MMAP;
+	bn->T->heap.newstorage = bn->T->heap.storage = (bn->T->heap.size < GDK_fpga_minsize) ? STORE_MEM : ((bn->T->heap.size < GDK_mmap_minsize) ? STORE_FPGA : STORE_MMAP);
 	if (HEAPload(&bn->T->heap, BBP_physical(bn->batCacheid), "tail", TRUE) != GDK_SUCCEED) {
 		HEAPfree(&bn->T->heap, 1);
 		GDKfree(bs);
@@ -394,6 +413,8 @@ BATattach(int tt, const char *heapfile, int role)
 BUN
 BATguess(BAT *b)
 {
+printf("BATguess");
+fflush(stdout);
 	BUN newcap;
 
 	BATcheck(b, "BATguess", 0);
@@ -410,6 +431,9 @@ BATguess(BAT *b)
 BUN
 BATgrows(BAT *b)
 {
+printf("BATgrows");
+fflush(stdout);
+
 	BUN oldcap, newcap;
 
 	BATcheck(b, "BATgrows", 0);
@@ -445,6 +469,9 @@ BATgrows(BAT *b)
 gdk_return
 BATextend(BAT *b, BUN newcap)
 {
+printf("BATextend");
+fflush(stdout);
+
 	size_t hheap_size = newcap, theap_size = newcap;
 
 	assert(newcap <= BUN_MAX);
@@ -496,6 +523,9 @@ BATextend(BAT *b, BUN newcap)
 gdk_return
 BATclear(BAT *b, int force)
 {
+printf("BATclear\n");
+fflush(stdout);
+
 	BUN p, q;
 	int voidbat;
 
@@ -605,6 +635,9 @@ BATclear(BAT *b, int force)
 void
 BATfree(BAT *b)
 {
+printf("BATfree\n");
+fflush(stdout);
+
 	if (b == NULL)
 		return;
 
@@ -705,7 +738,7 @@ BATdestroy( BATstore *bs )
 static gdk_return
 heapcopy(BAT *bn, char *ext, Heap *dst, Heap *src)
 {
-	if (src->filename && src->newstorage != STORE_MEM) {
+	if (src->filename && src->newstorage != STORE_MEM && src->newstorage != STORE_FPGA) {
 		const char *nme = BBP_physical(bn->batCacheid);
 
 		if ((dst->filename = GDKfilepath(NOFARM, NULL, nme, ext)) == NULL)
@@ -759,6 +792,9 @@ wrongtype(int t1, int t2)
 BAT *
 BATcopy(BAT *b, int ht, int tt, int writable, int role)
 {
+printf("BATcopy\n");
+fflush(stdout);
+
 	BUN bunstocopy = BUN_NONE;
 	BUN cnt;
 	BAT *bn = NULL;
@@ -1098,6 +1134,9 @@ BATcopy(BAT *b, int ht, int tt, int writable, int role)
 gdk_return
 BUNfastins(BAT *b, const void *h, const void *t)
 {
+printf("BATfstins");
+fflush(stdout);
+
 	bunfastins(b, h, t);
 	if (!b->batDirty)
 		b->batDirty = TRUE;
@@ -1226,6 +1265,9 @@ setcolprops(BAT *b, COLrec *col, const void *x)
 gdk_return
 BUNins(BAT *b, const void *h, const void *t, bit force)
 {
+printf("BUNins, ttype: %i\n", b->ttype);
+fflush(stdout);
+
 	int countonly;
 	BUN p;
 	BAT *bm;
@@ -1240,12 +1282,16 @@ BUNins(BAT *b, const void *h, const void *t, bit force)
 	void_materialize(b, t);
 
 	if ((b->hkey & BOUND2BTRUE) && (p = BUNfnd(bm, h)) != BUN_NONE) {
+   printf("BUNins1\n");
 		if (BUNinplace(b, p, h, t, force) != GDK_SUCCEED)
 			return GDK_FAIL;
 	} else if ((b->tkey & BOUND2BTRUE) && (p = BUNfnd(b, t)) != BUN_NONE) {
+   printf("BUNins2\n");
+
 		if (BUNinplace(bm, p, t, h, force) != GDK_SUCCEED)
 			return GDK_FAIL;
 	} else {
+   printf("BUNins3\n");
 #ifndef STATIC_CODE_ANALYSIS
 		size_t hsize = 0, tsize = 0;
 #endif
@@ -2336,6 +2382,8 @@ BATseqbase(BAT *b, oid o)
 
 		/* adapt keyness */
 		if (BAThvoid(b)) {
+         printf("BATseqbase: adapt keyness\n");
+         fflush(stdout);
 			if (o == oid_nil) {
 				b->hkey = b->batCount <= 1;
 				b->H->nonil = b->batCount == 0;
@@ -2431,7 +2479,7 @@ BATroles(BAT *b, const char *hnme, const char *tnme)
  * batMap fields that are used when the BAT descriptor is saved.
  */
 /* TODO niels: merge with BATsetmodes in gdk_storage */
-#define STORE_MODE(m,r,e,s,f) (((m) == STORE_MEM)?STORE_MEM:((r)&&(e)&&!(f))||(s)==STORE_PRIV?STORE_PRIV:STORE_MMAP)
+#define STORE_MODE(m,r,e,s,f) (((m) == STORE_MEM)?STORE_MEM:(((m) == STORE_FPGA)?STORE_FPGA:((r)&&(e)&&!(f))||(s)==STORE_PRIV?STORE_PRIV:STORE_MMAP))
 static void
 HEAPnewstorage(BAT *b, int force)
 {
@@ -2651,7 +2699,7 @@ backup_new(Heap *hp, int lockbat)
 static storage_t
 HEAPchangeaccess(Heap *hp, int dstmode, int existing)
 {
-	if (hp->base == NULL || hp->newstorage == STORE_MEM || !existing || dstmode == -1)
+	if (hp->base == NULL || hp->newstorage == STORE_MEM || hp->newstorage == STORE_FPGA || !existing || dstmode == -1)
 		return hp->newstorage;	/* 0<=>2,1<=>3,a<=>b */
 
 	if (dstmode == BAT_WRITE) {
@@ -2678,7 +2726,7 @@ HEAPcommitpersistence(Heap *hp, int writable, int existing)
 		return hp->newstorage;	/* 4=>0,5=>1,7=>3,c=>a no change */
 	}
 	/* !existing, ie will become persistent */
-	if (hp->newstorage == STORE_MEM)
+	if (hp->newstorage == STORE_MEM || hp->newstorage == STORE_FPGA)
 		return hp->newstorage;
 	if (hp->newstorage == STORE_MMAP && !writable)
 		return STORE_MMAP;	/* 0=>4 STORE_MMAP */
@@ -3072,6 +3120,8 @@ BATassertHeadProps(BAT *b)
 					"hash table\n");
 				goto abort_check;
 			}
+         printf("BATassert: %p\n", hp);
+         fflush(stdout);
 			snprintf(hp->filename, nmelen + 30,
 				 "%s.hash" SZFMT, nme, MT_getpid());
 			ext = GDKstrdup(hp->filename + nmelen + 1);
@@ -3313,6 +3363,8 @@ BATderiveHeadProps(BAT *b, int expensive)
 				"#BATderiveProps: cannot allocate "
 				"hash table: not doing full check\n");
 		}
+      printf("BATderived: %p\n", hp);
+      fflush(stdout);
 	}
 	for (q = BUNlast(b), p = BUNfirst(b);
 	     p < q && (sorted || revsorted || (key && hs));
