@@ -65,7 +65,11 @@ OPTmitosisImplementation(Client cntxt, MalBlkPtr mb, MalStkPtr stk, InstrPtr p)
 	InstrPtr q, *old, target = 0;
 	size_t argsize = 6 * sizeof(lng);
 	/*     per op:   6 = (2+1)*2   <=  2 args + 1 res, each with head & tail */
-	int threads = GDKnr_threads ? GDKnr_threads : 1;
+	int nrThreads = GDKnr_threads;
+
+	//if( isFPGAOp(p) == 1 ) nrThreads = 2;
+
+	int threads = nrThreads ? nrThreads : 1;
 	int activeClients;
 
 	(void) cntxt;
