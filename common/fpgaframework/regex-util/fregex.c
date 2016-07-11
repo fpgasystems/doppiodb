@@ -235,6 +235,7 @@ int parse_wildcard(char* regex_string, int pos, State* states, int* s_loc, Token
 		states[(*s_loc)].in_edge[states[(*s_loc)].in_cnt] = *s_loc;
 		states[(*s_loc)].out_cnt++;
 		states[(*s_loc)].in_cnt++;
+		cur_pos++;
 	}
 
 	return cur_pos;
