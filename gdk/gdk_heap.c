@@ -52,6 +52,8 @@
 static void *
 HEAPcreatefile(int farmid, size_t *maxsz, const char *fn)
 {
+printf("HEAPcreatefile\n");
+fflush(stdout);
 	void *base = NULL;
 	int fd;
 
@@ -90,6 +92,8 @@ decompose_filename(str nme)
 gdk_return
 HEAPalloc(Heap *h, size_t nitems, size_t itemsize)
 {
+printf("HEAPalloc entry\n");
+fflush(stdout);
 	h->base = NULL;
 	h->size = 1;
 	h->copied = 0;
@@ -101,16 +105,27 @@ HEAPalloc(Heap *h, size_t nitems, size_t itemsize)
 	if (itemsize && nitems > (h->size / itemsize))
 		return GDK_FAIL;
 
-	if (h->filename == NULL || h->size < GDK_mmap_minsize) {
+	if (h->filename == NULL || h->size < GDK_fpga_minsize) {
 		h->storage = STORE_MEM;
-      //TODO replace with call to fpga
-      h->base = (char *) FPGAmallocmax(h->size, &h->size, 0);
-      printf("HEAPalloc, base: %p\n", h->base);
+      printf("HEAPalloc MEM, base: %p\n", h->base);
       fflush(stdout);
-		//h->base = (char *) GDKmallocmax(h->size, &h->size, 0);
+		h->base = (char *) GDKmallocmax(h->size, &h->size, 0);
 		HEAPDEBUG fprintf(stderr, "#HEAPalloc " SZFMT " " PTRFMT "\n", h->size, PTRFMTCAST h->base);
 	}
+   // Use FPGA memory for medium sized allocations
+   else if (h->filename == NULL || h->size < GDK_mmap_minsize) {
+      h->storage = STORE_FPGA;
+      h->base = (char *) FPGAmallocmax(h->size, &h->size, 0);
+      printf("HEAPalloc FPGA, base: %p\n", h->base);
+      fflush(stdout);
+		HEAPDEBUG fprintf(stderr, "#HEAPalloc " SZFMT " " PTRFMT "\n", h->size, PTRFMTCAST h->base);
+
+   }
 	if (h->filename && h->base == NULL) {
+      printf("HEAPalloc, FILE base: %p\n", h->base);
+      printf("nitems: %i, itemsize: %i\n", nitems, itemsize);
+      fflush(stdout);
+
 		char *nme, *of;
 		struct stat st;
 
@@ -168,6 +183,8 @@ HEAPalloc(Heap *h, size_t nitems, size_t itemsize)
 gdk_return
 HEAPextend(Heap *h, size_t size, int mayshare)
 {
+printf("HEAPextend entry\n");
+fflush(stdout);
 	char nme[PATHLENGTH], *ext = NULL;
 	const char *failure = "None";
 
@@ -181,7 +198,7 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 
 	failure = "size > h->size";
 
- 	if (h->storage != STORE_MEM) {
+ 	if (h->storage != STORE_MEM && h->storage != STORE_FPGA) {
 		char *p;
 		char *path;
 
@@ -213,7 +230,7 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 		Heap bak = *h;
 		size_t cur = GDKmem_cursize(), tot = GDK_mem_maxsize;
 		int exceeds_swap = size > (tot + tot - MIN(tot + tot, cur));
-		int must_mmap = h->filename != NULL && (exceeds_swap || h->newstorage != STORE_MEM || size >= GDK_mmap_minsize);
+		int must_mmap = h->filename != NULL && (exceeds_swap || (h->newstorage != STORE_MEM && h->newstorage != STORE_FPGA) || size >= GDK_mmap_minsize);
 
 		h->size = size;
 
@@ -221,23 +238,37 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 		 * reasonable limits */
 		if (!must_mmap) {
 			void *p = h->base;
-			h->newstorage = h->storage = STORE_MEM;
-         //TODO replace with call to fpga
-         h->base = FPGAreallocmax(h->base, size, &h->size, 0);
-			//h->base = GDKreallocmax(h->base, size, &h->size, 0);
-			HEAPDEBUG fprintf(stderr, "#HEAPextend: extending malloced heap " SZFMT " " SZFMT " " PTRFMT " " PTRFMT "\n", size, h->size, PTRFMTCAST p, PTRFMTCAST h->base);
-			if (h->base)
-				return GDK_SUCCEED; /* success */
-			failure = "h->storage == STORE_MEM && !must_map && !h->base";
+         if (h->storage == STORE_MEM)
+         {
+			   h->newstorage = h->storage = STORE_MEM;
+			   h->base = GDKreallocmax(h->base, size, &h->size, 0);
+			   HEAPDEBUG fprintf(stderr, "#HEAPextend: extending malloced heap " SZFMT " " SZFMT " " PTRFMT " " PTRFMT "\n", size, h->size, PTRFMTCAST p, PTRFMTCAST h->base);
+			   if (h->base)
+				   return GDK_SUCCEED; /* success */
+			   failure = "h->storage == STORE_MEM && !must_map && !h->base";
+         }
+         else //STORE_FPGA
+         {
+            h->newstorage = h->storage = STORE_FPGA;
+            h->base = FPGAreallocmax(h->base, size, &h->size, 0);
+			   HEAPDEBUG fprintf(stderr, "#HEAPextend: extending malloced heap " SZFMT " " SZFMT " " PTRFMT " " PTRFMT "\n", size, h->size, PTRFMTCAST p, PTRFMTCAST h->base);
+			   if (h->base)
+				   return GDK_SUCCEED; /* success */
+			   failure = "h->storage == STORE_FPGA && !must_map && !h->base";
+
+
+         }
 		}
 		/* too big: convert it to a disk-based temporary heap */
 		if (h->filename != NULL) {
          printf("#HEAPextend: extending to disk-based heap");
+         printf("HEAPextend, FILE base: %p\n", h->base);
+         printf("size: %i\n", size);
          fflush(stdout);
 			int fd;
 			int existing = 0;
 
-			assert(h->storage == STORE_MEM);
+			assert(h->storage == STORE_MEM || h->storage == STORE_FPGA);
 			assert(ext != NULL);
 			h->filename = NULL;
 			/* if the heap file already exists, we want to
@@ -254,7 +285,7 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 				 * create a new one */
 				h->filename = GDKmalloc(strlen(nme) + strlen(ext) + 2);
 				if (h->filename == NULL) {
-					failure = "h->storage == STORE_MEM && can_map && h->filename == NULL";
+					failure = "h->storage == STORE_MEM/STORE_FPGA && can_map && h->filename == NULL";
 					goto failed;
 				}
 				sprintf(h->filename, "%s.%s", nme, ext);
@@ -271,7 +302,7 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 				close(fd);
 				h->storage = h->newstorage == STORE_MMAP && existing && !h->forcemap && !mayshare ? STORE_PRIV : h->newstorage;
 				/* make sure we really MMAP */
-				if (must_mmap && h->newstorage == STORE_MEM)
+				if (must_mmap && (h->newstorage == STORE_MEM || h->newstorage == STORE_FPGA))
 					h->storage = STORE_MMAP;
 				h->newstorage = h->storage;
 				h->forcemap = 0;
@@ -287,11 +318,11 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 					HEAPfree(&bak, 0);
 					return GDK_SUCCEED;
 				}
-				failure = "h->storage == STORE_MEM && can_map && fd >= 0 && HEAPload() != GDK_SUCCEED";
+				failure = "h->storage == STORE_MEM/STORE_FPGA && can_map && fd >= 0 && HEAPload() != GDK_SUCCEED";
 				/* couldn't allocate, now first save
 				 * data to file */
 				if (HEAPsave_intern(&bak, nme, ext, ".tmp") != GDK_SUCCEED) {
-					failure = "h->storage == STORE_MEM && can_map && fd >= 0 && HEAPsave_intern() != GDK_SUCCEED";
+					failure = "h->storage == STORE_MEM/STORE_FPGA && can_map && fd >= 0 && HEAPsave_intern() != GDK_SUCCEED";
 					goto failed;
 				}
 				/* then free memory */
@@ -303,13 +334,13 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 					GDKclrerr();	/* don't leak errors from e.g. HEAPload */
 					return GDK_SUCCEED;
 				}
-				failure = "h->storage == STORE_MEM && can_map && fd >= 0 && HEAPload_intern() != GDK_SUCCEED";
+				failure = "h->storage == STORE_MEM/STORE_FPGA && can_map && fd >= 0 && HEAPload_intern() != GDK_SUCCEED";
 				/* we failed */
 			} else {
-				failure = "h->storage == STORE_MEM && can_map && fd < 0";
+				failure = "h->storage == STORE_MEM/STORE_FPGA && can_map && fd < 0";
 			}
 		} else {
-			failure = "h->storage == STORE_MEM && !can_map";
+			failure = "h->storage == STORE_MEM/STORE_FPGA && !can_map";
 		}
 	  failed:
 		*h = bak;
@@ -327,14 +358,19 @@ HEAPshrink(Heap *h, size_t size)
 	assert(size >= h->free);
 	assert(size <= h->size);
 	if (h->storage == STORE_MEM) {
-      //TODO replace with call to fpga
-      p = FPGAreallocmax(h->base, size, &size, 0);
-		//p = GDKreallocmax(h->base, size, &size, 0);
+		p = GDKreallocmax(h->base, size, &size, 0);
 		HEAPDEBUG fprintf(stderr, "#HEAPshrink: shrinking malloced "
 				  "heap " SZFMT " " SZFMT " " PTRFMT " "
 				  PTRFMT "\n", h->size, size,
 				  PTRFMTCAST h->base, PTRFMTCAST p);
-	} else {
+	} else if(h->storage == STORE_FPGA) {
+      p = FPGAreallocmax(h->base, size, &size, 0);
+		HEAPDEBUG fprintf(stderr, "#HEAPshrink: shrinking malloced "
+				  "heap " SZFMT " " SZFMT " " PTRFMT " "
+				  PTRFMT "\n", h->size, size,
+				  PTRFMTCAST h->base, PTRFMTCAST p);
+
+   } else {
 		char nme[PATHLENGTH], *ext = NULL;
 		char *path;
 
@@ -442,7 +478,7 @@ GDKupgradevarheap(COLrec *c, var_t v, int copyall, int mayshare)
 	bid = strtol(filename, NULL, 8);
 	if ((BBP_status(bid) & (BBPEXISTING|BBPDELETED)) &&
 	    !file_exists(c->heap.farmid, BAKDIR, filename, NULL) &&
-	    (c->heap.storage != STORE_MEM ||
+	    ((c->heap.storage != STORE_MEM && c->heap.storage != STORE_FPGA) ||
 	     GDKmove(c->heap.farmid, BATDIR, c->heap.filename, NULL,
 		     BAKDIR, filename, NULL) != GDK_SUCCEED)) {
 		int fd;
@@ -572,10 +608,13 @@ HEAPfree(Heap *h, int remove)
 			HEAPDEBUG fprintf(stderr, "#HEAPfree " SZFMT
 					  " " PTRFMT "\n",
 					  h->size, PTRFMTCAST h->base);
-         //TODO replace with call to fpga
+			GDKfree(h->base);
+		} else if (h->storage == STORE_FPGA) {
+         HEAPDEBUG fprintf(stderr, "#HEAPfree " SZFMT
+					  " " PTRFMT "\n",
+					  h->size, PTRFMTCAST h->base);
          FPGAfree(h->base);
-			//GDKfree(h->base);
-		} else {	/* mapped file, or STORE_PRIV */
+      } else {	/* mapped file, or STORE_PRIV */
 			gdk_return ret = GDKmunmap(h->base, h->size);
 
 			if (ret != GDK_SUCCEED) {
@@ -618,12 +657,16 @@ HEAPfree(Heap *h, int remove)
 static gdk_return
 HEAPload_intern(Heap *h, const char *nme, const char *ext, const char *suffix, int trunc)
 {
+printf("HEAPload_intern entry,  h->size: %i\n", h->size);
+printf("GDK_mmap_minsize: %d\n", GDK_mmap_minsize);
+fflush(stdout);
+
 	size_t minsize;
 	int ret = 0;
 	char *srcpath, *dstpath;
 	int t0;
 
-	h->storage = h->newstorage = h->size < GDK_mmap_minsize ? STORE_MEM : STORE_MMAP;
+	h->storage = h->newstorage = (h->size < GDK_fpga_minsize) ? STORE_MEM : ((h->size < GDK_mmap_minsize) ? STORE_FPGA : STORE_MMAP);
 	if (h->filename == NULL)
 		h->filename = (char *) GDKmalloc(strlen(nme) + strlen(ext) + 2);
 	if (h->filename == NULL)
@@ -631,7 +674,7 @@ HEAPload_intern(Heap *h, const char *nme, const char *ext, const char *suffix, i
 	sprintf(h->filename, "%s.%s", nme, ext);
 
 	minsize = (h->size + GDK_mmap_pagesize - 1) & ~(GDK_mmap_pagesize - 1);
-	if (h->storage != STORE_MEM && minsize != h->size)
+	if (h->storage != STORE_MEM && h->storage != STORE_FPGA && minsize != h->size)
 		h->size = minsize;
 
 	/* when a bat is made read-only, we can truncate any unused
@@ -715,9 +758,11 @@ HEAPsave_intern(Heap *h, const char *nme, const char *ext, const char *suffix)
 	if (h->base == NULL) {
 		return GDK_FAIL;
 	}
+   printf("HEAPsave_intern: STH MIGHT GO BAD HERE!!!\n");
+   //TODO this might require STORE_FPGA
 	if (h->storage != STORE_MEM && store == STORE_PRIV) {
 		/* anonymous or private VM is saved as if it were malloced */
-		store = STORE_MEM;
+		store = STORE_MEM; //TODO THIS MIGHT BREAK, MAYBE WE HAVE TO DIFFER BTW MEM AND FPGA
 		assert(strlen(ext) + strlen(suffix) < sizeof(extension));
 		snprintf(extension, sizeof(extension), "%s%s", ext, suffix);
 		ext = extension;
@@ -765,7 +810,7 @@ HEAPwarm(Heap *h)
 {
 	int bogus_result = 0;
 
-	if (h->storage != STORE_MEM) {
+	if (h->storage != STORE_MEM && h->storage != STORE_FPGA) {
 		/* touch the heap sequentially */
 		int *cur = (int *) h->base;
 		int *lim = (int *) (h->base + h->free) - 4096;

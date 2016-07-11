@@ -253,6 +253,7 @@ extern struct BBPfarm_t {
 extern int BBP_dirty;	/* BBP table dirty? */
 extern batlock_t GDKbatLock[BBP_BATMASK + 1];
 extern bbplock_t GDKbbpLock[BBP_THREADMASK + 1];
+extern size_t GDK_fpga_minsize;	/* size after which we use FPGA-shared memory */
 extern size_t GDK_mmap_minsize;	/* size after which we use memory mapped files */
 extern size_t GDK_mmap_pagesize; /* mmap granularity */
 extern MT_Lock GDKnameLock;
