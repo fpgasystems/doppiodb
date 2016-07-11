@@ -308,6 +308,8 @@
 #ifndef _GDK_H_
 #define _GDK_H_
 
+#define MY_GDK_DEBUG 0
+
 /* standard includes upon which all configure tests depend */
 #include <stdio.h>
 #ifdef HAVE_SYS_TYPES_H
@@ -644,6 +646,7 @@ typedef enum {
 	STORE_MEM = 0,		/* load into GDKmalloced memory */
 	STORE_MMAP = 1,		/* mmap() into virtual memory */
 	STORE_PRIV = 2,		/* BAT copy of copy-on-write mmap */
+   STORE_FPGA = 3,
 	STORE_INVALID		/* invalid value, used to indicate error */
 } storage_t;
 
