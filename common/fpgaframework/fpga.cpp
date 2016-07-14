@@ -58,8 +58,8 @@
 /// WHEN:          WHO:     WHAT:
 /// 06/15/2015     JG       Initial version started based on older sample code.@endverbatim
 //****************************************************************************
-#define  ASEAFU
-//#define HWAFU
+//#define  ASEAFU
+#define HWAFU
 
 //TODO maybe call this from BBPinit
 extern "C" {
@@ -73,29 +73,30 @@ void fpga_init() {
     MSG("fpga object null");
     my_fpga = new FPGA();
     MSG("fpga object initial allocation, start thread to fill it");
-    std::thread fpga_allocator( getFPGA, std::ref(my_fpga) );
-    fpga_allocator.join();
+    getFPGA(my_fpga);
   }
   pthread_mutex_unlock(&fpga_mutex);
 }
 
 void* FPGAmalloc(size_t size)
 {
+   //return malloc(size);
   if(my_fpga == NULL) 
   {
+      MSG("FPGAmalloc: NULL");
     fpga_init();
   }
-  return my_fpga->malloc(size);
+  return my_fpga->malloc(size, &size);
 }
 
 void* FPGAmallocmax(size_t size, size_t *maxsize, int emergency)
 {
-  if(my_fpga == NULL) 
-  {
-    fpga_init();
-  }
-   
-   return my_fpga->malloc(size);
+   if(my_fpga == NULL) 
+   {
+      MSG("FPGAmallocmax: NULL");
+      fpga_init();
+   }
+   return my_fpga->malloc(size, maxsize);
 }
 
 void* FPGAreallocmax(void* ptr, size_t size, size_t *psize, int emergency)
@@ -113,54 +114,108 @@ void* FPGAreallocmax(void* ptr, size_t size, size_t *psize, int emergency)
 
 void FPGAfree(void *blk)
 {
-   ssize_t size = 0;
-   ssize_t *s = (ssize_t*) blk;
-   if (s == NULL)
-      return;
    my_fpga->free(blk);
 }
 
-//MAYBE add GDK_VAROFFSET
 void FPGAregex(void* base,
                void* vbase,
                unsigned int count,
                unsigned int width,
-               void* retBase)
+               void* retBase,
+               char regex)
 {
   
-  MSG("Processing on FPGA...");
-  printf("base: %p\n", base);
+  //MSG("Processing on FPGA..."<<pthread_self());
+  /*printf("base: %p\n", base);
   printf("base: %p\n", vbase);
-  fflush(stdout);
+  fflush(stdout);*/
 
   auto start_time = std::chrono::high_resolution_clock::now();
 
-  //pthread_mutex_lock(&fpga_mutex);
-
-  //id = (id%4)+1;
-
-  Fthread regex( fthread_regex(my_fpga, reinterpret_cast<btVirtAddr>(base), 
+  Fthread t( fthread_regex(my_fpga, reinterpret_cast<btVirtAddr>(base), 
   	                    reinterpret_cast<btVirtAddr>(vbase), 
-  						reinterpret_cast<btVirtAddr>(retBase), count, width) );
-  //pthread_mutex_unlock(&fpga_mutex);
-  regex.join();
+  						reinterpret_cast<btVirtAddr>(retBase), count, width, regex) );
+  t.join();
 
-  regex.printStatusLine();
+  //regex.printStatusLine();
  
   //MSG(" regex Done for thread");
 
   auto end_time = std::chrono::high_resolution_clock::now();
-  double    execTime = (std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count())/1000.0;
+  double    execTime = (std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count()) / 1000.0;
   
-  double Throughput  = 1000.0 * (double(count*64) / double(MB(1024))) / execTime; 
-  double opLocalTime = regex.timing();
+  double Throughput  = (double(count*64) / double(MB(1))) / (execTime/1000.0); 
+  double opLocalTime = t.timing();
   
-  printf("%d,  %.10f, %.5f, %.10f\n", 
+  printf("Items: %d,  Time[ms] %.10f, TP[MB/s] %.5f, %.10f\n", 
         count, 
         execTime,
         Throughput,
         opLocalTime);
+   //MSG("Processing on FPGA done."<<pthread_self());*/
 
+   return;
+}
+
+void FPGAparallelRegex(void* base,
+               void* vbase,
+               unsigned int count,
+               unsigned int width,
+               void* retBase,
+               char regex)
+{
+  
+   //MSG("Parallel Processing on FPGA..."<<pthread_self());
+  /*printf("base: %p\n", base);
+  printf("base: %p\n", vbase);
+  fflush(stdout);*/
+
+   Fthread ts[4];
+
+   auto start_time = std::chrono::high_resolution_clock::now();
+
+   //Start 4 threads
+   //TODO split horizontially
+   //split count into 4
+   unsigned int partCount = (count / 4);
+   unsigned int lastCount = (count - 3*partCount);
+   unsigned char* curBase = reinterpret_cast<btVirtAddr>(base);
+   unsigned char* curRetBase = reinterpret_cast<btVirtAddr>(retBase);
+   for (int i = 0; i < 3; i++)
+   {
+      ts[i] = Fthread(  fthread_regex(my_fpga, curBase, 
+  	                     reinterpret_cast<btVirtAddr>(vbase), 
+  						      curRetBase, partCount, width, regex) );
+      curBase += (partCount*width);
+      curRetBase += (partCount*sizeof(uint16_t));
+   }
+   //Create last thread
+   ts[3] = Fthread(  fthread_regex(my_fpga, curBase, 
+  	                     reinterpret_cast<btVirtAddr>(vbase), 
+  						      curRetBase, lastCount, width, regex) );
+
+
+   //Try to join 4 threads
+   for (int i = 0; i < 4; i++)
+   {
+      ts[i].join();
+   }
+
+ 
+   //MSG("Parallel execution done.");
+
+   auto end_time = std::chrono::high_resolution_clock::now();
+   double    execTime = (std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count()) / 1000.0;
+  
+   double Throughput  = (double(count*64) / double(MB(1))) / (execTime/1000.0); 
+   double opLocalTime = 0;//t.timing();
+  
+   /*printf("Items: %d,  Time[ms] %.10f, TP[MB/s] %.5f, %.10f\n", 
+        count, 
+        execTime,
+        Throughput,
+        opLocalTime);*/
+   //MSG("Processing on FPGA done."<<pthread_self());
 
    return;
 }
