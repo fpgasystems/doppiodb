@@ -689,6 +689,20 @@ int fregex_get_config(char* regex_string, int char_cnt, int state_cnt, byte* con
 		}		
 	}
 
+	if (SUPPORTS_CASE_INSENSITIVE==true) {
+
+		for (i=0; i<char_cnt; i++) {
+			if (ochars[i]>='A' && ochars[i]<='Z' && orange[i/2]==false) aux += (byte)1 << i%8;
+
+			if (i%8==7) {
+				if (DEBUG) printf("%2x ", aux);
+				config_bytes[bytes_used] = aux;
+				bytes_used ++;
+				aux = 0;
+			}
+		}
+	}
+
 
 	*(config_len) = bytes_used;
 
