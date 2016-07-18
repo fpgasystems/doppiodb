@@ -32,6 +32,20 @@ command regexfpga(regex:str, b:bat[:oid,:str]):bat[:oid,:sht]
 address UDFBATregexfpga
 comment "FPGA regex on a BAT of strings";
 
+
+# scalar MAL singatures
+module udf;
+command parregexfpga(regex:str, src:str):sht
+address UDFparregexfpga
+comment "fpga parallel regex function";
+
+# BAT MAL signatures
+module batudf;
+command parregexfpga(regex:str, b:bat[:oid,:str]):bat[:oid,:sht]
+address UDFBATparregexfpga
+comment "FPGA parallel regex on a BAT of strings";
+
+
 # scala MAL signatures
 module udf;
 command calc_test(one:dbl,two:dbl):dbl

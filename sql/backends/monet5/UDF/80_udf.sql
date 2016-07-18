@@ -15,6 +15,10 @@ returns string external name udf.reverse;
 create function regexfpga(regex string, src string)
 returns smallint external name udf.regexfpga;
 
+-- Parallel Regex function using fpga
+create function parregexfpga(regex string, src string)
+returns smallint external name udf.parregexfpga;
+
 
 create function calc_test(one double, two double)
 returns double external name udf.calc_test;

@@ -191,7 +191,7 @@ UDFregexfpga(sht *ret, const char **regex, const char **arg)
 {
 	/* assert calling sanity */
 	assert(ret != NULL && arg != NULL);
-   printf("regex: %s\n", *regex);
+   //printf("regex: %s\n", *regex);
 
 	return UDFregexfpga_ ( ret, *arg );
 }
@@ -213,7 +213,7 @@ str UDFtest(dbl *ret, dbl *_p1, dbl *_p2)
 
 /* actual implementation */
 static char *
-UDFBATregexfpga_(BAT **ret, BAT *src)
+UDFBATregexfpga_(BAT **ret, BAT *src, char regex)
 {
 	BATiter li;
 	BAT *bn = NULL;
@@ -349,7 +349,8 @@ UDFBATregexfpga_(BAT **ret, BAT *src)
                src->T->vheap->base,
                src->batCount,
                src->T->width,
-               bn->T->heap.base);
+               bn->T->heap.base,
+               regex);
    /*printf("*****************FPGA results****************\n");
    res = (signed short*) bn->T->heap.base;
    for (i = 0; i < src->batCount; i++)
@@ -376,7 +377,7 @@ UDFBATregexfpga(bat *ret, const char **regex, const bat *arg)
 
 	// assert calling sanity
 	assert(ret != NULL && arg != NULL);
-   printf("regex: %s\n", *regex); //TODO check for NULL
+   //printf("regex: %s\n", *regex); //TODO check for NULL
 
 
 	// bat-id -> BAT-descriptor
@@ -384,7 +385,7 @@ UDFBATregexfpga(bat *ret, const char **regex, const bat *arg)
 		throw(MAL, "batudf.regexfpga", RUNTIME_OBJECT_MISSING);
 
 	// do the work
-	msg = UDFBATregexfpga_ ( &res, src );
+	msg = UDFBATregexfpga_ ( &res, src, (*regex)[0] );
 
 	// release input BAT-descriptor
 	BBPunfix(src->batCacheid);
@@ -399,6 +400,134 @@ UDFBATregexfpga(bat *ret, const char **regex, const bat *arg)
 
 
 
+/* PARALLEL REGEX */
+/* actual implementation */
+/* all non-exported functions must be declared static */
+static char *
+UDFparregexfpga_(sht *ret, const char *src)
+{
+	size_t len = 0;
+        sht match = 0;
+	//char *dst = NULL;
+
+	/* assert calling sanity */
+	assert(ret != NULL);
+
+	/* handle NULL pointer and NULL value */
+	if (src == NULL || strcmp(src, str_nil) == 0) {
+		*ret = 0;
+
+		return MAL_SUCCEED;
+	}
+
+	/* allocate result string */
+	len = strlen(src);
+	*ret = (len/2);
+
+	return MAL_SUCCEED;
+}
+
+/* MAL wrapper */
+char *
+UDFparregexfpga(sht *ret, const char **regex, const char **arg)
+{
+	/* assert calling sanity */
+	assert(ret != NULL && arg != NULL);
+
+	return UDFparregexfpga_ ( ret, *arg );
+}
+
+/* BAT VERSION OF PARALLEL REGEX */
+/* actual implementation */
+static char *
+UDFBATparregexfpga_(BAT **ret, BAT *src, char regex)
+{
+	BATiter li;
+	BAT *bn = NULL;
+	BUN p = 0, q = 0;
+
+   // assert calling sanity
+	assert(ret != NULL);
+
+	// handle NULL pointer
+	if (src == NULL)
+		throw(MAL, "batudf.parregexfpga", RUNTIME_OBJECT_MISSING);
+
+	// check tail type
+	if (src->ttype != TYPE_str) {
+		throw(MAL, "batudf.parregexfpga",
+		      "tail-type of input BAT must be TYPE_str");
+	}
+
+	// allocate result BAT 
+	bn = BATnew(src->htype, TYPE_sht, BATcount(src), TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.parregexfpga", MAL_MALLOC_FAIL);
+	}
+   // Set seq/key base for new BAT, TODO adapt keyness???
+	BATseqbase(bn, src->hseqbase);
+   //BATmaterialize, not required!
+   
+   int i = 0;
+   unsigned short* res;
+
+   // copy OIDS
+   memcpy(bn->H->heap.base, src->H->heap.base, (src->H->width * src->batCount));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * src->batCount);
+   bn->T->heap.free += (bn->T->width * src->batCount);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, src->batCount);
+   //destroy imprints, this breaks the UDF!!
+   //IMPSdestroy(bn);
+
+
+
+   //Call FPGA
+   FPGAparallelRegex(src->T->heap.base,
+               src->T->vheap->base,
+               src->batCount,
+               src->T->width,
+               bn->T->heap.base,
+               regex);
+
+	*ret = bn;
+
+	return MAL_SUCCEED;
+}
+
+/* MAL wrapper */
+char *
+UDFBATparregexfpga(bat *ret, const char **regex, const bat *arg)
+{
+	BAT *res = NULL, *src = NULL;
+	char *msg = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL && arg != NULL);
+   //printf("regex: %s\n", *regex); //TODO check for NULL
+
+
+	// bat-id -> BAT-descriptor
+	if ((src = BATdescriptor(*arg)) == NULL)
+		throw(MAL, "batudf.parregexfpga", RUNTIME_OBJECT_MISSING);
+
+	// do the work
+	msg = UDFBATparregexfpga_ ( &res, src, (*regex)[0] );
+
+	// release input BAT-descriptor
+	BBPunfix(src->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
 
 /* fuse */
 

@@ -31,8 +31,12 @@
 
 udf_export char * UDFreverse(char **ret, const char **arg);
 udf_export char * UDFBATreverse(bat *ret, const bat *arg);
+
 udf_export char * UDFregexfpga(sht *ret, const char **regex, const char **arg);
 udf_export char * UDFBATregexfpga(bat *ret, const char **regex, const bat *arg);
+
+udf_export char * UDFparregexfpga(sht *ret, const char **regex, const char **arg);
+udf_export char * UDFBATparregexfpga(bat *ret, const char **regex, const bat *arg);
 
 udf_export str UDFtest(dbl*, dbl*, dbl*);
 
