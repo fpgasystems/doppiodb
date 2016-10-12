@@ -1669,6 +1669,9 @@ sqltypeinit( sql_allocator *sa)
 				create_arg(sa, NULL, sql_create_subtype(sa, INT, 0, 0), ARG_IN)), 
 				create_arg(sa, NULL, sql_create_subtype(sa, INT, 0, 0), ARG_IN)), 
 				sres, FALSE, F_FUNC, SCALE_FIX);
+      /* regex functionality */
+      sql_create_func(sa, "match", "pcre", "match", *t, *t, BIT, SCALE_NONE);
+      sql_create_func(sa, "imatch", "pcre", "imatch", *t, *t, BIT, SCALE_NONE);
 	}
 	sres = create_arg(sa, NULL, sql_create_subtype(sa, TABLE, 0, 0), ARG_OUT); 
 	/* copyfrom fname (arg 9) */
