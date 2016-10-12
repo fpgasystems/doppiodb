@@ -79,8 +79,10 @@ BATcreatedesc(int ht, int tt, int heapnames, int role)
 	assert(role >= 0 && role < 32);
 
 	bs = (BATstore *) GDKzalloc(sizeof(BATstore));
+#if MY_GDK_DEBUG
    printf("BATcreatedesc: %p\n", bs);
    fflush(stdout);
+#endif
 
 	if (bs == NULL)
 		return NULL;
@@ -155,16 +157,20 @@ BATcreatedesc(int ht, int tt, int heapnames, int role)
 		}
 
 		if (ATOMneedheap(ht)) {
+#if MY_GDK_DEBUG
          printf("ht needs vheap\n");
          fflush(stdout);
+#endif
 
 			if ((bn->H->vheap = (Heap *) GDKzalloc(sizeof(Heap))) == NULL ||
 			    (bn->H->vheap->filename = GDKfilepath(NOFARM, NULL, nme, "hheap")) == NULL)
 				goto bailout;
 			bn->H->vheap->parentid = bn->batCacheid;
 			bn->H->vheap->farmid = BBPselectfarm(role, bn->htype, varheap);
+#if MY_GDK_DEBUG
          printf("BATcreatedesc, ht vheap: %p\n", bs);
          fflush(stdout);
+#endif
 
 		}
 
@@ -175,9 +181,10 @@ BATcreatedesc(int ht, int tt, int heapnames, int role)
 				goto bailout;
 			bn->T->vheap->parentid = bn->batCacheid;
 			bn->T->vheap->farmid = BBPselectfarm(role, bn->ttype, varheap);
+#if MY_GDK_DEBUG
          printf("BATcreatedesc, tt vheap: %p\n", bs);
          fflush(stdout);
-
+#endif
 		}
 	}
 	bn->batDirty = TRUE;
@@ -245,8 +252,10 @@ BATsetdims(BAT *b)
 static BATstore *
 BATnewstorage(int ht, int tt, BUN cap, int role)
 {
+#if MY_GDK_DEBUG
 printf("BATnewstorage, cap: %i\n, ht: %s, tt: %s", cap, ATOMname(ht), ATOMname(tt));
 fflush(stdout);
+#endif
 	BATstore *bs;
 	BAT *bn;
 
@@ -331,8 +340,10 @@ BATnew(int ht, int tt, BUN cap, int role)
 BAT *
 BATattach(int tt, const char *heapfile, int role)
 {
+#if MY_GDK_DEBUG
 printf("BATattach");
 fflush(stdout);
+#endif
 	BATstore *bs;
 	BAT *bn;
 	struct stat st;
@@ -413,8 +424,11 @@ fflush(stdout);
 BUN
 BATguess(BAT *b)
 {
+#if MY_GDK_DEBUG
 printf("BATguess");
 fflush(stdout);
+#endif
+
 	BUN newcap;
 
 	BATcheck(b, "BATguess", 0);
@@ -431,8 +445,10 @@ fflush(stdout);
 BUN
 BATgrows(BAT *b)
 {
+#if MY_GDK_DEBUG
 printf("BATgrows");
 fflush(stdout);
+#endif
 
 	BUN oldcap, newcap;
 
@@ -469,8 +485,10 @@ fflush(stdout);
 gdk_return
 BATextend(BAT *b, BUN newcap)
 {
+#if MY_GDK_DEBUG
 printf("BATextend");
 fflush(stdout);
+#endif
 
 	size_t hheap_size = newcap, theap_size = newcap;
 
@@ -523,8 +541,10 @@ fflush(stdout);
 gdk_return
 BATclear(BAT *b, int force)
 {
+#if MY_GDK_DEBUG
 printf("BATclear\n");
 fflush(stdout);
+#endif
 
 	BUN p, q;
 	int voidbat;
@@ -635,8 +655,10 @@ fflush(stdout);
 void
 BATfree(BAT *b)
 {
+#if MY_GDK_DEBUG
 printf("BATfree\n");
 fflush(stdout);
+#endif
 
 	if (b == NULL)
 		return;
@@ -792,8 +814,10 @@ wrongtype(int t1, int t2)
 BAT *
 BATcopy(BAT *b, int ht, int tt, int writable, int role)
 {
+#if MY_GDK_DEBUG
 printf("BATcopy\n");
 fflush(stdout);
+#endif
 
 	BUN bunstocopy = BUN_NONE;
 	BUN cnt;
@@ -1134,8 +1158,10 @@ fflush(stdout);
 gdk_return
 BUNfastins(BAT *b, const void *h, const void *t)
 {
+#if MY_GDK_DEBUG
 printf("BATfstins");
 fflush(stdout);
+#endif
 
 	bunfastins(b, h, t);
 	if (!b->batDirty)
@@ -1265,8 +1291,10 @@ setcolprops(BAT *b, COLrec *col, const void *x)
 gdk_return
 BUNins(BAT *b, const void *h, const void *t, bit force)
 {
+#if MY_GDK_DEBUG
 printf("BUNins, ttype: %i\n", b->ttype);
 fflush(stdout);
+#endif
 
 	int countonly;
 	BUN p;
@@ -1291,7 +1319,6 @@ fflush(stdout);
 		if (BUNinplace(bm, p, t, h, force) != GDK_SUCCEED)
 			return GDK_FAIL;
 	} else {
-   printf("BUNins3\n");
 #ifndef STATIC_CODE_ANALYSIS
 		size_t hsize = 0, tsize = 0;
 #endif
@@ -2382,8 +2409,10 @@ BATseqbase(BAT *b, oid o)
 
 		/* adapt keyness */
 		if (BAThvoid(b)) {
+#if MY_GDK_DEBUG
          printf("BATseqbase: adapt keyness\n");
          fflush(stdout);
+#endif
 			if (o == oid_nil) {
 				b->hkey = b->batCount <= 1;
 				b->H->nonil = b->batCount == 0;
@@ -3120,8 +3149,10 @@ BATassertHeadProps(BAT *b)
 					"hash table\n");
 				goto abort_check;
 			}
+#if MY_GDK_DEBUG
          printf("BATassert: %p\n", hp);
          fflush(stdout);
+#endif
 			snprintf(hp->filename, nmelen + 30,
 				 "%s.hash" SZFMT, nme, MT_getpid());
 			ext = GDKstrdup(hp->filename + nmelen + 1);
@@ -3363,8 +3394,10 @@ BATderiveHeadProps(BAT *b, int expensive)
 				"#BATderiveProps: cannot allocate "
 				"hash table: not doing full check\n");
 		}
+#if MY_GDK_DEBUG
       printf("BATderived: %p\n", hp);
       fflush(stdout);
+#endif
 	}
 	for (q = BUNlast(b), p = BUNfirst(b);
 	     p < q && (sorted || revsorted || (key && hs));

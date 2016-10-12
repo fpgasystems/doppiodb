@@ -460,8 +460,11 @@ GDKsave(int farmid, const char *nme, const char *ext, void *buf, size_t size, st
 char *
 GDKload(int farmid, const char *nme, const char *ext, size_t size, size_t *maxsize, storage_t mode)
 {
+#if MY_GDK_DEBUG
 printf("GDKload entry, mode: %i\n", mode);
 fflush(stdout);
+#endif
+
 	char *ret = NULL;
 
 	assert(size <= *maxsize);
@@ -469,8 +472,10 @@ fflush(stdout);
 		fprintf(stderr, "#GDKload: name=%s, ext=%s, mode %d\n", nme, ext ? ext : "", (int) mode);
 	}
 	if (mode == STORE_MEM || mode == STORE_FPGA) {
+#if MY_GDK_DEBUG
       printf("GDKload STORE_MEM || STORE_FPGA\n");
       fflush(stdout);
+#endif
 		int fd = GDKfdlocate(farmid, nme, "rb", ext);
 
 		if (fd >= 0) {
@@ -523,10 +528,11 @@ fflush(stdout);
 		}
 	} else {
 		char *path;
+#if MY_GDK_DEBUG
       printf("GDKload, FILE\n");
       printf("size: %i\n", size);
       fflush(stdout);
-
+#endif
 
 		/* round up to multiple of GDK_mmap_pagesize with a
 		 * minimum of one */
@@ -548,8 +554,10 @@ fflush(stdout);
 		}
 		GDKfree(path);
 	}
+#if MY_GDK_DEBUG
    printf("GDKload done\n");
    fflush(stdout);
+#endif
 	return ret;
 }
 
@@ -572,8 +580,10 @@ fflush(stdout);
 static BATstore *
 DESCload(int i)
 {
+#if MY_GDK_DEBUG
 printf("DESCload\n");
 fflush(stdout);
+#endif
 	str s, nme = BBP_physical(i);
 	BATstore *bs;
 	BAT *b = NULL;
@@ -593,8 +603,10 @@ fflush(stdout);
 	if ((ht < 0 && (ht = ATOMindex(s = ATOMunknown_name(ht))) < 0) ||
 	    (tt < 0 && (tt = ATOMindex(s = ATOMunknown_name(tt))) < 0)) {
 		GDKerror("DESCload: atom '%s' unknown, in BAT '%s'.\n", s, nme);
+#if MY_GDK_DEBUG
       printf("DESCload FAIL\n");
       fflush(stdout);
+#endif
 		return NULL;
 	}
 	b->htype = ht;
@@ -610,8 +622,10 @@ fflush(stdout);
 	b->batCopiedtodisk = 1;
 	DESCclean(b);
 
+#if MY_GDK_DEBUG
    printf("DESCload SUCCESS\n");
    fflush(stdout);
+#endif
 	return bs;
 }
 
@@ -747,8 +761,11 @@ BATmsync(BAT *b)
 gdk_return
 BATsave(BAT *bd)
 {
+#if MY_GDK_DEBUG
 printf("BATsave\n");
 fflush(stdout);
+#endif
+
 	gdk_return err = GDK_SUCCEED;
 	char *nme;
 	BATstore bs;

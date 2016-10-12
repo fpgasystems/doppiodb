@@ -52,8 +52,11 @@
 static void *
 HEAPcreatefile(int farmid, size_t *maxsz, const char *fn)
 {
+#if MY_GDK_DEBUG
 printf("HEAPcreatefile\n");
 fflush(stdout);
+#endif
+
 	void *base = NULL;
 	int fd;
 
@@ -92,8 +95,11 @@ decompose_filename(str nme)
 gdk_return
 HEAPalloc(Heap *h, size_t nitems, size_t itemsize)
 {
+#if MY_GDK_DEBUG
 printf("HEAPalloc entry\n");
 fflush(stdout);
+#endif
+
 	h->base = NULL;
 	h->size = 1;
 	h->copied = 0;
@@ -107,8 +113,10 @@ fflush(stdout);
 
 	if (h->filename == NULL || h->size < GDK_fpga_minsize) {
 		h->storage = STORE_MEM;
+#if MY_GDK_DEBUG
       printf("HEAPalloc MEM, base: %p\n", h->base);
       fflush(stdout);
+#endif
 		h->base = (char *) GDKmallocmax(h->size, &h->size, 0);
 		HEAPDEBUG fprintf(stderr, "#HEAPalloc " SZFMT " " PTRFMT "\n", h->size, PTRFMTCAST h->base);
 	}
@@ -116,15 +124,19 @@ fflush(stdout);
    else if (h->filename == NULL || h->size < GDK_mmap_minsize) {
       h->storage = STORE_FPGA;
       h->base = (char *) FPGAmallocmax(h->size, &h->size, 0);
+#if MY_GDK_DEBUG
       printf("HEAPalloc FPGA, base: %p\n", h->base);
       fflush(stdout);
+#endif
 		HEAPDEBUG fprintf(stderr, "#HEAPalloc " SZFMT " " PTRFMT "\n", h->size, PTRFMTCAST h->base);
 
    }
 	if (h->filename && h->base == NULL) {
+#if MY_GDK_DEBUG
       printf("HEAPalloc, FILE base: %p\n", h->base);
       printf("nitems: %i, itemsize: %i\n", nitems, itemsize);
       fflush(stdout);
+#endif
 
 		char *nme, *of;
 		struct stat st;
@@ -183,8 +195,11 @@ fflush(stdout);
 gdk_return
 HEAPextend(Heap *h, size_t size, int mayshare)
 {
+#if MY_GDK_DEBUG
 printf("HEAPextend entry\n");
 fflush(stdout);
+#endif
+
 	char nme[PATHLENGTH], *ext = NULL;
 	const char *failure = "None";
 
@@ -261,10 +276,12 @@ fflush(stdout);
 		}
 		/* too big: convert it to a disk-based temporary heap */
 		if (h->filename != NULL) {
+#if MY_GDK_DEBUG
          printf("#HEAPextend: extending to disk-based heap");
          printf("HEAPextend, FILE base: %p\n", h->base);
          printf("size: %i\n", size);
          fflush(stdout);
+#endif
 			int fd;
 			int existing = 0;
 
@@ -657,9 +674,11 @@ HEAPfree(Heap *h, int remove)
 static gdk_return
 HEAPload_intern(Heap *h, const char *nme, const char *ext, const char *suffix, int trunc)
 {
+#if MY_GDK_DEBUG
 printf("HEAPload_intern entry,  h->size: %i\n", h->size);
 printf("GDK_mmap_minsize: %d\n", GDK_mmap_minsize);
 fflush(stdout);
+#endif
 
 	size_t minsize;
 	int ret = 0;
