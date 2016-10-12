@@ -750,6 +750,12 @@ int isFragmentGroup(InstrPtr p){
 			));
 }
 
+int isFPGAOp(InstrPtr p)
+{
+	if( strstr( getFunctionId(p), "fpga" )  ) return 1;
+
+	return 0;
+}
 /*
  * Some optimizers are interdependent (e.g. mitosis ), which
  * requires inspection of the pipeline attached to a MAL block.

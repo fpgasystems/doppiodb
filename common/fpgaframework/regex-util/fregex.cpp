@@ -547,7 +547,7 @@ int fregex_get_config(char* regex_string, int char_cnt, int state_cnt, byte* con
 				return 0; 
 			}
 		}
-		tokens[t].real_offs = cpos-tokens[t].size;
+		tokens[t].real_offs = cpos-1;
 		if (DEBUG) printf("Updated pos of Token %d is at %d\n", t, cpos-tokens[t].size);
 	}
 
@@ -661,7 +661,12 @@ int fregex_get_config(char* regex_string, int char_cnt, int state_cnt, byte* con
 	//state lengths
 	aux = 0;
 	for (i=0; i<state_cnt; i++) {
-		aux += oslen[i] << ((i%2)*4);
+		if (oslen[i]==0) {
+			aux += 0 << ((i%2)*4);
+		} else {
+			aux += (oslen[i]-1) << ((i%2)*4);
+		}
+
 
 		if (i%2==1) {
 			if (DEBUG) printf("%2x ", aux);
