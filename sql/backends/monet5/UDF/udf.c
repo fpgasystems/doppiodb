@@ -213,7 +213,7 @@ str UDFtest(dbl *ret, dbl *_p1, dbl *_p2)
 
 /* actual implementation */
 static char *
-UDFBATregexfpga_(BAT **ret, BAT *src, char regex)
+UDFBATregexfpga_(BAT **ret, BAT *src, char* regex)
 {
 	BATiter li;
 	BAT *bn = NULL;
@@ -385,7 +385,7 @@ UDFBATregexfpga(bat *ret, const char **regex, const bat *arg)
 		throw(MAL, "batudf.regexfpga", RUNTIME_OBJECT_MISSING);
 
 	// do the work
-	msg = UDFBATregexfpga_ ( &res, src, (*regex)[0] );
+	msg = UDFBATregexfpga_ ( &res, src, (*regex));
 
 	// release input BAT-descriptor
 	BBPunfix(src->batCacheid);
@@ -485,6 +485,13 @@ UDFBATparregexfpga_(BAT **ret, BAT *src, char regex)
    //IMPSdestroy(bn);
 
 
+   //Check if hybrid
+   bool hybrid = false;
+   if (regex == '7')
+   {
+      hybrid = true;
+      regex = '3';
+   }
 
    //Call FPGA
    FPGAparallelRegex(src->T->heap.base,
@@ -493,6 +500,38 @@ UDFBATparregexfpga_(BAT **ret, BAT *src, char regex)
                src->T->width,
                bn->T->heap.base,
                regex);
+
+   // For hybrid do postprocessing
+   if (hybrid)
+   {
+      printf("Hybrid regex evaluation\n");
+      //for debug
+      int postCount = 0;
+      int hits = 0;
+
+      uint16_t* resPtr = (uint16_t*)(bn->T->heap.base);
+      int j = 0;
+      for (j = 0; j < bn->batCount; j++)
+      {
+         //Do post-processing
+         if (*resPtr != 0)
+         {
+            const char* myt = (const char *) (src->T->vheap->base+ 
+                  (((unsigned int *) src->T->heap.base)[*resPtr]));
+
+            const char* res = strstr(myt, "delivery");
+
+            if (res)
+            {
+               *resPtr = (uint16_t)(res - myt);// ;(uint16_t) 1; //TODO
+               hits++;
+            }
+            postCount++;
+         }
+         resPtr++;
+      }
+      printf("%i strings post-processed, hits: %i\n", postCount, hits);
+   }
 
 	*ret = bn;
 

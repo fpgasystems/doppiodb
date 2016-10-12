@@ -4,6 +4,8 @@
 #endif
 #include "fpga.hpp"
 
+#define NUM_ENGINES 4
+
 
 
 
@@ -122,22 +124,35 @@ void FPGAregex(void* base,
                unsigned int count,
                unsigned int width,
                void* retBase,
-               char regex)
+               char* regex)
 {
   
-  //MSG("Processing on FPGA..."<<pthread_self());
-  /*printf("base: %p\n", base);
+  MSG("Processing on FPGA..."<<pthread_self());
+  printf("base: %p\n", base);
   printf("base: %p\n", vbase);
-  fflush(stdout);*/
+  printf("tailWidth: %i\n", width);
+  fflush(stdout);
 
   auto start_time = std::chrono::high_resolution_clock::now();
+
+  /*unsigned char configBytes[512];
+  int configLen = 0;
+  printf("Regex: %s\n", regex);
+  fregex_get_config(regex, 8, 16, configBytes, &configLen);
+  printf("Config length: %i\n", configLen*8);
+  printf("Config: ");
+  for (int i = 0; i < 64; i++)
+  {
+    printf("%c ", configBytes[i]);
+  }
+  printf("\n");*/
 
   Fthread t( fthread_regex(my_fpga, reinterpret_cast<btVirtAddr>(base), 
   	                    reinterpret_cast<btVirtAddr>(vbase), 
   						reinterpret_cast<btVirtAddr>(retBase), count, width, regex) );
   t.join();
 
-  //regex.printStatusLine();
+  t.printStatusLine();
  
   //MSG(" regex Done for thread");
 
@@ -152,7 +167,7 @@ void FPGAregex(void* base,
         execTime,
         Throughput,
         opLocalTime);
-   //MSG("Processing on FPGA done."<<pthread_self());*/
+   MSG("Processing on FPGA done."<<pthread_self());
 
    return;
 }
@@ -162,7 +177,7 @@ void FPGAparallelRegex(void* base,
                unsigned int count,
                unsigned int width,
                void* retBase,
-               char regex)
+               char* regex)
 {
   
    //MSG("Parallel Processing on FPGA..."<<pthread_self());
@@ -170,18 +185,19 @@ void FPGAparallelRegex(void* base,
   printf("base: %p\n", vbase);
   fflush(stdout);*/
 
-   Fthread ts[4];
+
+   Fthread ts[NUM_ENGINES];
 
    auto start_time = std::chrono::high_resolution_clock::now();
 
    //Start 4 threads
    //TODO split horizontially
    //split count into 4
-   unsigned int partCount = (count / 4);
-   unsigned int lastCount = (count - 3*partCount);
+   unsigned int partCount = (count / NUM_ENGINES);
+   unsigned int lastCount = (count - (NUM_ENGINES-1)*partCount);
    unsigned char* curBase = reinterpret_cast<btVirtAddr>(base);
    unsigned char* curRetBase = reinterpret_cast<btVirtAddr>(retBase);
-   for (int i = 0; i < 3; i++)
+   for (int i = 0; i < (NUM_ENGINES-1); i++)
    {
       ts[i] = Fthread(  fthread_regex(my_fpga, curBase, 
   	                     reinterpret_cast<btVirtAddr>(vbase), 
@@ -190,13 +206,13 @@ void FPGAparallelRegex(void* base,
       curRetBase += (partCount*sizeof(uint16_t));
    }
    //Create last thread
-   ts[3] = Fthread(  fthread_regex(my_fpga, curBase, 
+   ts[NUM_ENGINES-1] = Fthread(  fthread_regex(my_fpga, curBase, 
   	                     reinterpret_cast<btVirtAddr>(vbase), 
   						      curRetBase, lastCount, width, regex) );
 
 
    //Try to join 4 threads
-   for (int i = 0; i < 4; i++)
+   for (int i = 0; i < NUM_ENGINES; i++)
    {
       ts[i].join();
    }

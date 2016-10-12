@@ -29,8 +29,8 @@
    extern void* FPGAreallocmax(void*, size_t, size_t*, int);
    extern void FPGAfree(void*);
 
-   extern void FPGAregex(void*, void*, unsigned int, unsigned int, void*, char);
-   extern void FPGAparallelRegex(void*, void*, unsigned int, unsigned int, void*, char);
+   extern void FPGAregex(void*, void*, unsigned int, unsigned int, void*, char*);
+   extern void FPGAparallelRegex(void*, void*, unsigned int, unsigned int, void*, char*);
 
 
    //TODO make not extern
