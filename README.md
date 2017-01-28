@@ -1,2 +1,2 @@
-# doppiodb
+# doppiodDB
 doppioDB - A hardware accelerated database
