@@ -4,6 +4,11 @@ Makefile.am
 Makefile.in
 Makefile.msc
 
+#intermediate
+*.lo
+*.la
+._*
+
 #executables
 Mdiff
 MkillUsers
@@ -13,9 +18,8 @@ libtool
 mserver5*
 monetdbd*
 
-
-
 #some dirs
+.libs
 build/
 *.gem
 home/

@@ -1,0 +1,5 @@
+Makefile using sources from Centaur
+=========================================
+Set path of you Centaur git directory:
+
+export CENTAUR_HOME=~/workspace/centaur
