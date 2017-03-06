@@ -23,9 +23,11 @@
                                 int* base2, const char* selectionType2, int lowerThreshold2, int upperThreshold2,
                                 int countTuples, int* destination);
     extern int FPGAminmaxsum(int* base, int countTuples, int* destination);
-
-   extern void FPGAskyline(void* tupleDims[],unsigned int numDims, unsigned int numTuples,  void* retBase);
-   extern void SWskyline(void* tupleDims[],unsigned int numDims, unsigned int numTuples,  void* retBase);
+   //Skyline
+   extern void FPGAskyline(void* tupleDims[], unsigned int numDims, unsigned int numTuples, void* retBase);
+   extern void SWskyline(void* tupleDims[], unsigned int numDims, unsigned int numTuples, void* retBase);
+   //SGD
+   extern void FPGAsgd(void* tupleDims[], unsigned int numDims, unsigned int numTuples, void* retBase);
 
 
 #ifdef __cplusplus

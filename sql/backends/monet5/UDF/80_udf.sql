@@ -71,6 +71,10 @@ returns integer external name udf.skylinefpga;
 create function skylinesw(src1 integer, src2 integer, src3 integer, src4 integer, src5 integer, src6 integer, src7 integer, src8 integer, src9 integer, src10 integer, src11 integer, src12 integer, src13 integer, src14 integer, src15 integer, src16 integer)
 returns integer external name udf.skylinesw;
 
+--SGD function using fpga
+create function sgdfpga(d1 float, d2 float, d3 float, d4 float, d5 float, d6 float, d7 float, d8 float, d9 float, d10 float, d11 float, d12 float, d13 float, d14 float, d15 float, d16 float)
+returns integer external name udf.skylinefpga;
+
 --create function calc_test(one double, two double)
 --returns double external name udf.calc_test;
 

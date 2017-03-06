@@ -9,12 +9,10 @@ static FPGA * my_fpga;
 static pthread_mutex_t fpga_mutex;
 static int* use_sw;
 
-void GenerateData(int Dimensions,char Distribution,int Count,int* dims[]);
-
 struct datapoint {
   struct datapoint *next;
   uint64_t timestamp;
-  uint32_t dimensions[7]; 
+  uint32_t dimensions[16]; 
 };
 
 #define FALSE 0

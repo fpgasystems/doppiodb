@@ -698,9 +698,9 @@ void SWskyline(void* dims[], uint32_t numDims, uint32_t numTuples, void* retBase
   struct datapoint *wstart, *wend, *wcurrent, *wprevious; 
   uint32_t wcount;
 
-  uint32_t NUMDIMENSIONS = 7;
+  uint32_t NUMDIMENSIONS = numDims;
   uint32_t WINDOWSIZE    = 64;
-  uint32_t NUMPOINTS     = 102400;
+  uint32_t NUMPOINTS     = numTuples;
 
   BOOL keepPoint;
   BOOL hasSmaller, hasLarger;
@@ -723,11 +723,8 @@ void SWskyline(void* dims[], uint32_t numDims, uint32_t numTuples, void* retBase
   wprevious = NULL;
   wcount = 0;
 
- // printf("Executing query...\n");
+   printf("Entering Skyline SW implementation\n");
   
-  NUMDIMENSIONS = numDims;
-  NUMPOINTS     = numTuples;
-  WINDOWSIZE    = 64;
   //
   pointcnt = 0;
   dimcnt = 0;
@@ -926,6 +923,8 @@ void SWskyline(void* dims[], uint32_t numDims, uint32_t numTuples, void* retBase
     numskylinepts++;  
   }
 
+   int* stats       = reinterpret_cast<int*>(retBase);
+   stats[0] = numskylinepts;
 }
 
 void FPGAskyline(void* tupleDims[],
@@ -933,13 +932,11 @@ void FPGAskyline(void* tupleDims[],
                  unsigned int numTuples,
                  void* retBase)
 {
-   std::thread::id this_id = std::this_thread::get_id();
-  
   printf("Enter Skyline UDF\n"); //fflush(stdout);
   // Prepare processing space
-  int * tmpDims     = reinterpret_cast<int*>(my_fpga->malloc(sizeof(uint32_t)*(numTuples*(numDims+1))));
-  int * skylines    = reinterpret_cast<int*>(reinterpret_cast<char*>(retBase) + 64);                      // reserve one cache line header for some statistics
-  int * stats       = reinterpret_cast<int*>(retBase);
+  int* tmpDims     = reinterpret_cast<int*>(my_fpga->malloc(sizeof(uint32_t)*(numTuples*(numDims+1))));
+  int* skylines    = reinterpret_cast<int*>(reinterpret_cast<char*>(retBase) + 64);                      // reserve one cache line header for some statistics
+  int* stats       = reinterpret_cast<int*>(retBase);
   
   //printf("Create Op\n"); fflush(stdout);
   auto start_time = std::chrono::high_resolution_clock::now();
@@ -994,6 +991,16 @@ void FPGAskyline(void* tupleDims[],
                 status->afu_counters[5],
                 status->afu_counters[6],
                 status->afu_counters[7]);*/
+}
+
+void FPGAsgd(void* tupleDims[], unsigned int numDims, unsigned int numTuples, void* retBase)
+{
+   //Return Dummy result for now
+   int* result = reinterpret_cast<int*>(retBase);
+   for (int i = 0; i < numDims; i++)
+   {
+      result[i] = i;
+   }
 }
 
 

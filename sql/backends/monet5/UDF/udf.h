@@ -34,9 +34,13 @@ udf_export char * UDFBATreverse(bat *ret, const bat *arg);
 udf_export char * UDFregexfpga(sht *ret, const char **regex, const char **arg);
 udf_export char * UDFBATregexfpga(bat *ret, const char **regex, const bat *arg);
 
+//Skyline
 udf_export char * UDFBATskylinefpga(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, const bat *arg4, const bat *arg5, const bat *arg6, const bat *arg7, const bat *arg8, const bat *arg9, const bat *arg10, const bat *arg11, const bat *arg12, const bat *arg13, const bat *arg14, const bat *arg15, const bat *arg16);
 udf_export char * UDFBATskylinesw(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, const bat *arg4, const bat *arg5, const bat *arg6, const bat *arg7, const bat *arg8, const bat *arg9, const bat *arg10, const bat *arg11, const bat *arg12, const bat *arg13, const bat *arg14, const bat *arg15, const bat *arg16);
+//Stochastic Gradient Descent
+udf_export char * UDFBATsgdfpga(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, const bat *arg4, const bat *arg5, const bat *arg6, const bat *arg7, const bat *arg8, const bat *arg9, const bat *arg10, const bat *arg11, const bat *arg12, const bat *arg13, const bat *arg14, const bat *arg15, const bat *arg16);
 
+//Regex
 udf_export char * UDFparregexfpga(sht *ret, const char **regex, const char **arg);
 udf_export char * UDFBATparregexfpga(bat *ret, const char **regex, const bat *arg);
 

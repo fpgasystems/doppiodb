@@ -956,7 +956,7 @@ UDFBATskylineGen_(BAT **ret, BAT *arg[16], int numDims, bool useFPGA)
    bn->H->heap.dirty = 1;
    bn->T->heap.dirty = 1;
    //set count
-   BATsetcount(bn, 16);
+   BATsetcount(bn, 1);
    //
 
    void * srcs[16];
@@ -1193,6 +1193,97 @@ UDFBATskylinesw(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, con
 	}
 
 	return msg;
+}
+
+//Stochastic Gradient Descent
+char *
+UDFBATsgdfpga(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, const bat *arg4, const bat *arg5, const bat *arg6, const bat *arg7, const bat *arg8, const bat *arg9, const bat *arg10, const bat *arg11, const bat *arg12, const bat *arg13, const bat *arg14, const bat *arg15, const bat *arg16)
+{
+   BATiter li;
+   BAT *res = NULL;
+	BAT *bn = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL);
+
+   BAT* srcs[16];
+   memset(srcs, 0, 16);
+
+	// bat-id -> BAT-descriptor
+	srcs[0] = BATdescriptor(*arg1);
+	srcs[1] = BATdescriptor(*arg2);
+	srcs[2] = BATdescriptor(*arg3);
+	srcs[3] = BATdescriptor(*arg4);
+	srcs[4] = BATdescriptor(*arg5);
+	srcs[5] = BATdescriptor(*arg6);
+	srcs[6] = BATdescriptor(*arg7);
+	srcs[7] = BATdescriptor(*arg8);
+	srcs[8] = BATdescriptor(*arg9);
+	srcs[9] = BATdescriptor(*arg10);
+	srcs[10] = BATdescriptor(*arg11);
+	srcs[11] = BATdescriptor(*arg12);
+	srcs[12] = BATdescriptor(*arg13);
+	srcs[13] = BATdescriptor(*arg14);
+	srcs[14] = BATdescriptor(*arg15);
+	srcs[15] = BATdescriptor(*arg16);
+
+	// handle NULL pointer
+   int i = 0;
+	for(i = 0; i < 16; i++)
+	{
+		if (srcs[i] == NULL)
+			throw(MAL, "batudf.sgd", RUNTIME_OBJECT_MISSING);
+	}
+ 
+   //Determine number of dimensions
+   int numDim = 1; //TODO maybe remove
+   while(numDim < 16)
+   {
+      if (srcs[numDim-1] == srcs[numDim])
+         break;
+      numDim++;
+   }
+   
+	// allocate result BAT 
+	bn = BATnew(TYPE_void, TYPE_int, numDim, TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.sgd", MAL_MALLOC_FAIL);
+	}
+
+	BATseqbase(bn, srcs[0]->hseqbase);
+
+   // copy OIDS
+   //memcpy(bn->H->heap.base, arg[0]->H->heap.base, (arg[0]->H->width * arg[0]->batCount));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * numDim);
+   bn->T->heap.free += (bn->T->width * numDim);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, numDim);
+
+   void* srcBase[16];
+   for(i = 0; i < numDim; i++)
+	{
+		srcBase[i] = srcs[i]->T->heap.base;
+	}
+
+   printf("-------------- DIMENSIONS: %i --------------\n", numDim);
+
+   FPGAsgd(srcBase, numDim, srcs[0]->batCount, bn->T->heap.base);
+	res = bn;
+
+	// release input BAT-descriptor
+   for (i = 0; i < numDim; i++)
+   {
+	   BBPunfix(srcs[i]->batCacheid);
+   }
+
+	// register result BAT in buffer pool
+	BBPkeepref((*ret = res->batCacheid));
+
+	return MAL_SUCCEED;
 }
 
 

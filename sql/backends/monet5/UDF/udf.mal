@@ -125,6 +125,12 @@ command skylinesw(a:bat[:oid,:int], b:bat[:oid,:int], c:bat[:oid,:int], d:bat[:o
 address UDFBATskylinesw
 comment "Software skyline for up to 16 columns";
 
+#Stochastic Gradient Descent
+module batudf;
+command sgdfpga(a:bat[:oid,:int], b:bat[:oid,:int], c:bat[:oid,:int], d:bat[:oid,:int], e:bat[:oid,:int], f:bat[:oid,:int], g:bat[:oid,:int], h:bat[:oid,:int], i:bat[:oid,:int], j:bat[:oid,:int], k:bat[:oid,:int], l:bat[:oid,:int], m:bat[:oid,:int], n:bat[:oid,:int], o:bat[:oid,:int], p:bat[:oid,:int]):bat[:oid,:int]
+address UDFBATsgdfpga
+comment "FPGA SGD for up to 16 columns";
+
 # scalar MAL signatures
 module udf;
 
