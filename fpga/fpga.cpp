@@ -102,7 +102,7 @@ void FPGAregex(void* base,
                unsigned int count,
                unsigned int width,
                void* retBase,
-               char * regex)
+               const char * regex)
 {
   
   MSG("Processing on FPGA...");
@@ -146,7 +146,7 @@ void FPGAparallelRegex(void* base,
                unsigned int count,
                unsigned int width,
                void* retBase,
-               char* regex)
+               const char* regex)
 {
   
    //MSG("Parallel Processing on FPGA..."<<pthread_self());
@@ -384,7 +384,7 @@ int FPGAregexcount(void* base,
                unsigned int count,
                unsigned int width,
                //void* retBase,
-               char * regex)
+               const char * regex)
 {
   
   MSG("Processing on FPGA...");
@@ -433,7 +433,7 @@ int FPGAregexcount(void* base,
   return ret;
 }
 
-unsigned long int * FPGAregexperc(void* base, void* vbase, unsigned int count, unsigned int width, void* data, char * regex)
+unsigned long int * FPGAregexperc(void* base, void* vbase, unsigned int count, unsigned int width, void* data, const char * regex)
 {
   MSG("Processing on FPGA...");
   printf("base: %p\n", base);
@@ -503,7 +503,7 @@ int FPGAregexcount_sw(void* base,
                unsigned int count,
                unsigned int width,
                //void* retBase,
-               char * regex)
+               const char * regex)
 {
   
   MSG("Processing on FPGA...");
@@ -636,7 +636,7 @@ void FPGAmac(void* base,
    return;
 }
 
-int FPGAselection(int* base1, char* selectionType1, int lowerThreshold1, int upperThreshold1,
+int FPGAselection(int* base1, const char* selectionType1, int lowerThreshold1, int upperThreshold1,
                   int countTuples, int* destination)
 {
 
@@ -650,8 +650,8 @@ int FPGAselection(int* base1, char* selectionType1, int lowerThreshold1, int upp
   return 0;
 }
 
-int FPGAselection2( int* base1, char* selectionType1, int lowerThreshold1, int upperThreshold1,
-                    int* base2, char* selectionType2, int lowerThreshold2, int upperThreshold2,
+int FPGAselection2( int* base1, const char* selectionType1, int lowerThreshold1, int upperThreshold1,
+                    int* base2, const char* selectionType2, int lowerThreshold2, int upperThreshold2,
                     int countTuples, int* destination)
 {
 
@@ -681,11 +681,14 @@ int FPGAminmaxsum(int* base, int countTuples, int* destination)
 
   return 0;
 }
-int skylineSW(void* dims[16], uint32_t numDims, uint32_t numTuples) {
 
-  char *dbname;
-  uint32_t i,j,k;
-  FILE *dbfile;
+//TODO why is this here??
+void SWskyline(void* dims[], uint32_t numDims, uint32_t numTuples, void* retBase)
+{
+
+  //char *dbname;
+  uint32_t k;
+  //FILE *dbfile;
   uint32_t currentdim, dimcnt, pointcnt;
   
   // datapoint-list
@@ -720,11 +723,6 @@ int skylineSW(void* dims[16], uint32_t numDims, uint32_t numTuples) {
   wprevious = NULL;
   wcount = 0;
 
- /* FILE *resfile;
-  resfile = fopen("skyline_results_sw.csv", "w");
-
-  fprintf(resfile, "Dist,Dim,Size, Win,#Iter,#STuples,QTime\n");
-    */
  // printf("Executing query...\n");
   
   NUMDIMENSIONS = numDims;
@@ -928,52 +926,29 @@ int skylineSW(void* dims[16], uint32_t numDims, uint32_t numTuples) {
     numskylinepts++;  
   }
 
-
-  /* output results --------------------------------------------------------------- */
-            
-
-  //fprintf(resfile, "%d,", numruns+1);
-  //fprintf(resfile, "%d,", numskylinepts);
-            
-  //fprintf(resfile, "%.5f\n", 1000.0*((end.tv_sec-start.tv_sec) + 1e-6*(end.tv_usec-start.tv_usec)));
-
-
-//  fclose(resfile);
-return 0;
 }
-//////////////////////////////////////////////////////////////////
-void FPGAskyline1(void* tupleDims[],
+
+void FPGAskyline(void* tupleDims[],
                  unsigned int numDims,
                  unsigned int numTuples,
-                 void* retBase,
-                 unsigned int criticalLevel){
-
-  if (criticalLevel == 0)
-  {
-    skylineSW( tupleDims, numDims, numTuples);
-  }
-  else 
-  {
-  FILE *resfile;
+                 void* retBase)
+{
    std::thread::id this_id = std::this_thread::get_id();
-   char tmp_text[200]="";
-   sprintf(tmp_text, "skyline_results_%d.csv", this_id);
-  resfile = fopen(tmp_text, "a");
   
-  printf("Enter Skyline UDF\n"); fflush(stdout);
+  printf("Enter Skyline UDF\n"); //fflush(stdout);
   // Prepare processing space
   int * tmpDims     = reinterpret_cast<int*>(my_fpga->malloc(sizeof(uint32_t)*(numTuples*(numDims+1))));
   int * skylines    = reinterpret_cast<int*>(reinterpret_cast<char*>(retBase) + 64);                      // reserve one cache line header for some statistics
   int * stats       = reinterpret_cast<int*>(retBase);
   
-  printf("Create Op\n"); fflush(stdout);
+  //printf("Create Op\n"); fflush(stdout);
   auto start_time = std::chrono::high_resolution_clock::now();
 
-  Fthread skylineOp( fthread_skyline(my_fpga, tupleDims, tmpDims, skylines, numTuples, numDims, criticalLevel ) );
+  Fthread skylineOp( fthread_skyline(my_fpga, tupleDims, tmpDims, skylines, numTuples, numDims) );
   
   MSG("FPGA thread created...");
   skylineOp.join();
-  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   auto   end_time    = std::chrono::high_resolution_clock::now();
   double execTime    = (std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count())/1000.0;
   double Throughput  = double(numTuples)*1000.0 / execTime; 
@@ -999,14 +974,14 @@ void FPGAskyline1(void* tupleDims[],
   stats[14] = 0;
   stats[15] = 0;
  
-  int skyLineCount = status->afu_counters[0];
+  //int skyLineCount = status->afu_counters[0];
 
-  printf("Number of Skyline Tuples = %d\n-------------------------\n", skyLineCount);
+  //printf("Number of Skyline Tuples = %d\n-------------------------\n", skyLineCount);
   my_fpga->free(tmpDims);
 
-  double TuplesThroughput = (double(numTuples))/(1000.0*(double(execTime)));
+  //double TuplesThroughput = (double(numTuples))/(1000.0*(double(execTime)));
   // Output results
-  fprintf(resfile, "%d,%d,%d,%d,%d,%d,%.10f,%d,%d,%d,%d,%d\n", 
+  /*fprintf(resfile, "%d,%d,%d,%d,%d,%d,%.10f,%d,%d,%d,%d,%d\n", 
                 status->afu_counters[1], 
                 status->afu_counters[0],
                 status->writes,
@@ -1018,151 +993,7 @@ void FPGAskyline1(void* tupleDims[],
                 status->afu_counters[4],
                 status->afu_counters[5],
                 status->afu_counters[6],
-                status->afu_counters[7]);
-
-}
-}
-////////////////////////////////////////////////////////////////////////////////
-void FPGAskyline2(void* dim1,
-                 unsigned int count,
-                 void* retBase)
-{
-  
-  MSG("Processing on FPGA...");
-  // Allocate I/O
-  uint64_t tupleCount  = 1024;
-  uint64_t dataSize[3] = {1024, 1024, 1024};
-
-  int Dimensions[3]    = {7, 7, 7};
-
-  char dtype[3]       = {'E', 'E', 'E'};
-  int* dims[16];
-  int* skylines[16];
-
-  int* tmpDims;
-  int* skOut;
-
-  int NUM_REP = 1;
-  uint32_t midData[4][3];
-
-//  char dtype[3]={'C', 'E', 'A'};
-  char dbfilename[200]="";
-  char resfilename[200]="";
-
-  FILE *resfile;
-  resfile = fopen("skyline_results.csv", "w");
-
-  fprintf(resfile, "Dist,Dim,Size, Win,#Iter,#STuples,#WR,#RD,#REQU,#EXEC,QTime\n");
-
-  // Allocate I/O memory
-  for(int i = 0; i < 7; i++)
-  {
-    dims[i]     = reinterpret_cast<int*>(my_fpga->malloc(sizeof(uint32_t)*tupleCount));
-//    skylines[i] = reinterpret_cast<int*>(my_fpga->malloc(sizeof(uint32_t)*tupleCount));
-  } 
-
-  tmpDims     = reinterpret_cast<int*>(my_fpga->malloc(sizeof(uint32_t)*(tupleCount*8)));
-  skOut       = reinterpret_cast<int*>(my_fpga->malloc(sizeof(uint32_t)*(tupleCount*8)));
-  // Iterate data sizes
-  for(int c = 0; c < 1; c++)
-  {
-
-    // Generate Data
-    GenerateData(7, dtype[c], 1024, dims);
-        
-    sprintf(dbfilename, "skyline_dbfile_%c.txt", dtype[c]);
-    ///////////////////////// print dims in file
-    FILE *dbfile;
-    dbfile=fopen(dbfilename, "w");
-
-    for(int i = 0; i < tupleCount; i++)
-    {
-     // dims[7][i] = i;
-      for(int l=0; l < 7; l++)
-      {
-        fprintf(dbfile, "%d,", uint32_t(dims[l][i]));
-      }
-      fprintf(dbfile, "%d\n", i);
-    }
-
-    fclose(dbfile);
-        
-    tupleCount = 1024;
-    // Iterate over dimensions
-    for(int d = 0; d < 1; d++)
-    {
-      // iterate over data distributions
-      for(int s = 0; s < 1; s++)
-      {
-        for(int w=0; w < 1; w++)
-        {
-          printf("Run Experiment For Dist:%c, Dim:%d, Data Size: %d, Win: %d\n", dtype[c], Dimensions[d], dataSize[s], w);
-          fprintf(resfile, "%c,%d,%d,%d,", dtype[c], Dimensions[d], dataSize[s], w+1);
-          fflush(stdout);
-        
-          ///////////////////////////////////
-
-          auto start_time = std::chrono::high_resolution_clock::now();
-
-          Fthread skylineOp(fthread_skyline(my_fpga, reinterpret_cast<void**>(dims), tmpDims, skOut, tupleCount, 7, w+1 ) );
-          //fthread_skyline(my_fpga, dims, skylines, tupleCount, Dimensions[d], w+1 ) );
-        
-          MSG("FPGA thread created..."); 
-          skylineOp.join();
-          //////////////////////////////////////////////////////////////////////////////////////////////////
-          auto end_time = std::chrono::high_resolution_clock::now();
-          double    execTime = (std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count())/1000.0;
-  
-          double Throughput  = 1000.0 * (double(tupleCount*(Dimensions[d]+1)*4) / double(MB(1024))) / execTime; 
-          double opLocalTime = skylineOp.timing();
-  
-          printf("%d,  %.10f, %.5f, %.10f\n", 
-              tupleCount, 
-              execTime,
-              Throughput,
-              opLocalTime);
-
-          skylineOp.printStatusLine();
- 
-          FTStatus * status = skylineOp.getFThreadRec()->get_status();
-
-          int skyLineCount = status->afu_counters[0];
-
-          printf("Number of Skyline Tuples = %d\n-------------------------\n", skyLineCount);
-
-          double TuplesThroughput = (double(tupleCount))/(1000.0*(double(execTime)));
-          // Output results
-          fprintf(resfile, "%d,%d,%d,%d,%d,%d,%.10f,%d,%d,%d,%d,%d\n", 
-                 status->afu_counters[1], 
-                status->afu_counters[0],
-                status->writes,
-                status->reads, 
-                status->afu_counters[2],
-                status->exec_cycles, 
-                execTime,
-                status->afu_counters[3],
-                status->afu_counters[4],
-                status->afu_counters[5],
-                status->afu_counters[6],
-                status->afu_counters[7]);
-        }
-      } // Iterate over Rep
-    } // Iterate Over Dim
-  } // Iterate over distributions
-
-  for(int i = 0; i < 7; i++)
-  {
-    my_fpga->free(dims[i]);
-  }
-  my_fpga->free(skOut);
-  my_fpga->free(tmpDims);
-
-
-  fclose(resfile);
-  
-  fflush(stdout);
-
-  return;
+                status->afu_counters[7]);*/
 }
 
 

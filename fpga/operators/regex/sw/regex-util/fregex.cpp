@@ -53,7 +53,7 @@ void copy_state(State* dest, State* src) {
 }
 
 
-int parse_sequence(char* regex_string, int pos, State* states, int* s_loc, Token* tokens, int* t_loc) {	
+int parse_sequence(const char* regex_string, int pos, State* states, int* s_loc, Token* tokens, int* t_loc) {	
 	int cur_pos = pos;
 	char temp[128];
 	int cnt = 0;
@@ -90,7 +90,7 @@ int parse_sequence(char* regex_string, int pos, State* states, int* s_loc, Token
 	return cur_pos;
 }
 
-int parse_range(char* regex_string, int pos, State* states, int* s_loc, Token* tokens, int* t_loc) {
+int parse_range(const char* regex_string, int pos, State* states, int* s_loc, Token* tokens, int* t_loc) {
 	int cur_pos = pos;
 	char temp[128];
 	int cnt = 0;	
@@ -153,7 +153,7 @@ int parse_range(char* regex_string, int pos, State* states, int* s_loc, Token* t
 	return cur_pos;
 }
 
-int parse_choice(char* regex_string, int pos, State* states, int* s_loc, Token* tokens, int* t_loc) {
+int parse_choice(const char* regex_string, int pos, State* states, int* s_loc, Token* tokens, int* t_loc) {
 	int cur_pos = pos;
 	char temp[128];
 	int cnt = 0;	
@@ -211,7 +211,7 @@ int parse_choice(char* regex_string, int pos, State* states, int* s_loc, Token* 
 	return cur_pos;
 }
 
-int parse_wildcard(char* regex_string, int pos, State* states, int* s_loc, Token* tokens, int* t_loc) {
+int parse_wildcard(const char* regex_string, int pos, State* states, int* s_loc, Token* tokens, int* t_loc) {
 	int cur_pos = pos;
 	
 	if (DEBUG) printf("->wildcard\n");
@@ -361,7 +361,7 @@ int rename_accepting_state(State* states, int s_loc, int max_states) {
 }
 
 
-int fregex_get_config(char* regex_string, int char_cnt, int state_cnt, unsigned char* config_bytes, int* config_len) {
+int fregex_get_config(const char* regex_string, int char_cnt, int state_cnt, unsigned char* config_bytes, int* config_len) {
 
 	State states[state_cnt+1];
 	Token tokens[char_cnt+1];
@@ -518,7 +518,7 @@ int fregex_get_config(char* regex_string, int char_cnt, int state_cnt, unsigned 
 	bool oactivates[state_cnt][char_cnt];
 	bool otrans[state_cnt][state_cnt];
 	bool osticky[state_cnt];
-	byte oslen[state_cnt];
+	unsigned char oslen[state_cnt];
 
 	int bytes_used = 0;
 
@@ -590,9 +590,9 @@ int fregex_get_config(char* regex_string, int char_cnt, int state_cnt, unsigned 
 	if (DEBUG) printf("\t");
 
 	//ranges
-	byte aux = 0;
+	unsigned char aux = 0;
 	for (i=0; i<char_cnt/2; i++) {
-		if (orange[i]==true) aux += (byte)1 << i%8;
+		if (orange[i]==true) aux += (unsigned char)1 << i%8;
 	
 		if (i%8==7) {
 			if (DEBUG) printf("%2x ", aux);
@@ -608,7 +608,7 @@ int fregex_get_config(char* regex_string, int char_cnt, int state_cnt, unsigned 
 
 	//sequence conds
 	for (i=0; i<char_cnt; i++) {
-		if (oseq[i]==true) aux += (byte)1 << i%8;
+		if (oseq[i]==true) aux += (unsigned char)1 << i%8;
 
 		if (i%8==7) {
 			if (DEBUG) printf("%2x ", aux);
@@ -625,7 +625,7 @@ int fregex_get_config(char* regex_string, int char_cnt, int state_cnt, unsigned 
 	//triggers
 	for (s=0; s<state_cnt; s++) {
 		for (i=0; i<char_cnt; i++) {
-			if (oactivates[s][i]==true) aux += (byte)1 << i%8;
+			if (oactivates[s][i]==true) aux += (unsigned char)1 << i%8;
 
 			if (i%8==7) {
 				if (DEBUG) printf("%2x ", aux);
@@ -643,7 +643,7 @@ int fregex_get_config(char* regex_string, int char_cnt, int state_cnt, unsigned 
 	//trasnitions into
 	for (s=0; s<state_cnt; s++) {
 		for (i=0; i<state_cnt; i++) {
-			if (otrans[s][i]==true) aux += (byte)1 << i%8;
+			if (otrans[s][i]==true) aux += (unsigned char)1 << i%8;
 
 			if (i%8==7) {
 				if (DEBUG) printf("%2x ", aux);
@@ -682,7 +682,7 @@ int fregex_get_config(char* regex_string, int char_cnt, int state_cnt, unsigned 
 
 	//sticky
 	for (i=0; i<state_cnt; i++) {
-		if (osticky[i]==true) aux += (byte)1 << i%8;
+		if (osticky[i]==true) aux += (unsigned char)1 << i%8;
 
 		if (i%8==7) {
 			if (DEBUG) printf("%2x ", aux);
@@ -697,7 +697,7 @@ int fregex_get_config(char* regex_string, int char_cnt, int state_cnt, unsigned 
 	if (SUPPORTS_CASE_INSENSITIVE==true) {
 
 		for (i=0; i<char_cnt; i++) {
-			if (ochars[i]>='A' && ochars[i]<='Z' && orange[i/2]==false) aux += (byte)1 << i%8;
+			if (ochars[i]>='A' && ochars[i]<='Z' && orange[i/2]==false) aux += (unsigned char)1 << i%8;
 
 			if (i%8==7) {
 				if (DEBUG) printf("%2x ", aux);

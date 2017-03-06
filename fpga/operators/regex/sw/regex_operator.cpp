@@ -7,7 +7,7 @@
 
 
 FthreadRec* fthread_regex(FPGA * t_fpga, unsigned char* src, unsigned char* vsrc, 
-                          unsigned char* dst, unsigned int long batcount, int tailwidth, char* regex)
+                          unsigned char* dst, unsigned int long batcount, int tailwidth, const char* regex)
 {
   // construct thread config parameters
   printf(" allocate regex config struct\n"); fflush(stdout);

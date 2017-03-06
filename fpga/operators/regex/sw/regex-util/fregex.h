@@ -14,6 +14,6 @@
 
 #define SUPPORTS_CASE_INSENSITIVE false
 
-int fregex_get_config(char* regex_string, int char_cnt, int state_cnt, unsigned char* config_data, int* config_len);
+int fregex_get_config(const char* regex_string, int char_cnt, int state_cnt, unsigned char* config_data, int* config_len);
 
 #endif 

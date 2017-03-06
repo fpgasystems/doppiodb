@@ -31,14 +31,32 @@
 
 udf_export char * UDFreverse(char **ret, const char **arg);
 udf_export char * UDFBATreverse(bat *ret, const bat *arg);
-
 udf_export char * UDFregexfpga(sht *ret, const char **regex, const char **arg);
 udf_export char * UDFBATregexfpga(bat *ret, const char **regex, const bat *arg);
+
+udf_export char * UDFBATskylinefpga(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, const bat *arg4, const bat *arg5, const bat *arg6, const bat *arg7, const bat *arg8, const bat *arg9, const bat *arg10, const bat *arg11, const bat *arg12, const bat *arg13, const bat *arg14, const bat *arg15, const bat *arg16);
+udf_export char * UDFBATskylinesw(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, const bat *arg4, const bat *arg5, const bat *arg6, const bat *arg7, const bat *arg8, const bat *arg9, const bat *arg10, const bat *arg11, const bat *arg12, const bat *arg13, const bat *arg14, const bat *arg15, const bat *arg16);
 
 udf_export char * UDFparregexfpga(sht *ret, const char **regex, const char **arg);
 udf_export char * UDFBATparregexfpga(bat *ret, const char **regex, const bat *arg);
 
-udf_export str UDFtest(dbl*, dbl*, dbl*);
+udf_export char * UDFBATregexcountfpga(bat *ret, const char **regex, const bat *arg);
+udf_export char * UDFBATregexcountfpgasw(bat *ret, const char **regex, const bat *arg);
+udf_export char * UDFBATtestcountfpga(bat *ret, const char** test, sht* threshold, const bat *arg);
+udf_export char * UDFBATcopyfpga(bat *ret, const bat *arg);
+udf_export char * UDFBATpercentagefpga(bat *ret, bat *arg1, const bat *arg2);
+udf_export char * UDFBATmacfpga(bat *ret, const sht* mularg, const int* addarg,  const bat *arg);
+udf_export char * UDFBATregexpercfpga(bat *ret, const char **regex, const bat *arg1, const bat *arg2);
+
+udf_export char * UDFBATmadpercfpga(bat *ret, const int* alpha, const int* beta, bat *arg1, const bat *arg2);
+
+udf_export char * UDFBAThwselection(bat *res, const bat *i1, const char** selectionType1, const int* lowerThreshold1, const int* upperThreshold1);
+udf_export char * UDFBAThwselection2(bat *res, 	const bat *i1, const char** selectionType1, const int* lowerThreshold1, const int* upperThreshold1, 
+												const bat *i2, const char** selectionType2, const int* lowerThreshold2, const int* upperThreshold2);
+
+udf_export char * UDFBAThwminmaxsum(bat* res, const bat* i);
+
+//udf_export str UDFtest(dbl*, dbl*, dbl*);
 
 /* using C macro for convenient type-expansion */
 #define UDFfuse_scalar_decl(in,out) \

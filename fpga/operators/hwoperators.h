@@ -35,7 +35,7 @@ uint32_t fthread_copy();
 
 FthreadRec* fthread_regex(FPGA * my_fpga, unsigned char* src, unsigned char* vsrc, 
                           unsigned char* dst, unsigned int long batcount, 
-                          int tailwidth, char * regex);
+                          int tailwidth, const char * regex);
 uint32_t fthread_regex();
 
 //template <typename T>
@@ -54,7 +54,7 @@ FthreadRec * fthread_mac(FPGA * my_fpga, unsigned char * src, unsigned char * ds
 
 uint32_t fthread_mac();
 
-FthreadRec* fthread_selection(FPGA* my_fpga, int* predicateSource, int* source, int* destination,  char* selectionType, int lowerThreshold, int upperThreshold, int countTuples);
+FthreadRec* fthread_selection(FPGA* my_fpga, int* predicateSource, int* source, int* destination,  const char* selectionType, int lowerThreshold, int upperThreshold, int countTuples);
 
 uint32_t fthread_selection();
 
@@ -62,8 +62,8 @@ FthreadRec* fthread_minmaxsum(FPGA* my_fpga, int* source, int* destination, int 
 
 uint32_t fthread_minmaxsum();
 
-FthreadRec * fthread_skyline(FPGA * my_fpga, int* dim[], int* skyline[], uint64_t count, uint32_t numDims, int opPrio);
-FthreadRec * fthread_skyline(FPGA * my_fpga, void* dim[], int* tmpDims, int* skylines, uint64_t count, uint32_t numDims, int opPrio);
+FthreadRec * fthread_skyline(FPGA * my_fpga, int* dim[], int* skyline[], uint64_t count, uint32_t numDims);
+FthreadRec * fthread_skyline(FPGA * my_fpga, void* dim[], int* tmpDims, int* skylines, uint64_t count, uint32_t numDims);
 uint32_t fthread_skyline();
 
 #endif // __HWOPERATORS_H__
