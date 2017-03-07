@@ -21,7 +21,7 @@ struct SELECTION_AFU_CONFIG {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //template <typename T>
-FthreadRec * fthread_selection(FPGA* my_fpga, int* predicateSource, int* source, int* destination, char* selectionType, int lowerThreshold, int upperThreshold, int countTuples)
+FthreadRec * fthread_selection(FPGA* my_fpga, int* predicateSource, int* source, int* destination, const char* selectionType, int lowerThreshold, int upperThreshold, int countTuples)
 { 
   //----------------------------- Operator specific configuration -------------------------------//
   SELECTION_AFU_CONFIG* afu_cfg = (struct SELECTION_AFU_CONFIG*)(my_fpga->malloc( sizeof(SELECTION_AFU_CONFIG) ));

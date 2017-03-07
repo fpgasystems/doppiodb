@@ -19,9 +19,64 @@ returns smallint external name udf.regexfpga;
 create function parregexfpga(regex string, src string)
 returns smallint external name udf.parregexfpga;
 
+-- Copy function using fpga
+create function copyfpga(src integer)
+returns integer external name udf.copyfpga;
 
-create function calc_test(one double, two double)
-returns double external name udf.calc_test;
+-- MAC function using fpga
+create function macfpga(mularg smallint, addarg integer, src integer)
+returns integer external name udf.macfpga;
+
+-- Regex count function using fpga
+create function regexcountfpga(regex string, src string)
+returns integer external name udf.regexcountfpga;
+
+-- Regex percentage function using fpga
+create function regexpercfpga(regex string, src1 string, src2 integer)
+returns bigint external name udf.regexpercfpga;
+
+-- Regex count function using fpga  and sw
+create function regexcountfpgasw(regex string, src string)
+returns integer external name udf.regexcountfpgasw;
+
+-- test_count function using fpga
+create function testcountfpga(test string, threshold smallint, src smallint)
+returns integer external name udf.testcountfpga;
+
+-- percentage function using fpga
+create function percentagefpga(src1 smallint, src2 integer)
+returns bigint external name udf.percentagefpga;
+
+-- mull-add + percentage function using fpga
+create function madpercfpga(a integer, b integer, src1 smallint, src2 integer)
+returns bigint external name udf.madpercfpga;
+
+-- hwselection function using fpga
+create function hwselection(one integer, selectionType1 string, lowerThreshold1 integer, upperThreshold1 integer)
+returns integer external name udf.hwselection;
+
+-- hwselection2 function using fpga
+create function hwselection2(	one integer, selectionType1 string, lowerThreshold1 integer, upperThreshold1 integer, two integer, selectionType2 string, lowerThreshold2 integer, upperThreshold2 integer)
+returns integer external name udf.hwselection2;
+
+-- minmaxsum function using fpga
+create function hwminmaxsum(one integer)
+returns integer external name udf.hwminmaxsum;
+
+--skyline function using fpga
+create function skylinefpga(src1 integer, src2 integer, src3 integer, src4 integer, src5 integer, src6 integer, src7 integer, src8 integer, src9 integer, src10 integer, src11 integer, src12 integer, src13 integer, src14 integer, src15 integer, src16 integer)
+returns integer external name udf.skylinefpga;
+
+--skyline function using sw
+create function skylinesw(src1 integer, src2 integer, src3 integer, src4 integer, src5 integer, src6 integer, src7 integer, src8 integer, src9 integer, src10 integer, src11 integer, src12 integer, src13 integer, src14 integer, src15 integer, src16 integer)
+returns integer external name udf.skylinesw;
+
+--SGD function using fpga
+create function sgdfpga(d1 float, d2 float, d3 float, d4 float, d5 float, d6 float, d7 float, d8 float, d9 float, d10 float, d11 float, d12 float, d13 float, d14 float, d15 float, d16 float)
+returns integer external name udf.skylinefpga;
+
+--create function calc_test(one double, two double)
+--returns double external name udf.calc_test;
 
 -- fuse two (1-byte) tinyint values into one (2-byte) smallint value
 create function fuse(one tinyint, two tinyint)

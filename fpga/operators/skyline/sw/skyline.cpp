@@ -27,11 +27,10 @@ struct SKYLINE_AFU_CONFIG {
       };
    };
 };
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-FthreadRec * fthread_skyline(FPGA * my_fpga, int* dim[], int* skyline[], uint64_t count, uint32_t numDims, int opPrio){
+
+
+FthreadRec * fthread_skyline(FPGA * my_fpga, int* dim[], int* skyline[], uint64_t count, uint32_t numDims)
+{
   
 
   //----------------------------- Operator specific configuration -------------------------------//
@@ -64,13 +63,7 @@ FthreadRec * fthread_skyline(FPGA * my_fpga, int* dim[], int* skyline[], uint64_
   afu_cfg->dimensionCount       = numDims;
   afu_cfg->dimensionComparisons = 0;
 
-//  if(opPrio == 1)      opCode = SKYLINE256_OP;
-//  else if(opPrio == 2) opCode = SKYLINE128_OP;
-//  else                 opCode = SKYLINE64_OP;
-
-  
-  //---------------------------------- Thread allocation ----------------------------------------//
-  
+  //Thread allocation
   return  my_fpga->create_fthread(opCode, reinterpret_cast<unsigned char*>(afu_cfg), sizeof(SKYLINE_AFU_CONFIG) );
  }
 
@@ -102,7 +95,8 @@ struct SKYLINE_AFU_CONFIG2 {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 FthreadRec * fthread_skyline(FPGA * my_fpga, void* dim[], int* tmpDims, int* skylines, 
-                             uint64_t count, uint32_t numDims, int opPrio){
+                             uint64_t count, uint32_t numDims)
+{
   
 
   //----------------------------- Operator specific configuration -------------------------------//
@@ -120,10 +114,6 @@ FthreadRec * fthread_skyline(FPGA * my_fpga, void* dim[], int* tmpDims, int* sky
   afu_cfg->tupleCount           = uint32_t(count);
   afu_cfg->dimensionCount       = numDims;
   afu_cfg->dimensionComparisons = 0;
-
- // if(opPrio == 3)      opCode = SKYLINE256_OP;
- // else if(opPrio == 2) opCode = SKYLINE128_OP;
- // else                 opCode = SKYLINE64_OP;
 
   
   //---------------------------------- Thread allocation ----------------------------------------//

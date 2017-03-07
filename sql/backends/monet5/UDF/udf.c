@@ -191,18 +191,18 @@ UDFregexfpga(sht *ret, const char **regex, const char **arg)
 {
 	/* assert calling sanity */
 	assert(ret != NULL && arg != NULL);
-   //printf("regex: %s\n", *regex);
+   printf("regex: %s\n", *regex);
 
 	return UDFregexfpga_ ( ret, *arg );
 }
 
 
 
-str UDFtest(dbl *ret, dbl *_p1, dbl *_p2)
+/*str UDFtest(dbl *ret, dbl *_p1, dbl *_p2)
 {
    *ret = *_p1+*_p2;
    return MAL_SUCCEED;
-}
+}*/
 
 
 
@@ -213,7 +213,7 @@ str UDFtest(dbl *ret, dbl *_p1, dbl *_p2)
 
 /* actual implementation */
 static char *
-UDFBATregexfpga_(BAT **ret, BAT *src, char* regex)
+UDFBATregexfpga_(BAT **ret, BAT *src, const char *regex)
 {
 	BATiter li;
 	BAT *bn = NULL;
@@ -385,7 +385,7 @@ UDFBATregexfpga(bat *ret, const char **regex, const bat *arg)
 		throw(MAL, "batudf.regexfpga", RUNTIME_OBJECT_MISSING);
 
 	// do the work
-	msg = UDFBATregexfpga_ ( &res, src, (*regex));
+	msg = UDFBATregexfpga_ ( &res, src, *regex );
 
 	// release input BAT-descriptor
 	BBPunfix(src->batCacheid);
@@ -440,7 +440,7 @@ UDFparregexfpga(sht *ret, const char **regex, const char **arg)
 /* BAT VERSION OF PARALLEL REGEX */
 /* actual implementation */
 static char *
-UDFBATparregexfpga_(BAT **ret, BAT *src, char regex)
+UDFBATparregexfpga_(BAT **ret, BAT *src, const char* regex)
 {
 	BATiter li;
 	BAT *bn = NULL;
@@ -487,11 +487,11 @@ UDFBATparregexfpga_(BAT **ret, BAT *src, char regex)
 
    //Check if hybrid
    bool hybrid = false;
-   if (regex == '7')
+   /*if (regex == '7')
    {
       hybrid = true;
       regex = '3';
-   }
+   }*/
 
    //Call FPGA
    FPGAparallelRegex(src->T->heap.base,
@@ -555,7 +555,7 @@ UDFBATparregexfpga(bat *ret, const char **regex, const bat *arg)
 		throw(MAL, "batudf.parregexfpga", RUNTIME_OBJECT_MISSING);
 
 	// do the work
-	msg = UDFBATparregexfpga_ ( &res, src, (*regex)[0] );
+	msg = UDFBATparregexfpga_ ( &res, src, *regex );
 
 	// release input BAT-descriptor
 	BBPunfix(src->batCacheid);
@@ -567,6 +567,1330 @@ UDFBATparregexfpga(bat *ret, const char **regex, const bat *arg)
 
 	return msg;
 }
+
+
+/*
+ * Generic "type-oblivious" version,
+ * using generic "type-oblivious" BAT access interface.
+ */
+
+/* actual implementation */
+static char *
+UDFBATtestcountfpga_(BAT **ret, BAT *src, const char* test, sht threshold)
+{
+
+	BATiter li;
+	BAT *bn = NULL;
+	BUN p = 0, q = 0;
+
+	assert(ret != NULL);
+
+
+	// handle NULL pointer
+	if (src == NULL)
+		throw(MAL, "batudf.testcountfpga", RUNTIME_OBJECT_MISSING);
+    
+    // allocate result BAT 
+	bn = BATnew(src->htype, TYPE_int, 1, TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.testcountfpga", MAL_MALLOC_FAIL);
+	}
+   // Set seq/key base for new BAT, TODO adapt keyness???
+	BATseqbase(bn, src->hseqbase);
+
+   int i = 0;
+   //unsigned short* res;
+
+   // copy OIDS
+   memcpy(bn->H->heap.base, src->H->heap.base, (src->H->width * 1));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * 1);
+   bn->T->heap.free += (bn->T->width * 1);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, 1);
+
+   //memset(bn->T->heap.base, 0, sizeof(int));
+
+   //Call FPGA
+   int res = FPGAtestcount(src->T->heap.base,
+                 		src->batCount,
+                 	    test,
+                 		threshold);
+    
+    //memcpy(bn->T->heap.base, &res, sizeof(int));
+   *((int*) bn->T->heap.base) = res;
+    *ret = bn;
+
+	return MAL_SUCCEED;
+}
+/* MAL wrapper */
+char *
+UDFBATtestcountfpga(bat *ret, const char** test, sht* threshold, const bat *arg)
+{
+	BAT *res = NULL;
+	char *msg = NULL;
+	BAT *src = NULL;
+
+
+	// assert calling sanity
+	assert(ret != NULL && arg != NULL);
+    printf("test: %s, threshold: %d\n", *test, *threshold); //
+
+
+	if ((src = BATdescriptor(*arg)) == NULL)
+		throw(MAL, "batudf.testcountfpga", RUNTIME_OBJECT_MISSING);
+
+	// do the work
+	msg = UDFBATtestcountfpga_ ( &res, src, *test, *threshold );
+
+	//release input BAT-descriptor
+	BBPunfix(src->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
+
+/*
+ * Generic "type-oblivious" version,
+ * using generic "type-oblivious" BAT access interface.
+ */
+
+/* actual implementation */
+static char *
+UDFBATregexcountfpga_(BAT **ret, BAT *src, const char *regex)
+{
+	
+
+    BATiter li;
+	BAT *bn = NULL;
+	BUN p = 0, q = 0;
+
+	assert(ret != NULL);
+
+
+	// handle NULL pointer
+	if (src == NULL)
+		throw(MAL, "batudf.testcountfpga", RUNTIME_OBJECT_MISSING);
+    
+    // allocate result BAT 
+	bn = BATnew(src->htype, TYPE_int, 1, TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.testcountfpga", MAL_MALLOC_FAIL);
+	}
+   // Set seq/key base for new BAT, TODO adapt keyness???
+	BATseqbase(bn, src->hseqbase);
+
+   int i = 0;
+   //unsigned short* res;
+
+   // copy OIDS
+   memcpy(bn->H->heap.base, src->H->heap.base, (src->H->width * 1));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * 1);
+   bn->T->heap.free += (bn->T->width * 1);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, 1);
+
+   memset(bn->T->heap.base, 0, sizeof(int));
+   //Call FPGA
+   int res = FPGAregexcount(src->T->heap.base,
+               src->T->vheap->base,
+               src->batCount,
+               src->T->width,
+               //bn->T->heap.base,
+               regex);
+
+
+
+
+	memcpy(bn->T->heap.base, &res, sizeof(int));
+    *ret = bn;
+
+	return MAL_SUCCEED;
+}
+
+/* MAL wrapper */
+char *
+UDFBATregexcountfpga(bat *ret, const char **regex, const bat *arg)
+{
+	BAT *res = NULL, *src = NULL;
+	char *msg = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL && arg != NULL);
+   printf("regex: %s\n", *regex); //TODO check for NULL
+
+
+	// bat-id -> BAT-descriptor
+	if ((src = BATdescriptor(*arg)) == NULL)
+		throw(MAL, "batudf.regexcountfpga", RUNTIME_OBJECT_MISSING);
+
+	// do the work
+	msg = UDFBATregexcountfpga_ ( &res, src, *regex );
+
+	// release input BAT-descriptor
+	BBPunfix(src->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
+
+/*
+ * Generic "type-oblivious" version,
+ * using generic "type-oblivious" BAT access interface.
+ */
+
+/* actual implementation */
+static char *
+UDFBATregexcountfpgasw_(BAT **ret, BAT *src, const char *regex)
+{
+	
+
+    BATiter li;
+	BAT *bn = NULL;
+	BUN p = 0, q = 0;
+
+	assert(ret != NULL);
+
+
+	// handle NULL pointer
+	if (src == NULL)
+		throw(MAL, "batudf.testcountfpga", RUNTIME_OBJECT_MISSING);
+    
+    // allocate result BAT 
+	bn = BATnew(src->htype, TYPE_int, 1, TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.testcountfpga", MAL_MALLOC_FAIL);
+	}
+   // Set seq/key base for new BAT, TODO adapt keyness???
+	BATseqbase(bn, src->hseqbase);
+
+   int i = 0;
+   //unsigned short* res;
+
+   // copy OIDS
+   memcpy(bn->H->heap.base, src->H->heap.base, (src->H->width * 1));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * 1);
+   bn->T->heap.free += (bn->T->width * 1);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, 1);
+
+   memset(bn->T->heap.base, 0, sizeof(int));
+   //Call FPGA
+   int res = FPGAregexcount(src->T->heap.base,
+               src->T->vheap->base,
+               src->batCount,
+               src->T->width,
+               //bn->T->heap.base,
+               regex);
+
+
+
+
+	memcpy(bn->T->heap.base, &res, sizeof(int));
+    *ret = bn;
+
+	return MAL_SUCCEED;
+}
+
+/* MAL wrapper */
+char *
+UDFBATregexcountfpgasw(bat *ret, const char **regex, const bat *arg)
+{
+	BAT *res = NULL, *src = NULL;
+	char *msg = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL && arg != NULL);
+   printf("regex: %s\n", *regex); //TODO check for NULL
+
+
+	// bat-id -> BAT-descriptor
+	if ((src = BATdescriptor(*arg)) == NULL)
+		throw(MAL, "batudf.regexcountfpga", RUNTIME_OBJECT_MISSING);
+
+	// do the work
+	msg = UDFBATregexcountfpgasw_ ( &res, src, *regex );
+
+	// release input BAT-descriptor
+	BBPunfix(src->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
+
+/* actual implementation */
+static char *
+UDFBATcopyfpga_(BAT **ret, BAT *src)
+{
+	BATiter li;
+	BAT *bn = NULL;
+	BUN p = 0, q = 0;
+
+	// assert calling sanity
+	assert(ret != NULL);
+
+	// handle NULL pointer
+	if (src == NULL)
+		throw(MAL, "batudf.copyfpga", RUNTIME_OBJECT_MISSING);
+
+	// allocate result BAT 
+	bn = BATnew(src->htype, TYPE_int, BATcount(src), TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.copyfpga", MAL_MALLOC_FAIL);
+	}
+
+	BATseqbase(bn, src->hseqbase);
+
+   int i = 0;
+   unsigned short* res;
+
+   // copy OIDS
+   memcpy(bn->H->heap.base, src->H->heap.base, (src->H->width * src->batCount));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * src->batCount);
+   bn->T->heap.free += (bn->T->width * src->batCount);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, src->batCount);
+   //
+
+   //Call FPGA
+   FPGAcopy(src->T->heap.base,
+               src->batCount,
+               bn->T->heap.base);
+  
+
+	*ret = bn;
+
+	return MAL_SUCCEED;
+}
+/* MAL wrapper */
+char *
+UDFBATcopyfpga(bat *ret, const bat *arg)
+{
+	BAT *res = NULL, *src = NULL;
+	char *msg = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL && arg != NULL);
+
+
+	// bat-id -> BAT-descriptor
+	if ((src = BATdescriptor(*arg)) == NULL)
+		throw(MAL, "batudf.copyfpga", RUNTIME_OBJECT_MISSING);
+
+	// do the work
+	msg = UDFBATcopyfpga_ ( &res, src );
+
+	// release input BAT-descriptor
+	BBPunfix(src->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
+
+/* actual implementation */
+static char *
+UDFBATskylineGen_(BAT **ret, BAT *arg[16], int numDims, bool useFPGA)
+{
+	BATiter li;
+	BAT *bn = NULL;
+	BUN p = 0, q = 0;
+	int i = 0;
+
+	// assert calling sanity
+	assert(ret != NULL);
+
+	// handle NULL pointer
+	for(i = 0; i < numDims; i++)
+	{
+		if (arg[i] == NULL)
+			throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	}
+
+	// allocate result BAT 
+	bn = BATnew(arg[0]->htype, TYPE_int, BATcount(arg[0])*numDims, TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.skyline", MAL_MALLOC_FAIL);
+	}
+
+	BATseqbase(bn, arg[0]->hseqbase);
+
+   unsigned short* res;
+
+   // copy OIDS
+   memcpy(bn->H->heap.base, arg[0]->H->heap.base, (arg[0]->H->width * arg[0]->batCount));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * arg[0]->batCount * numDims);
+   bn->T->heap.free += (bn->T->width * arg[0]->batCount * numDims);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, 1);
+   //
+
+   void * srcs[16];
+
+   	for(i = 0; i < numDims; i++)
+	{
+		srcs[i] = arg[i]->T->heap.base;
+	}
+   
+   //Call FPGA
+   if (useFPGA)
+   {
+      FPGAskyline(srcs, numDims, arg[0]->batCount, bn->T->heap.base);
+   }
+   //Call SW
+   else
+   {
+      SWskyline(srcs, numDims, arg[0]->batCount, bn->T->heap.base);
+   }
+
+	*ret = bn;
+
+	return MAL_SUCCEED;
+}
+
+/* MAL wrapper */
+char *
+UDFBATskylinefpga(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, const bat *arg4, const bat *arg5, const bat *arg6, const bat *arg7, const bat *arg8, const bat *arg9, const bat *arg10, const bat *arg11, const bat *arg12, const bat *arg13, const bat *arg14, const bat *arg15, const bat *arg16)
+{
+	BAT *res = NULL, *src1 = NULL, *src2 = NULL, *src3 = NULL, *src4 = NULL, *src5 = NULL, *src6 = NULL, *src7 = NULL, *src8 = NULL;
+	BAT *src9 = NULL, *src10 = NULL, *src11 = NULL, *src12 = NULL, *src13 = NULL, *src14 = NULL, *src15 = NULL, *src16 = NULL;
+
+	char *msg = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL);
+
+
+	// bat-id -> BAT-descriptor
+	if ((src1 = BATdescriptor(*arg1)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src2 = BATdescriptor(*arg2)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src3 = BATdescriptor(*arg3)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src4 = BATdescriptor(*arg4)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src5 = BATdescriptor(*arg5)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src6 = BATdescriptor(*arg6)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src7 = BATdescriptor(*arg7)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src8 = BATdescriptor(*arg8)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src9 = BATdescriptor(*arg9)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src10 = BATdescriptor(*arg10)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src11 = BATdescriptor(*arg11)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src12 = BATdescriptor(*arg12)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src13 = BATdescriptor(*arg13)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src14 = BATdescriptor(*arg14)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src15 = BATdescriptor(*arg15)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src16 = BATdescriptor(*arg16)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+    
+	// do the work
+	BAT* srcs[16];
+
+	srcs[0] = src1;
+	srcs[1] = src2;
+	srcs[2] = src3;
+	srcs[3] = src4;
+	srcs[4] = src5;
+	srcs[5] = src6;
+	srcs[6] = src7;
+	srcs[7] = src8;
+	srcs[8] = src9;
+	srcs[9] = src10;
+	srcs[10] = src11;
+	srcs[11] = src12;
+	srcs[12] = src13;
+	srcs[13] = src14;
+	srcs[14] = src15;
+	srcs[15] = src16;
+   //Determine number of dimensions
+   int dim = 1;
+   while(dim < 16)
+   {
+      if (srcs[dim-1] == srcs[dim])
+         break;
+      dim++;
+   }
+   if (dim < 2)
+      throw (MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+
+   printf("-------------- DIMENSIONS: %i --------------\n", dim);
+
+	msg = UDFBATskylineGen_( &res, srcs, dim, true);
+
+	// release input BAT-descriptor
+	BBPunfix(src1->batCacheid);
+	BBPunfix(src2->batCacheid);
+	BBPunfix(src3->batCacheid);
+	BBPunfix(src4->batCacheid);
+	BBPunfix(src5->batCacheid);
+	BBPunfix(src6->batCacheid);
+	BBPunfix(src7->batCacheid);
+	BBPunfix(src8->batCacheid);
+	BBPunfix(src9->batCacheid);
+	BBPunfix(src10->batCacheid);
+	BBPunfix(src11->batCacheid);
+	BBPunfix(src12->batCacheid);
+	BBPunfix(src13->batCacheid);
+	BBPunfix(src14->batCacheid);
+	BBPunfix(src15->batCacheid);
+	BBPunfix(src16->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
+
+char *
+UDFBATskylinesw(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, const bat *arg4, const bat *arg5, const bat *arg6, const bat *arg7, const bat *arg8, const bat *arg9, const bat *arg10, const bat *arg11, const bat *arg12, const bat *arg13, const bat *arg14, const bat *arg15, const bat *arg16)
+{
+	BAT *res = NULL, *src1 = NULL, *src2 = NULL, *src3 = NULL, *src4 = NULL, *src5 = NULL, *src6 = NULL, *src7 = NULL, *src8 = NULL;
+	BAT *src9 = NULL, *src10 = NULL, *src11 = NULL, *src12 = NULL, *src13 = NULL, *src14 = NULL, *src15 = NULL, *src16 = NULL;
+
+	char *msg = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL);
+
+
+	// bat-id -> BAT-descriptor
+	if ((src1 = BATdescriptor(*arg1)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src2 = BATdescriptor(*arg2)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src3 = BATdescriptor(*arg3)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src4 = BATdescriptor(*arg4)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src5 = BATdescriptor(*arg5)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src6 = BATdescriptor(*arg6)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src7 = BATdescriptor(*arg7)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src8 = BATdescriptor(*arg8)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src9 = BATdescriptor(*arg9)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src10 = BATdescriptor(*arg10)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src11 = BATdescriptor(*arg11)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src12 = BATdescriptor(*arg12)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src13 = BATdescriptor(*arg13)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src14 = BATdescriptor(*arg14)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src15 = BATdescriptor(*arg15)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+	if ((src16 = BATdescriptor(*arg16)) == NULL)
+		throw(MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+    
+	// do the work
+	BAT* srcs[16];
+
+	srcs[0] = src1;
+	srcs[1] = src2;
+	srcs[2] = src3;
+	srcs[3] = src4;
+	srcs[4] = src5;
+	srcs[5] = src6;
+	srcs[6] = src7;
+	srcs[7] = src8;
+	srcs[8] = src9;
+	srcs[9] = src10;
+	srcs[10] = src11;
+	srcs[11] = src12;
+	srcs[12] = src13;
+	srcs[13] = src14;
+	srcs[14] = src15;
+	srcs[15] = src16;
+   //Determine number of dimensions
+   int dim = 1;
+   while(dim < 16)
+   {
+      if (srcs[dim-1] == srcs[dim])
+         break;
+      dim++;
+   }
+   if (dim < 2)
+      throw (MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
+
+   printf("-------------- DIMENSIONS: %i --------------\n", dim);
+
+	msg = UDFBATskylineGen_( &res, srcs, dim, false);
+
+	// release input BAT-descriptor
+	BBPunfix(src1->batCacheid);
+	BBPunfix(src2->batCacheid);
+	BBPunfix(src3->batCacheid);
+	BBPunfix(src4->batCacheid);
+	BBPunfix(src5->batCacheid);
+	BBPunfix(src6->batCacheid);
+	BBPunfix(src7->batCacheid);
+	BBPunfix(src8->batCacheid);
+	BBPunfix(src9->batCacheid);
+	BBPunfix(src10->batCacheid);
+	BBPunfix(src11->batCacheid);
+	BBPunfix(src12->batCacheid);
+	BBPunfix(src13->batCacheid);
+	BBPunfix(src14->batCacheid);
+	BBPunfix(src15->batCacheid);
+	BBPunfix(src16->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
+
+//Stochastic Gradient Descent
+char *
+UDFBATsgdfpga(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, const bat *arg4, const bat *arg5, const bat *arg6, const bat *arg7, const bat *arg8, const bat *arg9, const bat *arg10, const bat *arg11, const bat *arg12, const bat *arg13, const bat *arg14, const bat *arg15, const bat *arg16)
+{
+   BATiter li;
+   BAT *res = NULL;
+	BAT *bn = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL);
+
+   BAT* srcs[16];
+   memset(srcs, 0, 16);
+
+	// bat-id -> BAT-descriptor
+	srcs[0] = BATdescriptor(*arg1);
+	srcs[1] = BATdescriptor(*arg2);
+	srcs[2] = BATdescriptor(*arg3);
+	srcs[3] = BATdescriptor(*arg4);
+	srcs[4] = BATdescriptor(*arg5);
+	srcs[5] = BATdescriptor(*arg6);
+	srcs[6] = BATdescriptor(*arg7);
+	srcs[7] = BATdescriptor(*arg8);
+	srcs[8] = BATdescriptor(*arg9);
+	srcs[9] = BATdescriptor(*arg10);
+	srcs[10] = BATdescriptor(*arg11);
+	srcs[11] = BATdescriptor(*arg12);
+	srcs[12] = BATdescriptor(*arg13);
+	srcs[13] = BATdescriptor(*arg14);
+	srcs[14] = BATdescriptor(*arg15);
+	srcs[15] = BATdescriptor(*arg16);
+
+	// handle NULL pointer
+   int i = 0;
+	for(i = 0; i < 16; i++)
+	{
+		if (srcs[i] == NULL)
+			throw(MAL, "batudf.sgd", RUNTIME_OBJECT_MISSING);
+	}
+ 
+   //Determine number of dimensions
+   int numDim = 1; //TODO maybe remove
+   while(numDim < 16)
+   {
+      if (srcs[numDim-1] == srcs[numDim])
+         break;
+      numDim++;
+   }
+   
+	// allocate result BAT 
+	bn = BATnew(TYPE_void, TYPE_int, numDim, TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.sgd", MAL_MALLOC_FAIL);
+	}
+
+	BATseqbase(bn, srcs[0]->hseqbase);
+
+   // copy OIDS
+   //memcpy(bn->H->heap.base, arg[0]->H->heap.base, (arg[0]->H->width * arg[0]->batCount));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * numDim);
+   bn->T->heap.free += (bn->T->width * numDim);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, numDim);
+
+   void* srcBase[16];
+   for(i = 0; i < numDim; i++)
+	{
+		srcBase[i] = srcs[i]->T->heap.base;
+	}
+
+   printf("-------------- DIMENSIONS: %i --------------\n", numDim);
+
+   FPGAsgd(srcBase, numDim, srcs[0]->batCount, bn->T->heap.base);
+	res = bn;
+
+	// release input BAT-descriptor
+   for (i = 0; i < numDim; i++)
+   {
+	   BBPunfix(srcs[i]->batCacheid);
+   }
+
+	// register result BAT in buffer pool
+	BBPkeepref((*ret = res->batCacheid));
+
+	return MAL_SUCCEED;
+}
+
+
+/* actual implementation */
+static char *
+UDFBATmacfpga_(BAT **ret, BAT *src, const sht mul, const int add)
+{
+	BATiter li;
+	BAT *bn = NULL;
+	BUN p = 0, q = 0;
+
+	// assert calling sanity
+	assert(ret != NULL);
+
+	// handle NULL pointer
+	if (src == NULL)
+		throw(MAL, "batudf.macfpga", RUNTIME_OBJECT_MISSING);
+
+	// allocate result BAT 
+	bn = BATnew(src->htype, TYPE_int, BATcount(src), TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.macfpga", MAL_MALLOC_FAIL);
+	}
+
+	BATseqbase(bn, src->hseqbase);
+
+   int i = 0;
+   //unsigned short* res;
+
+   // copy OIDS
+   memcpy(bn->H->heap.base, src->H->heap.base, (src->H->width * src->batCount));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * src->batCount);
+   bn->T->heap.free += (bn->T->width * src->batCount);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, src->batCount);
+   //
+
+   //Call FPGA
+   FPGAmac(src->T->heap.base,
+               src->batCount,
+               bn->T->heap.base, 
+               mul, 
+               add);
+  
+
+	*ret = bn;
+
+	return MAL_SUCCEED;
+}
+/* MAL wrapper */
+char *
+UDFBATmacfpga(bat *ret, const sht* mularg, const int* addarg,  const bat *arg)
+{
+	BAT *res = NULL, *src = NULL;
+	char *msg = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL && arg != NULL);
+
+
+	// bat-id -> BAT-descriptor
+	if ((src = BATdescriptor(*arg)) == NULL)
+		throw(MAL, "batudf.macfpga", RUNTIME_OBJECT_MISSING);
+
+	// do the work
+	msg = UDFBATmacfpga_ ( &res, src, *mularg, *addarg );
+
+	// release input BAT-descriptor
+	BBPunfix(src->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
+/*
+ * Generic "type-oblivious" version,
+ * using generic "type-oblivious" BAT access interface.
+ */
+
+/* actual implementation */
+static char *
+UDFBATpercentagefpga_(BAT **ret, BAT *p_src, BAT *d_src)
+{
+    BATiter li;
+	BAT *bn = NULL;
+	BUN p = 0, q = 0;
+
+	assert(ret != NULL);
+
+
+	// handle NULL pointer
+	if ((d_src == NULL) || (p_src == NULL))
+		throw(MAL, "batudf.percentagefpga", RUNTIME_OBJECT_MISSING);
+    
+    // allocate result BAT 
+	bn = BATnew(d_src->htype, TYPE_lng, 3, TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.percentagefpga", MAL_MALLOC_FAIL);
+	}
+   // Set seq/key base for new BAT, TODO adapt keyness???
+	BATseqbase(bn, d_src->hseqbase);
+
+   int i = 0;
+   //unsigned short* res;
+
+   // copy OIDS
+   memcpy(bn->H->heap.base, d_src->H->heap.base, (d_src->H->width * 3));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * 3);
+   bn->T->heap.free += (bn->T->width * 3);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, 3);
+
+   //Call FPGA
+   unsigned long int * res = FPGApercentage(d_src->T->heap.base,
+                            p_src->T->heap.base,
+                            bn->T->heap.base,
+               				d_src->batCount);
+
+
+    memcpy(bn->T->heap.base, res, 3*sizeof(unsigned long int));
+    *ret = bn;
+}
+
+/* MAL wrapper */
+char *
+UDFBATpercentagefpga(bat *ret, bat *arg1, const bat *arg2)
+{
+	BAT *res = NULL, *d_src = NULL, *p_src = NULL;
+	char *msg = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL && arg1 != NULL && arg2 != NULL);
+
+
+	// bat-id -> BAT-descriptor
+	if ((d_src = BATdescriptor(*arg2)) == NULL)
+		throw(MAL, "batudf.percentagefpga", RUNTIME_OBJECT_MISSING);
+
+	if ((p_src = BATdescriptor(*arg1)) == NULL)
+		throw(MAL, "batudf.percentagefpga", RUNTIME_OBJECT_MISSING);
+
+	// do the work
+	msg = UDFBATpercentagefpga_ ( &res, p_src, d_src );
+
+	// release input BAT-descriptor
+	BBPunfix(d_src->batCacheid);
+	BBPunfix(p_src->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
+
+/*
+ * Generic "type-oblivious" version,
+ * using generic "type-oblivious" BAT access interface.
+ */
+
+/* actual implementation */
+static char *
+UDFBATmadpercfpga_(BAT **ret, BAT *p_src, BAT *d_src, int a, int b)
+{
+	
+
+    BATiter li;
+	BAT *bn = NULL;
+	BUN p = 0, q = 0;
+
+	assert(ret != NULL);
+
+
+	// handle NULL pointer
+	if ((d_src == NULL) || (p_src == NULL))
+		throw(MAL, "batudf.madpercfpga", RUNTIME_OBJECT_MISSING);
+    
+    // allocate result BAT 
+	bn = BATnew(d_src->htype, TYPE_lng, 3, TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.madpercfpga", MAL_MALLOC_FAIL);
+	}
+   // Set seq/key base for new BAT, TODO adapt keyness???
+	BATseqbase(bn, d_src->hseqbase);
+
+   int i = 0;
+   //unsigned short* res;
+
+   // copy OIDS
+   memcpy(bn->H->heap.base, d_src->H->heap.base, (d_src->H->width * 3));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * 3);
+   bn->T->heap.free += (bn->T->width * 3);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, 3);
+
+   //Call FPGA
+   unsigned long int * res = FPGAmadperc(d_src->T->heap.base,
+                            p_src->T->heap.base,
+                            bn->T->heap.base,
+               				d_src->batCount, a, b);
+
+
+    memcpy(bn->T->heap.base, res, 3*sizeof(unsigned long int));
+    *ret = bn;
+
+	return MAL_SUCCEED;
+}
+
+/* MAL wrapper */
+char *
+UDFBATmadpercfpga(bat *ret, const int* alpha, const int* beta, bat *arg1, const bat *arg2)
+{
+	BAT *res = NULL, *d_src = NULL, *p_src = NULL;
+	char *msg = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL && arg1 != NULL && arg2 != NULL);
+
+
+	// bat-id -> BAT-descriptor
+	if ((d_src = BATdescriptor(*arg2)) == NULL)
+		throw(MAL, "batudf.percentagefpga", RUNTIME_OBJECT_MISSING);
+
+	if ((p_src = BATdescriptor(*arg1)) == NULL)
+		throw(MAL, "batudf.percentagefpga", RUNTIME_OBJECT_MISSING);
+
+	// do the work
+	msg = UDFBATmadpercfpga_ ( &res, p_src, d_src, *alpha, *beta );
+
+	// release input BAT-descriptor
+	BBPunfix(d_src->batCacheid);
+	BBPunfix(p_src->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
+
+/*
+ * Generic "type-oblivious" version,
+ * using generic "type-oblivious" BAT access interface.
+ */
+
+/* actual implementation */
+static char *
+UDFBATregexpercfpga_(BAT **ret, BAT *src_int, BAT *src_str, const char *regex)
+{
+    BATiter li;
+	BAT *bn = NULL;
+	BUN p = 0, q = 0;
+
+	assert(ret != NULL);
+
+
+	// handle NULL pointer
+	if (src_str == NULL)
+		throw(MAL, "batudf.regexpercfpga", RUNTIME_OBJECT_MISSING);
+
+	if (src_int == NULL)
+		throw(MAL, "batudf.regexpercfpga", RUNTIME_OBJECT_MISSING);
+    
+    // allocate result BAT 
+	bn = BATnew(src_int->htype, TYPE_lng, 3, TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.regexpercfpga", MAL_MALLOC_FAIL);
+	}
+   // Set seq/key base for new BAT, TODO adapt keyness???
+	BATseqbase(bn, src_int->hseqbase);
+
+   int i = 0;
+   //unsigned short* res;
+
+   // copy OIDS
+   memcpy(bn->H->heap.base, src_int->H->heap.base, (src_int->H->width * 3));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * 3);
+   bn->T->heap.free += (bn->T->width * 3);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, 3);
+
+   //memset(bn->T->heap.base, 0, sizeof(int));
+   //Call FPGA
+   unsigned long int * res = FPGAregexperc(src_str->T->heap.base,
+               src_str->T->vheap->base,
+               src_str->batCount,
+               src_str->T->width,
+               src_int->T->heap.base,
+               regex);
+
+	memcpy(bn->T->heap.base, res, 3*sizeof(unsigned long int));
+    *ret = bn;
+
+	return MAL_SUCCEED;
+}
+
+/* MAL wrapper */
+char *
+UDFBATregexpercfpga(bat *ret, const char **regex, const bat *arg1, const bat *arg2)
+{
+	BAT *res = NULL, *src_str = NULL, *src_int = NULL;
+	char *msg = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL && arg1 != NULL && arg2 != NULL);
+   printf("regex: %s\n", *regex); //TODO check for NULL
+
+
+	// bat-id -> BAT-descriptor
+	if ((src_str = BATdescriptor(*arg1)) == NULL)
+		throw(MAL, "batudf.regexpercfpga", RUNTIME_OBJECT_MISSING);
+
+	if ((src_int = BATdescriptor(*arg2)) == NULL)
+		throw(MAL, "batudf.regexpercfpga", RUNTIME_OBJECT_MISSING);
+
+	// do the work
+	msg = UDFBATregexpercfpga_ ( &res, src_int, src_str, *regex );
+
+	// release input BAT-descriptor
+	BBPunfix(src_int->batCacheid);
+	BBPunfix(src_str->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
+
+
+static char *
+UDFBAThwselection_(BAT **res, 	const BAT *b1, const char* selectionType1, const int lowerThreshold1, const int upperThreshold1)
+{
+	/* handle NULL pointer */
+	if (b1 == NULL)
+	        throw(MAL, "batudf.hwselection", RUNTIME_OBJECT_MISSING);
+
+	int oneCount = (int)BATcount(b1);
+
+	int *one;
+	one = (int*) Tloc(b1, BUNfirst(b1));
+
+	printf("rel1 num_tuples %d\n", oneCount);
+
+	BAT *bres = NULL;
+	bres = BATnew(TYPE_void, TYPE_int, oneCount, TRANSIENT);
+	if (bres == NULL)
+	    throw(MAL, "batudf.hwselection", MAL_MALLOC_FAIL);
+
+	int* dest = (int*)Tloc(bres, BUNfirst(bres));
+
+	//--------------------------------------------------------------------------------------FPGA Part Begin
+	int result =  FPGAselection(one, selectionType1, lowerThreshold1, upperThreshold1, oneCount, dest);
+	//--------------------------------------------------------------------------------------FPGA Part End
+
+	// bit* output = (bit*)Tloc(bres, BUNfirst(bres));
+
+	// int i;
+	// for (i = 0; i < oneCount; i++) {
+	// 	if (dest [i] > 0)
+	// 		output[i] = TRUE;
+	// 	else
+	// 		output[i] = FALSE;
+	// }
+
+	BATseqbase(bres, b1->hseqbase); /* result head has same seqbase as input */
+	// copy OIDS
+	memcpy(bres->H->heap.base, b1->H->heap.base, (b1->H->width * b1->batCount));
+	//update free pointer
+	bres->H->heap.free += (bres->H->width * b1->batCount);
+	bres->T->heap.free += (bres->T->width * b1->batCount);
+	//set dirty bit, not sure if necessary
+	bres->H->heap.dirty = 1;
+	bres->T->heap.dirty = 1;
+	BATsetcount(bres, oneCount);
+
+	/* set result properties */
+	// bres->hdense = TRUE;              /* result head is dense */
+	// bres->hsorted = 1;                 result head is sorted 
+	// bres->hrevsorted = (BATcount(bres) <= 1);
+	// BATkey(bres, TRUE);               /* result head is key (unique) */
+
+	*res = bres;
+
+	return MAL_SUCCEED;
+}
+
+char *
+UDFBAThwselection(bat *res, const bat *i1, const char** selectionType1, const int* lowerThreshold1, const int* upperThreshold1)
+{
+	printf("I am HW BAT selection!\n");
+	fflush(stdout);
+
+	BAT *bres = NULL, *b1 = NULL;
+	char *msg = NULL;
+
+	/* assert calling sanity */
+	assert(res != NULL && i1 != NULL);
+
+	/* bat-id -> BAT-descriptor */
+	if ((b1 = BATdescriptor(*i1)) == NULL)
+	        throw(MAL, "batudf.hwselection", RUNTIME_OBJECT_MISSING);
+
+	/* do the work */
+	msg = UDFBAThwselection_(&bres, b1, *selectionType1, *lowerThreshold1, *upperThreshold1);
+
+	/* release input BAT-descriptors */
+	BBPunfix(b1->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+        // register result BAT in buffer pool 
+        BBPkeepref((*res = bres->batCacheid));
+	}
+
+	printf("HW BAT selection out!\n");
+	fflush(stdout);
+
+	return msg;
+}
+
+static char *
+UDFBAThwselection2_(BAT **res, 	const BAT *b1, const char* selectionType1, const int lowerThreshold1, const int upperThreshold1,
+								const BAT *b2, const char* selectionType2, const int lowerThreshold2, const int upperThreshold2)
+{
+	/* handle NULL pointer */
+	if (b1 == NULL || b2 == NULL)
+	        throw(MAL, "batudf.hwselection", RUNTIME_OBJECT_MISSING);
+
+	/* check tail types */
+	if (b1->ttype != b2->ttype) {
+	        throw(MAL, "batudf.hwselection", "tails of input BATs must be identical");
+	}
+
+	int oneCount = (int)BATcount(b1);
+	int twoCount = (int)BATcount(b2);
+
+	int *one, *two;
+	one = (int*) Tloc(b1, BUNfirst(b1));
+	two = (int*) Tloc(b2, BUNfirst(b2));
+
+	printf("rel1 num_tuples %d, rel2 num_tuples %d\n", oneCount, twoCount);
+
+	BAT *bres = NULL;
+	bres = BATnew(TYPE_void, TYPE_int, oneCount, TRANSIENT);
+	if (bres == NULL)
+	    throw(MAL, "batudf.hwselection", MAL_MALLOC_FAIL);
+
+	int* dest = (int*) Tloc(bres, BUNfirst(bres));
+
+	//--------------------------------------------------------------------------------------FPGA Part Begin
+	int result =  FPGAselection2(one, selectionType1, lowerThreshold1, upperThreshold1, two, selectionType2, lowerThreshold2, upperThreshold2, oneCount, dest);
+	//int result = memcpy(dest, one, oneCount*sizeof(int));
+	//--------------------------------------------------------------------------------------FPGA Part End
+
+	fflush(stdout);	
+/*
+	int *result;
+	result = (int*) Tloc(bres, BUNfirst(bres));
+	result[0] = (int)matches;
+*/
+	BATsetcount(bres, oneCount);
+
+	/* set result properties */
+	bres->hdense = TRUE;              /* result head is dense */
+	BATseqbase(bres, b1->hseqbase); /* result head has same seqbase as input */
+	bres->hsorted = 1;                /* result head is sorted */
+	bres->hrevsorted = (BATcount(bres) <= 1);
+	BATkey(bres, TRUE);               /* result head is key (unique) */
+
+	*res = bres;
+
+	return MAL_SUCCEED;
+}
+
+char *
+UDFBAThwselection2(bat *res, const bat *i1, const char** selectionType1, const int* lowerThreshold1, const int* upperThreshold1, 
+							const bat *i2, const char** selectionType2, const int* lowerThreshold2, const int* upperThreshold2)
+{
+	printf("I am HW BAT selection2!\n");
+	fflush(stdout);
+
+	BAT *bres = NULL, *b1 = NULL, *b2 = NULL;
+	char *msg = NULL;
+
+	/* assert calling sanity */
+	assert(res != NULL && i1 != NULL && i2 != NULL);
+
+	/* bat-id -> BAT-descriptor */
+	if ((b1 = BATdescriptor(*i1)) == NULL)
+	        throw(MAL, "batudf.hwselection", RUNTIME_OBJECT_MISSING);
+
+	/* bat-id -> BAT-descriptor */
+	if ((b2 = BATdescriptor(*i2)) == NULL) {
+	        BBPunfix(b1->batCacheid);
+	        throw(MAL, "batudf.hwselection", RUNTIME_OBJECT_MISSING);
+	}
+
+	/* do the work */
+	msg = UDFBAThwselection2_(&bres, b1, *selectionType1, *lowerThreshold1, *upperThreshold1, b2, *selectionType2, *lowerThreshold2, *upperThreshold2);
+
+	/* release input BAT-descriptors */
+	BBPunfix(b1->batCacheid);
+	BBPunfix(b2->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+        // register result BAT in buffer pool 
+        BBPkeepref((*res = bres->batCacheid));
+	}
+
+	printf("HW BAT selection2 out!\n");
+	fflush(stdout);
+
+	return msg;
+}
+
+static char*
+UDFBAThwminmaxsum_(BAT **res, const BAT *b)
+{
+	/* handle NULL pointer */
+	if (b == NULL)
+	    throw(MAL, "batudf.hwselection", RUNTIME_OBJECT_MISSING);
+
+	int oneCount = (int)BATcount(b);
+
+	int *one;
+	one = (int*) Tloc(b, BUNfirst(b));
+
+	printf("rel num_tuples %d\n", oneCount);
+
+	BAT *bres = NULL;
+	bres = BATnew(TYPE_void, TYPE_int, oneCount, TRANSIENT);
+	if (bres == NULL)
+	    throw(MAL, "batudf.hwselection", MAL_MALLOC_FAIL);
+
+	int* dest = (int*) Tloc(bres, BUNfirst(bres));
+
+	//--------------------------------------------------------------------------------------FPGA Part Begin
+	int result =  FPGAminmaxsum(one, oneCount, dest);
+	//--------------------------------------------------------------------------------------FPGA Part End
+
+	BATsetcount(bres, 3);
+
+	/* set result properties */
+	bres->hdense = TRUE;              /* result head is dense */
+	BATseqbase(bres, b->hseqbase); 		/* result head has same seqbase as input */
+	bres->hsorted = 1;                /* result head is sorted */
+	bres->hrevsorted = (BATcount(bres) <= 1);
+	BATkey(bres, TRUE);               /* result head is key (unique) */
+
+	*res = bres;
+
+	return MAL_SUCCEED;
+}
+
+char *
+UDFBAThwminmaxsum(bat* res, const bat* i)
+{
+	printf("I am HW BAT minmaxsum\n");
+	fflush(stdout);
+
+	BAT *bres = NULL, *b = NULL;
+	char *msg = NULL;
+
+	/* assert calling sanity */
+	assert(res != NULL && i != NULL);
+
+	/* bat-id -> BAT-descriptor */
+	if ((b = BATdescriptor(*i)) == NULL)
+	        throw(MAL, "batudf.hwselection", RUNTIME_OBJECT_MISSING);
+
+	msg = UDFBAThwminmaxsum_(&bres, b);
+
+	BBPunfix(b->batCacheid);
+
+	if(msg == MAL_SUCCEED){
+		// register result BAT in buffer pool 
+        BBPkeepref((*res = bres->batCacheid));
+	}
+
+	printf("HW BAT minmaxsum out!\n");
+	fflush(stdout);
+
+	return msg;
+}
+
 
 /* fuse */
 

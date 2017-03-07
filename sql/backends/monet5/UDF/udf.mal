@@ -11,14 +11,12 @@ command reverse(ra1:str):str
 address UDFreverse
 comment "Reverse a string";
 
-
 # BAT MAL signatures
 module batudf;
 
 command reverse(b:bat[:oid,:str]):bat[:oid,:str]
 address UDFBATreverse
 comment "Reverse a BAT of strings";
-
 
 # scalar MAL singatures
 module udf;
@@ -32,7 +30,6 @@ command regexfpga(regex:str, b:bat[:oid,:str]):bat[:oid,:sht]
 address UDFBATregexfpga
 comment "FPGA regex on a BAT of strings";
 
-
 # scalar MAL singatures
 module udf;
 command parregexfpga(regex:str, src:str):sht
@@ -45,13 +42,94 @@ command parregexfpga(regex:str, b:bat[:oid,:str]):bat[:oid,:sht]
 address UDFBATparregexfpga
 comment "FPGA parallel regex on a BAT of strings";
 
+# BAT MAL signatures
+module batudf;
+command copyfpga(b:bat[:oid,:int]):bat[:oid,:int]
+address UDFBATcopyfpga
+comment "FPGA Copy on a BAT of integers";
 
-# scala MAL signatures
-module udf;
-command calc_test(one:dbl,two:dbl):dbl
-address UDFtest
-comment "udf floating point test";
+# BAT MAL signatures
+module batudf;
+command macfpga(mularg:sht, addarg:int, b:bat[:oid,:int]):bat[:oid,:int]
+address UDFBATmacfpga
+comment "FPGA MAC on a BAT of integers";
 
+# BAT MAL signatures
+module batudf;
+command percentagefpga(a:bat[:oid,:sht], b:bat[:oid,:int]):bat[:oid,:lng]
+address UDFBATpercentagefpga
+comment "Compute percentage of values matching certain predicate";
+
+# BAT MAL signatures
+module batudf;
+command madpercfpga(alpha: int, beta: int, a:bat[:oid,:sht], b:bat[:oid,:int]):bat[:oid,:lng]
+address UDFBATmadpercfpga
+comment "Compute percentage of values matching certain predicate after applying a mul-add operation";
+
+# BAT MAL signatures
+module batudf;
+command regexpercfpga(regex:str, b:bat[:oid,:str], c:bat[:oid,:int]):bat[:oid,:lng]
+address UDFBATregexpercfpga
+comment "FPGA regex on a BAT of strings returns percentage";
+
+# BAT MAL signatures
+module batudf;
+command regexcountfpga(regex:str, b:bat[:oid,:str]):bat[:oid,:int]
+address UDFBATregexcountfpga
+comment "FPGA regex on a BAT of strings returns count";
+
+# BAT MAL signatures
+module batudf;
+command regexcountfpgasw(regex:str, b:bat[:oid,:str]):bat[:oid,:int]
+address UDFBATregexcountfpgasw
+comment "FPGA regex on a BAT of strings and count in UDF";
+
+# BAT MAL signatures
+module batudf;
+command testcountfpga(test:str, threshold:sht, b:bat[:oid,:sht]):bat[:oid,:int]
+address UDFBATtestcountfpga
+comment "FPGA test and count on a BAT of integers";
+
+# scalar MAL signatures
+#module udf;
+#command calc_test(one:dbl,two:dbl):dbl
+#address UDFtest
+#comment "udf floating point test";
+
+# BAT MAL signatures
+module batudf;
+command hwselection(one:bat[:oid,:int], selectionType1:str, lowerThreshold1:int, upperThreshold1:int ):bat[:oid,:int]
+address UDFBAThwselection
+comment "FPGA selection for one column";
+
+# BAT MAL signatures
+module batudf;
+command hwselection2(one:bat[:oid,:int], selectionType1:str, lowerThreshold1:int, upperThreshold1:int, two:bat[:oid,:int], selectionType2:str, lowerThreshold2:int, upperThreshold2:int ):bat[:oid,:int]
+address UDFBAThwselection2
+comment "FPGA selection for two columns in a pipeline";
+
+# BAT MAL signatures
+module batudf;
+command hwminmaxsum(one:bat[:oid,:int]):bat[:oid,:int]
+address UDFBAThwminmaxsum
+comment "FPGA minmaxsum for one column";
+
+# BAT MAL signatures
+module batudf;
+command skylinefpga(a:bat[:oid,:int], b:bat[:oid,:int], c:bat[:oid,:int], d:bat[:oid,:int], e:bat[:oid,:int], f:bat[:oid,:int], g:bat[:oid,:int], h:bat[:oid,:int], i:bat[:oid,:int], j:bat[:oid,:int], k:bat[:oid,:int], l:bat[:oid,:int], m:bat[:oid,:int], n:bat[:oid,:int], o:bat[:oid,:int], p:bat[:oid,:int]):bat[:oid,:int]
+address UDFBATskylinefpga
+comment "FPGA skyline for up to 16 columns";
+
+module batudf;
+command skylinesw(a:bat[:oid,:int], b:bat[:oid,:int], c:bat[:oid,:int], d:bat[:oid,:int], e:bat[:oid,:int], f:bat[:oid,:int], g:bat[:oid,:int], h:bat[:oid,:int], i:bat[:oid,:int], j:bat[:oid,:int], k:bat[:oid,:int], l:bat[:oid,:int], m:bat[:oid,:int], n:bat[:oid,:int], o:bat[:oid,:int], p:bat[:oid,:int]):bat[:oid,:int]
+address UDFBATskylinesw
+comment "Software skyline for up to 16 columns";
+
+#Stochastic Gradient Descent
+module batudf;
+command sgdfpga(a:bat[:oid,:int], b:bat[:oid,:int], c:bat[:oid,:int], d:bat[:oid,:int], e:bat[:oid,:int], f:bat[:oid,:int], g:bat[:oid,:int], h:bat[:oid,:int], i:bat[:oid,:int], j:bat[:oid,:int], k:bat[:oid,:int], l:bat[:oid,:int], m:bat[:oid,:int], n:bat[:oid,:int], o:bat[:oid,:int], p:bat[:oid,:int]):bat[:oid,:int]
+address UDFBATsgdfpga
+comment "FPGA SGD for up to 16 columns";
 
 # scalar MAL signatures
 module udf;
@@ -67,7 +145,6 @@ comment "fuse two (2-byte) sht values into one (4-byte) int value";
 command fuse(one:int,two:int):lng
 address UDFfuse_int_lng
 comment "fuse two (4-byte) int values into one (8-byte) lng value";
-
 
 # BAT MAL signatures
 module batudf;
