@@ -127,9 +127,24 @@ comment "Software skyline for up to 16 columns";
 
 #Stochastic Gradient Descent
 module batudf;
-command sgdfpga(a:bat[:oid,:int], b:bat[:oid,:int], c:bat[:oid,:int], d:bat[:oid,:int], e:bat[:oid,:int], f:bat[:oid,:int], g:bat[:oid,:int], h:bat[:oid,:int], i:bat[:oid,:int], j:bat[:oid,:int], k:bat[:oid,:int], l:bat[:oid,:int], m:bat[:oid,:int], n:bat[:oid,:int], o:bat[:oid,:int], p:bat[:oid,:int]):bat[:oid,:int]
-address UDFBATsgdfpga
+command sgdfpga_column(numIterations:int, stepSizeShifter:int, a1:bat[:oid,:flt], a2:bat[:oid,:flt], a3:bat[:oid,:flt], a4:bat[:oid,:flt], a5:bat[:oid,:flt], a6:bat[:oid,:flt], a7:bat[:oid,:flt], a8:bat[:oid,:flt], a9:bat[:oid,:flt], a10:bat[:oid,:flt], a11:bat[:oid,:flt], a12:bat[:oid,:flt], a13:bat[:oid,:flt], a14:bat[:oid,:flt], a15:bat[:oid,:flt], b:bat[:oid,:flt]):bat[:oid,:flt]
+address UDFBATsgdfpga_column
 comment "FPGA SGD for up to 16 columns";
+
+module batudf;
+command sgdsw_column(numIterations:int, stepSizeShifter:int, a1:bat[:oid,:flt], a2:bat[:oid,:flt], a3:bat[:oid,:flt], a4:bat[:oid,:flt], a5:bat[:oid,:flt], a6:bat[:oid,:flt], a7:bat[:oid,:flt], a8:bat[:oid,:flt], a9:bat[:oid,:flt], a10:bat[:oid,:flt], a11:bat[:oid,:flt], a12:bat[:oid,:flt], a13:bat[:oid,:flt], a14:bat[:oid,:flt], a15:bat[:oid,:flt], b:bat[:oid,:flt]):bat[:oid,:flt]
+address UDFBATsgdsw_column
+comment "SW SGD for up to 16 columns";
+
+module batudf;
+command sgdfpga_row(numFeatures:int, numIterations:int, stepSizeShifter:int, ab:bat[:oid,:flt]):bat[:oid,:flt]
+address UDFBATsgdfpga_row
+comment "FPGA SGD for up to N columns";
+
+module batudf;
+command sgdsw_row(numFeatures:int, numIterations:int, stepSizeShifter:int, ab:bat[:oid,:flt]):bat[:oid,:flt]
+address UDFBATsgdsw_row
+comment "SW SGD for up to N columns";
 
 # scalar MAL signatures
 module udf;

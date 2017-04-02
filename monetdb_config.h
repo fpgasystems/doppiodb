@@ -10,10 +10,10 @@
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
 /* location where binaries are installed */
-#define BINDIR "/usr/local/bin"
+#define BINDIR "/home/kkara/Projects/MyMonetDB/bin"
 
 /* read-only architecture-independent data */
-#define DATA_DIR "/usr/local/share"
+#define DATA_DIR "/home/kkara/Projects/MyMonetDB/share"
 
 /* Program to perform diffs */
 #define DIFF "diff"
@@ -55,7 +55,7 @@
 /* #undef HAVE_CTIME_R3 */
 
 /* Define if you have the cURL library */
-#define HAVE_CURL 1
+/* #undef HAVE_CURL */
 
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
@@ -131,7 +131,7 @@
 #define HAVE_GETUID 1
 
 /* Define if you have the gsl library */
-/* #undef HAVE_GSL */
+#define HAVE_GSL 1
 
 /* Define if you have the iconv() function and it works. */
 #define HAVE_ICONV 1
@@ -254,7 +254,7 @@
 #define HAVE_NL_LANGINFO 1
 
 /* Define to 1 if you have the <odbcinst.h> header file. */
-#define HAVE_ODBCINST_H 1
+/* #undef HAVE_ODBCINST_H */
 
 /* Define if you have the OpenSSL library */
 #define HAVE_OPENSSL 1
@@ -371,7 +371,7 @@
 /* #undef HAVE_SPHINXCLIENT */
 
 /* Define if you have the SQLGetPrivateProfileString function */
-#define HAVE_SQLGETPRIVATEPROFILESTRING 1
+/* #undef HAVE_SQLGETPRIVATEPROFILESTRING */
 
 /* Define to 1 if stdbool.h conforms to C99. */
 #define HAVE_STDBOOL_H 1
@@ -401,7 +401,7 @@
 #define HAVE_STRNCASECMP 1
 
 /* Define to 1 if you have the <stropts.h> header file. */
-/* #undef HAVE_STROPTS_H */
+#define HAVE_STROPTS_H 1
 
 /* Define to 1 if you have the `strptime' function. */
 #define HAVE_STRPTIME 1
@@ -511,10 +511,10 @@
 #define HAVE_UTIME_H 1
 
 /* uuid */
-#define HAVE_UUID 1
+/* #undef HAVE_UUID */
 
 /* Define to 1 if you have the <uuid/uuid.h> header file. */
-#define HAVE_UUID_UUID_H 1
+/* #undef HAVE_UUID_UUID_H */
 
 /* Define if you have valgrind installed and want to use it */
 /* #undef HAVE_VALGRIND */
@@ -556,15 +556,16 @@
 #define ICONV_CONST 
 
 /* Define as SQLLEN * or SQLPOINTER depending on the include file */
-#define LENP_OR_POINTER_T SQLLEN *
+/* #undef LENP_OR_POINTER_T */
 
 /* Format to print 64 bit signed integers. */
 #define LLFMT "%lld"
 
 /* modifiable single-machine data */
-#define LOCALSTATEDIR "/usr/local/var"
+#define LOCALSTATEDIR "/home/kkara/Projects/MyMonetDB/var"
 
-/* Define to the sub-directory where libtool stores uninstalled libraries. */
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
 #define LT_OBJDIR ".libs/"
 
 /* The used password hash algorithm */
@@ -577,7 +578,7 @@
 /* #undef MONET_OID32 */
 
 /* Define if you do not want assertions */
-/* #undef NDEBUG */
+#define NDEBUG 1
 
 /* Name of package */
 #define PACKAGE "MonetDB"

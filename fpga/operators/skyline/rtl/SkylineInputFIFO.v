@@ -1,5 +1,5 @@
 
-//`include "../../framework_defines.vh"
+`include "framework_defines.vh"
 
 
 module SkylineInputFIFO #( parameter NUM_DIMENSIONS  = 2,

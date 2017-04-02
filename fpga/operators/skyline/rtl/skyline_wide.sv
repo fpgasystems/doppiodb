@@ -1,5 +1,5 @@
 
-//`include "../../framework_defines.vh"
+`include "framework_defines.vh"
 
 module skyline_wide #(parameter NUM_DIMENSIONS  = 7,
                       parameter DIMENSION_WIDTH = 32,

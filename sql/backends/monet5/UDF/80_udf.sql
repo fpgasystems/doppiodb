@@ -72,8 +72,20 @@ create function skylinesw(src1 integer, src2 integer, src3 integer, src4 integer
 returns integer external name udf.skylinesw;
 
 --SGD function using fpga
-create function sgdfpga(d1 float, d2 float, d3 float, d4 float, d5 float, d6 float, d7 float, d8 float, d9 float, d10 float, d11 float, d12 float, d13 float, d14 float, d15 float, d16 float)
-returns integer external name udf.skylinefpga;
+create function sgdfpga_column(numIterations integer, stepSizeShifter integer, a1 real, a2 real, a3 real, a4 real, a5 real, a6 real, a7 real, a8 real, a9 real, a10 real, a11 real, a12 real, a13 real, a14 real, a15 real, b real)
+returns real external name udf.sgdfpga_column;
+
+--SGD function using sw
+create function sgdsw_column(numIterations integer, stepSizeShifter integer, a1 real, a2 real, a3 real, a4 real, a5 real, a6 real, a7 real, a8 real, a9 real, a10 real, a11 real, a12 real, a13 real, a14 real, a15 real, b real)
+returns real external name udf.sgdsw_column;
+
+--SGD function using fpga
+create function sgdfpga_row(numFeatures integer, numIterations integer, stepSizeShifter integer, ab real)
+returns real external name udf.sgdfpga_row;
+
+--SGD function using sw
+create function sgdsw_row(numFeatures integer, numIterations integer, stepSizeShifter integer, ab real)
+returns real external name udf.sgdsw_row;
 
 --create function calc_test(one double, two double)
 --returns double external name udf.calc_test;

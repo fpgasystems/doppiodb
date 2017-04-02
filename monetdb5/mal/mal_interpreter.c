@@ -259,7 +259,7 @@ str malCommandCall(MalStkPtr stk, InstrPtr pci)
 			getArgReference(stk, pci, 13),
 			getArgReference(stk, pci, 14),
 			getArgReference(stk, pci, 15),
-         getArgReference(stk, pci, 16));
+         	getArgReference(stk, pci, 16));
 		break;
    case 18: ret = (str)(*pci->fcn)(
 			getArgReference(stk, pci, 0),
@@ -277,14 +277,36 @@ str malCommandCall(MalStkPtr stk, InstrPtr pci)
 			getArgReference(stk, pci, 12),
 			getArgReference(stk, pci, 13),
 			getArgReference(stk, pci, 14),
-         getArgReference(stk, pci, 15),
-         getArgReference(stk, pci, 16),
+			getArgReference(stk, pci, 15),
+ 			getArgReference(stk, pci, 16),
 			getArgReference(stk, pci, 17));
+		break;
+	case 19: ret = (str)(*pci->fcn)(
+			getArgReference(stk, pci, 0),
+			getArgReference(stk, pci, 1),
+			getArgReference(stk, pci, 2),
+			getArgReference(stk, pci, 3),
+			getArgReference(stk, pci, 4),
+			getArgReference(stk, pci, 5),
+			getArgReference(stk, pci, 6),
+			getArgReference(stk, pci, 7),
+			getArgReference(stk, pci, 8),
+			getArgReference(stk, pci, 9),
+			getArgReference(stk, pci, 10),
+			getArgReference(stk, pci, 11),
+			getArgReference(stk, pci, 12),
+			getArgReference(stk, pci, 13),
+			getArgReference(stk, pci, 14),
+			getArgReference(stk, pci, 15),
+ 			getArgReference(stk, pci, 16),
+			getArgReference(stk, pci, 17),
+			getArgReference(stk, pci, 18));
 		break;
 
 	default:
 		throw(MAL, "mal.interpreter", "too many arguments for command call");
 	}
+
 	return ret;
 }
 
