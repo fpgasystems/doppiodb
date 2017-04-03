@@ -2,6 +2,7 @@ CC = libtool
 SRC_DIR     = $(PWD)
 CT_DIR      = $(CENTAUR_HOME)/sw
 
+
 MON_SRC_DIR = $(SRC_DIR)
 COR_SRC_DIR = $(CT_DIR)/core
 OPR_SRC_DIR = $(SRC_DIR)/operators
@@ -24,7 +25,7 @@ PLT_OBJS = $(PLT_SRC_DIR)/platform.lo
 MON_OBJS = $(MON_SRC_DIR)/fpga.lo 
 
 OBJS     =  $(MON_OBJS) $(COR_OBJS) $(OPR_OBJS) $(PLT_OBJS)
-LTFLAGS  = --mode=compile g++ -O2 -Wall -std=c++11 -D__AAL_USER__=1 -fPIC -c -shared -I$(INC_DIR) -lOSAL -lAAS -lxlrt
+LTFLAGS  = --mode=compile g++ -O2 -Wall -std=c++11 -D__AAL_USER__=1 -fPIC -c -shared -I$(AAL_INCDIR) -I$(INC_DIR) -lOSAL -lAAS -lxlrt
 
 LIBS     = $(COR_SRC_DIR)/.libs $(OPR_SRC_DIR)/regex/.libs $(OPR_SRC_DIR)/copy/.libs $(OPR_SRC_DIR)/testcount/.libs $(PLT_SRC_DIR)/.libs $(MON_SRC_DIR)/.libs
 

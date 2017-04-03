@@ -131,7 +131,7 @@
 #define HAVE_GETUID 1
 
 /* Define if you have the gsl library */
-#define HAVE_GSL 1
+/* #undef HAVE_GSL */
 
 /* Define if you have the iconv() function and it works. */
 #define HAVE_ICONV 1
@@ -164,7 +164,7 @@
 /* #undef HAVE_LIBATOMIC_OPS */
 
 /* Define if you have the bz2 library */
-#define HAVE_LIBBZ2 1
+/* #undef HAVE_LIBBZ2 */
 
 /* Define to 1 if you have the <libgen.h> header file. */
 #define HAVE_LIBGEN_H 1
@@ -182,7 +182,7 @@
 /* #undef HAVE_LIBR */
 
 /* Define if you have the readline library */
-#define HAVE_LIBREADLINE 1
+/* #undef HAVE_LIBREADLINE */
 
 /* Define if you have the z library */
 #define HAVE_LIBZ 1
@@ -564,8 +564,7 @@
 /* modifiable single-machine data */
 #define LOCALSTATEDIR "/home/kkara/Projects/MyMonetDB/var"
 
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
 
 /* The used password hash algorithm */

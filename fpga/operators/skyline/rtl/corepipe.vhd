@@ -1,4 +1,27 @@
 library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+package conf is 
+
+  constant TupleBusWidthxK        : positive := 32;
+  constant BramAddrBusWidthxK     : positive := 9;   -- 2^BramAddrBusWidthxK*BramDataBusWidthxK should equal 16,384 (16 Kbit)
+  constant BramDataBusWidthxK     : positive := 32;  -- should be the same as TupleBusWidthxK
+  constant BramWriteEnableWidthxK : positive := 4;   -- should be BramDataBusWidthxK/8
+  constant NumCoresxK             : positive := 128;
+  constant NumDimensionsxK        : positive := 16;
+  constant NumTupleDimensionsxK   : positive := NumDimensionsxK+2;
+--  constant NumBitsDimCounterxK    : positive := 5;   -- number of bits require to count from 0 to NumTupleDimensionsxK
+    
+  type CoreStatexTYPE is (
+    L_FREE,
+    N_FREE,
+    P_OCCP,
+    S_OCCP
+    );
+  
+end conf;
+
+library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
@@ -65,6 +88,41 @@ architecture Implementation of corepipe is
   
   signal DimCnt : std_logic_vector(NumBitsDimCounterxK-1 downto 0);
   
+component core
+  generic(
+    isPhysicallyLast  : boolean := false;
+    isPhysicallyFirst : boolean := false;
+    NumBitsDimCounterxK: integer := 5
+  );
+
+  port(
+    CLKxCI           : in  std_logic                                       := '0';
+    RSTxRI           : in  std_logic                                       := '0';
+    TupleValidxEI    : in  std_logic                                       := '0';
+    TupleDataxDI     : in  std_logic_vector(TupleBusWidthxK-1 downto 0)    := (others => '0');
+    TupleNumDimsI    : in  std_logic_vector(NumBitsDimCounterxK-1 downto 0):= (others => '0');
+    TupleDimsCmpsI   : in  std_logic                                       := '0';         
+    TupleValidxEO    : out std_logic                                       := '0';
+    TupleDataxDO     : out std_logic_vector(TupleBusWidthxK-1 downto 0)    := (others => '0');
+    TupleNumDimsO    : out std_logic_vector(NumBitsDimCounterxK-1 downto 0):= (others => '0');
+    TupleDimsCmpsO   : out std_logic                                       := '0'; 
+    CopyValidxEI     : in  std_logic                                       := '0';
+    CopyValidxEO     : out std_logic                                       := '0';
+    CopySentxEI      : in  std_logic                                       := '0';
+    CopySentxEO      : out std_logic                                       := '0';
+    CopyReceivedxEI  : in  std_logic                                       := '0';
+    CopyReceivedxEO  : out std_logic                                       := '0';
+    BRAMDataxDI      : in  std_logic_vector(BramDataBusWidthxK-1 downto 0) := (others => '0');
+    BRAMDataxDO      : out std_logic_vector(BramDataBusWidthxK-1 downto 0) := (others => '0');
+    CoreStateReg1xDI : in  std_logic_vector(BramDataBusWidthxK-1 downto 0) := (others => '0');
+    CoreStateReg1xDO : out std_logic_vector(BramDataBusWidthxK-1 downto 0) := (others => '0');
+    CoreStateReg2xDI : in  std_logic_vector(BramDataBusWidthxK-1 downto 0) := (others => '0');
+    CoreStateReg2xDO : out std_logic_vector(BramDataBusWidthxK-1 downto 0) := (others => '0');
+    CoreStatexDI     : in  CoreStatexTYPE                                  := L_FREE;
+    CoreStatexDO     : out CoreStatexTYPE                                  := L_FREE
+    );
+end component;
+
 begin
 
   -----------------------------------------------------------------------------
@@ -133,7 +191,7 @@ begin
   -----------------------------------------------------------------------------
   
   core_pipe : for i in 0 to NUM_CORES-1 generate
-    core_i : entity work.core
+    core_i : core
       generic map (
         isPhysicallyLast  => (i = (NUM_CORES-1)),
         isPhysicallyFirst => (i = 0),

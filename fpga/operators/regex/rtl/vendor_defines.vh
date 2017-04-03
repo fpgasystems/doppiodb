@@ -10,7 +10,7 @@
 `define VENDOR_DEFINES_VH
 
     // Generate error if Vendor not defined
-    `ifdef VENDOR_XILINX
+    /*`ifdef VENDOR_XILINX
             `ifdef VENDOR_ALTERA
                     ***Select only one VENDOR option***
             `endif
@@ -18,7 +18,7 @@
             `ifndef VENDOR_ALTERA
                     ***Select atleast one VENDOR option***
             `endif        
-    `endif
+    `endif*/
     
     `ifdef VENDOR_ALTERA
         `define GRAM_AUTO "no_rw_check"                         // defaults to auto
@@ -28,7 +28,7 @@
     
     //-------------------------------------------
     // Generate error if TOOL not defined
-    `ifdef TOOL_QUARTUS
+    /*`ifdef TOOL_QUARTUS
             `ifdef TOOL_SYNPLIFY
                     ***Select only one TOOL option***
             `endif
@@ -47,7 +47,7 @@
             `ifndef TOOL_VIVADO
                     ***Select atleast one TOOL option***
             `endif                
-    `endif
+    `endif*/
     
     `ifdef TOOL_QUARTUS
         `define GRAM_STYLE ramstyle

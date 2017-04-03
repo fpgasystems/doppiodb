@@ -39,11 +39,11 @@ architecture behavioral of sgd is
 
 signal started : std_logic;
 
+signal source_address : std_logic_vector(63 downto 0);
+signal destination_address : std_logic_vector(63 downto 0);
 signal mini_batch_size : std_logic_vector(15 downto 0);
 signal step_size : std_logic_vector(31 downto 0);
 signal number_of_epochs : std_logic_vector(13 downto 0);
-signal source_address : std_logic_vector(63 downto 0);
-signal destination_address : std_logic_vector(63 downto 0);
 signal dimension : std_logic_vector(17 downto 0);
 signal number_of_samples : std_logic_vector(31 downto 0);
 signal number_of_CL_to_process : std_logic_vector(31 downto 0);
@@ -287,11 +287,11 @@ end function;
 
 begin
 
-mini_batch_size <= um_params(15 downto 0);
-step_size <= um_params(63 downto 32);
-number_of_epochs <= um_params(77 downto 64);
-source_address <= um_params(159 downto 96);
-destination_address <= um_params(223 downto 160);
+source_address <= um_params(63 downto 0);
+destination_address <= um_params(127 downto 64);
+mini_batch_size <= um_params(143 downto 128);
+step_size <= um_params(191 downto 160);
+number_of_epochs <= um_params(205 downto 192);
 dimension <= um_params(241 downto 224);
 number_of_samples <= um_params(287 downto 256);
 number_of_CL_to_process <= um_params(319 downto 288);
@@ -425,6 +425,7 @@ gradient_valid_counter_unsigned <= to_unsigned(gradient_valid_counter, 32);
 
 um_tx_rd_tag <= (others => '0');
 um_tx_wr_tag <= (others => '0');
+um_rx_rd_ready <= '1';
 
 process(clk)
 begin

@@ -284,7 +284,7 @@ BATSIGinit(void)
 
 /* memory thresholds; these values some "sane" constants only, really
  * set in GDKinit() */
-size_t GDK_fpga_minsize = (size_t) 1 << 14; //16KB
+size_t GDK_fpga_minsize = (size_t) 1 << 7; //16KB
 size_t GDK_mmap_minsize = (size_t) 1 << 30; //was 1 << 18, now use 28
 size_t GDK_mmap_pagesize = (size_t) 1 << 16; /* mmap granularity */
 size_t GDK_mem_maxsize = GDK_VM_MAXSIZE;
