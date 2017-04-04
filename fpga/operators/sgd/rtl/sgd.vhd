@@ -612,7 +612,7 @@ if clk'event and clk = '1' then
             NumberOfCompletedWrites <= NumberOfCompletedWrites + 1;
         end if;
 
-        if start_um = '1' and NumberOfCompletedWrites = NumberOfRequestedWrites and NumberOfEpochsCompleted = NumberOfEpochs and model_is_written = '1' then
+        if NumberOfCompletedWrites = NumberOfRequestedWrites and NumberOfEpochsCompleted = NumberOfEpochs and model_is_written = '1' then
             um_done <= '1';
             started <= '0';
         end if;

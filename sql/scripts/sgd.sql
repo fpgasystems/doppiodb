@@ -11,6 +11,7 @@ COPY 87322 RECORDS INTO percolator_column from '/home/kkara/Projects/DataGenerat
 
 CREATE TABLE percolator_row (ab real);
 COPY 1397152 RECORDS INTO percolator_row from '/home/kkara/Projects/DataGenerator/percolator_row.tbl' USING DELIMITERS '|';
+COPY 16000 RECORDS INTO percolator_row from '/home/kkara/Projects/DataGenerator/percolator_row.tbl' USING DELIMITERS '|';
 
 select sgdfpga_column(4, 12, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, b) from percolator_column;
 select sgdsw_column(4, 12, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, b) from percolator_column;
