@@ -67,6 +67,6 @@ FthreadRec * fthread_skyline(FPGA * my_fpga, int* dim[], int* skyline[], uint64_
 FthreadRec * fthread_skyline(FPGA * my_fpga, void* dim[], int* tmpDims, int* skylines, uint64_t count, uint32_t numDims);
 uint32_t fthread_skyline();
 
-FthreadRec * fthread_sgd_row(FPGA* my_fpga, float* ab, uint32_t numberOfIterations, uint32_t numFeatures, uint32_t numSamples, float stepSize, float* x_history);
+FthreadRec * fthread_sgd_row(FPGA* my_fpga, float* ab, uint32_t numberOfIterations, uint32_t numFeatures, uint32_t numSamples, float stepSize, int32_t* x_history);
 
 #endif // __HWOPERATORS_H__

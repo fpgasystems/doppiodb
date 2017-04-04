@@ -1394,7 +1394,7 @@ UDFBATsgdfpga_row(bat *ret, const int* numFeatures, const int* numIterations, co
 		throw(MAL, "batudf.sgd", RUNTIME_OBJECT_MISSING);
 	
 	// allocate result BAT 
-	bn = BATnew(TYPE_void, TYPE_flt, (*numFeatures)*((*numIterations) + 1), TRANSIENT);
+	bn = BATnew(TYPE_void, TYPE_flt, ((*numIterations) + 1), TRANSIENT);
 	if (bn == NULL) {
 		throw(MAL, "batudf.sgd", MAL_MALLOC_FAIL);
 	}
@@ -1402,8 +1402,8 @@ UDFBATsgdfpga_row(bat *ret, const int* numFeatures, const int* numIterations, co
 	BATseqbase(bn, _ab->hseqbase);
 
 	//update free pointer
-	bn->H->heap.free += (bn->H->width * (*numFeatures)*((*numIterations) + 1) );
-	bn->T->heap.free += (bn->T->width * (*numFeatures)*((*numIterations) + 1) );
+	bn->H->heap.free += (bn->H->width * ((*numIterations) + 1) );
+	bn->T->heap.free += (bn->T->width * ((*numIterations) + 1) );
 	//set dirty bit, not sure if necessary
 	bn->H->heap.dirty = 1;
 	bn->T->heap.dirty = 1;

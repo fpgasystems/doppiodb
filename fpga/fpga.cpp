@@ -1060,14 +1060,47 @@ void FPGAsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, vo
 {
   printf("Starting FPGAsgd_row\n");
 
-  float* x_history;
-  x_history = reinterpret_cast<float*>(retBase);
+  uint32_t numCLsForX = numFeatures/16 + 1;
+
   float* ab;
   ab = reinterpret_cast<float*>(_ab);
-  Fthread sgd_row ( fthread_sgd_row(my_fpga, ab, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_history) );
+  int32_t* x_historyi = (int32_t*)( my_fpga->malloc(sizeof(int32_t)*numIterations*numCLsForX*16) );
+
+  Fthread sgd_row ( fthread_sgd_row(my_fpga, ab, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
 
   MSG("FPGA thread created...");
   void* ret_v = sgd_row.join();
+
+  
+  float x_history[(numIterations+1)][numFeatures];
+  for (int j = 0; j < numFeatures; j++) {
+    x_history[0][j] = 0.0;
+  }
+  for (int iteration = 0; iteration < numIterations; iteration++) {
+    printf("---------------------------------- Iteration %d\n", iteration+1);
+    uint32_t offset = iteration*numCLsForX*16;
+    for (int j = 0; j < numFeatures; j++) {
+      int32_t temp = x_historyi[offset + j];
+      x_history[iteration+1][j] = (float)temp;
+      x_history[iteration+1][j] /= (float)0x00800000;
+      printf("x[%d]: %.10f\n", j, x_history[iteration+1][j]);
+    }
+  }
+
+  float* loss_history = reinterpret_cast<float*>(retBase);
+
+  // Calculate Loss
+  for (int iteration = 0; iteration < numIterations+1; iteration++) {
+    for (int i = 0; i < numTuples; i++) {
+      float dot = 0;
+      int offset = i*(numFeatures+1);
+      for (int j = 0; j < numFeatures; j++) {
+        dot += x_history[iteration][j]*ab[offset + j];
+      }
+      loss_history[iteration] += (dot - ab[offset + numFeatures])*(dot - ab[offset + numFeatures]);
+    }
+    loss_history[iteration] /= (float)(numTuples << 1);
+  }
 
   sgd_row.printStatusLine();
 
@@ -1102,6 +1135,8 @@ void SWsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, void
   float stepSize = 1.0/(float)(1 << stepSizeShifter);
 
   for(int iteration = 0; iteration < numIterations; iteration++) {
+    printf("---------------------------------- Iteration %d\n", iteration+1);
+
     // Update x
     for (int i = 0; i < numTuples; i++) {
       float dot = 0;
@@ -1112,6 +1147,10 @@ void SWsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, void
       for (int j = 0; j < numFeatures; j++) {
         x[j] -= stepSize*(dot - ab[offset + numFeatures])*ab[offset + j];
       }
+    }
+
+    for (int j = 0; j < numFeatures; j++) {
+      printf("x[%d]: %.10f\n", j, x[j]);
     }
 
     // Calculate Loss
