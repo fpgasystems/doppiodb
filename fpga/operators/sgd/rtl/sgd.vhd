@@ -2,13 +2,30 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+package sgd_constants is
+    constant MAX_DIMENSION_BITS : integer := 13;
+    constant MAX_DIMENSION : integer := 2**MAX_DIMENSION_BITS;
+    
+    constant FIFO_DEPTH_BITS : integer := MAX_DIMENSION_BITS-4;
+    constant FIFO_DEPTH : integer := 2**FIFO_DEPTH_BITS-10;
+    constant X_CL_COUNT : integer := MAX_DIMENSION/16;
+
+    constant MAX_GATHER_DEPTH_BITS : integer := 8;
+    constant MAX_GATHER_DEPTH : integer := 2**MAX_GATHER_DEPTH_BITS;
+end package;
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use work.sgd_constants.all;
+
 entity sgd is
 port (
 	clk : in std_logic;
 	rst_n : in std_logic;
 
 	start_um : in std_logic;
-    um_params : in std_logic_vector(511 downto 0);
+    um_params : in std_logic_vector(1535 downto 0);
     um_done : out std_logic;
 
     -- TX RD
@@ -39,7 +56,7 @@ architecture behavioral of sgd is
 
 signal started : std_logic;
 
-signal source_address : std_logic_vector(63 downto 0);
+signal source_addresses : std_logic_vector(1023 downto 0); -- 16 addresses
 signal destination_address : std_logic_vector(63 downto 0);
 signal mini_batch_size : std_logic_vector(15 downto 0);
 signal step_size : std_logic_vector(31 downto 0);
@@ -49,12 +66,28 @@ signal number_of_samples : std_logic_vector(31 downto 0);
 signal number_of_CL_to_process : std_logic_vector(31 downto 0);
 signal binarize_b_value : std_logic;
 signal b_value_to_binarize_to : std_logic_vector(31 downto 0);
+signal do_gather : std_logic;
+signal gather_depth : std_logic_vector(7 downto 0);
 
-constant MAX_DIMENSION_BITS : integer := 13;
-constant MAX_DIMENSION : integer := 2**MAX_DIMENSION_BITS;
-constant FIFO_DEPTH_BITS : integer := MAX_DIMENSION_BITS-4;
-constant FIFO_DEPTH : integer := 2**FIFO_DEPTH_BITS-10;
-constant X_CL_COUNT : integer := MAX_DIMENSION/16;
+signal internal_tx_rd_addr : std_logic_vector(57 downto 0);
+signal internal_tx_rd_tag : std_logic_vector(7 downto 0);
+signal internal_tx_rd_valid : std_logic;
+signal internal_rx_data : std_logic_vector(511 downto 0);
+signal internal_rx_rd_valid : std_logic;
+
+-- GATHER SIGNALS
+signal gather_enable : std_logic;
+
+signal gather_tx_rd_addr : std_logic_vector(57 downto 0);
+signal gather_tx_rd_tag : std_logic_vector(7 downto 0);
+signal gather_tx_rd_valid : std_logic;
+signal gather_rx_rd_ready : std_logic;
+
+signal gather_number_of_requested_reads : std_logic_vector(31 downto 0);
+signal gather_number_of_completed_reads : std_logic_vector(31 downto 0);
+signal gather_out_valid : std_logic;
+signal gather_out_data : std_logic_vector(511 downto 0);
+signal gather_number_of_dimensions : std_logic_vector(4 downto 0);
 
 signal accumulation_count : integer;
 signal remainder : integer;
@@ -144,6 +177,37 @@ signal b_to_subtract_fifo_empty : std_logic;
 signal b_to_subtract_fifo_full : std_logic;
 signal b_to_subtract_fifo_almostfull: std_logic;
 signal b_to_subtract_fifo_free_count : unsigned(FIFO_DEPTH_BITS-1 downto 0);
+
+component gather
+port (
+    clk : in std_logic;
+    resetn : in std_logic;
+
+    enable : in std_logic;
+    start : in std_logic;
+
+    -- TX RD
+    um_tx_rd_addr : out std_logic_vector(57 downto 0);
+    um_tx_rd_tag : out std_logic_vector(7 downto 0);
+    um_tx_rd_valid : out std_logic;
+    um_tx_rd_ready : in std_logic;
+
+    -- RX RD
+    um_rx_rd_tag : in std_logic_vector(7 downto 0);
+    um_rx_data : in std_logic_vector(511 downto 0);
+    um_rx_rd_valid : in std_logic;
+    um_rx_rd_ready : out std_logic;
+
+    number_of_requested_reads : out std_logic_vector(31 downto 0);
+    number_of_completed_reads : out std_logic_vector(31 downto 0);
+    out_valid : out std_logic;
+    out_data : out std_logic_vector(511 downto 0);
+
+    addresses : in std_logic_vector(1023 downto 0);
+    number_of_samples : in std_logic_vector(31 downto 0);
+    number_of_dimensions : in std_logic_vector(4 downto 0);
+    gather_depth : in std_logic_vector(MAX_GATHER_DEPTH_BITS-1 downto 0));
+end component;
 
 component simple_dual_port_ram_single_clock
 generic(
@@ -284,19 +348,62 @@ begin
     return std_logic_vector(result);
 end function;
 
-
 begin
 
-source_address <= um_params(63 downto 0);
-destination_address <= um_params(127 downto 64);
-mini_batch_size <= um_params(143 downto 128);
-step_size <= um_params(191 downto 160);
-number_of_epochs <= um_params(205 downto 192);
-dimension <= um_params(241 downto 224);
-number_of_samples <= um_params(287 downto 256);
-number_of_CL_to_process <= um_params(319 downto 288);
-binarize_b_value <= um_params(320);
-b_value_to_binarize_to <= um_params(383 downto 352);
+um_tx_rd_addr <= internal_tx_rd_addr when do_gather = '0' else gather_tx_rd_addr;
+um_tx_rd_tag <= internal_tx_rd_tag when do_gather = '0' else gather_tx_rd_tag;
+um_tx_rd_valid <= internal_tx_rd_valid when do_gather = '0' else gather_tx_rd_valid;
+um_rx_rd_ready <= '1' when do_gather = '0' else gather_rx_rd_ready;
+
+internal_rx_data <= um_rx_data when do_gather = '0' else gather_out_data;
+internal_rx_rd_valid <= um_rx_rd_valid when do_gather = '0' else gather_out_valid;
+
+internal_tx_rd_tag <= (others => '0');
+um_tx_wr_tag <= (others => '0');
+
+GATHERER: gather
+port map (
+    clk => clk,
+    resetn => rst_n,
+
+    enable => gather_enable,
+    start => started,
+
+    -- TX RD
+    um_tx_rd_addr => gather_tx_rd_addr,
+    um_tx_rd_tag => gather_tx_rd_tag,
+    um_tx_rd_valid => gather_tx_rd_valid,
+    um_tx_rd_ready => um_tx_rd_ready,
+
+    -- RX RD
+    um_rx_rd_tag => um_rx_rd_tag,
+    um_rx_data => um_rx_data,
+    um_rx_rd_valid => um_rx_rd_valid,
+    um_rx_rd_ready => gather_rx_rd_ready,
+
+    number_of_requested_reads => gather_number_of_requested_reads,
+    number_of_completed_reads => gather_number_of_completed_reads,
+    out_valid => gather_out_valid,
+    out_data => gather_out_data,
+
+    addresses => source_addresses,
+    number_of_samples => number_of_samples,
+    number_of_dimensions => gather_number_of_dimensions,
+    gather_depth => gather_depth);
+gather_number_of_dimensions <= std_logic_vector( unsigned(dimension(4 downto 0)) + 1 );
+
+source_addresses <=         um_params(1023 downto 0);
+destination_address <=      um_params(1087 downto 1024);
+mini_batch_size <=          um_params(1103 downto 1088);
+step_size <=                um_params(1151 downto 1120);
+number_of_epochs <=         um_params(1165 downto 1152);
+dimension <=                um_params(1201 downto 1184);
+number_of_samples <=        um_params(1247 downto 1216);
+number_of_CL_to_process <=  um_params(1279 downto 1248);
+binarize_b_value <=         um_params(1280);
+b_value_to_binarize_to <=   um_params(1343 downto 1312);
+do_gather <=                um_params(1344);
+gather_depth <=             um_params(1383 downto 1376);
 
 ififo: my_fifo
 generic map (
@@ -423,9 +530,6 @@ accumulation_count <= to_integer(shift_right(unsigned(dimension), 4)) + remainde
 sample_index_to_read_unsigned <= to_unsigned(sample_index_to_read, 32);
 gradient_valid_counter_unsigned <= to_unsigned(gradient_valid_counter, 32);
 
-um_tx_rd_tag <= (others => '0');
-um_tx_wr_tag <= (others => '0');
-um_rx_rd_ready <= '1';
 
 process(clk)
 begin
@@ -486,11 +590,24 @@ if clk'event and clk = '1' then
 
         um_done <= '0';
     else
-        um_tx_rd_valid <= '0';
-        if NumberOfRequestedReads < NumberOfCLToProcess and um_tx_wr_ready = '1' and um_tx_rd_ready = '1' and NumberOfRequestedReads - NumberOfCompletedReads < a_row_fifo_free_count then
-            um_tx_rd_valid <= '1';
-            um_tx_rd_addr <= std_logic_vector(unsigned(source_address(63 downto 6)) + NumberOfRequestedReads);
+        internal_tx_rd_valid <= '0';
+        gather_enable <= '0';
+        if do_gather = '0' and NumberOfRequestedReads < NumberOfCLToProcess and um_tx_wr_ready = '1' and um_tx_rd_ready = '1' and NumberOfRequestedReads - NumberOfCompletedReads < a_row_fifo_free_count then
+            internal_tx_rd_valid <= '1';
+            internal_tx_rd_addr <= std_logic_vector(unsigned(source_addresses(63 downto 6)) + NumberOfRequestedReads);
             NumberOfRequestedReads <= NumberOfRequestedReads + 1;
+        end if;
+
+        if do_gather = '0' then
+            if internal_rx_rd_valid = '1' then
+                NumberOfCompletedReads <= NumberOfCompletedReads + 1;
+            end if;
+        else
+            if NumberOfRequestedReads - NumberOfCompletedReads < a_row_fifo_free_count then
+                gather_enable <= '1';
+            end if;
+            NumberOfRequestedReads <= unsigned(gather_number_of_requested_reads);
+            NumberOfCompletedReads <= unsigned(gather_number_of_completed_reads);
         end if;
 
         ififo_we <= '0';
@@ -498,9 +615,7 @@ if clk'event and clk = '1' then
         b_to_subtract_fifo_we <= '0';
         new_CL_available(0) <= '0';
         new_row_available(0) <= '0';
-        if um_rx_rd_valid = '1' then
-            NumberOfCompletedReads <= NumberOfCompletedReads + 1;
-
+        if internal_rx_rd_valid = '1' then
             ififo_we <= '1';
             a_row_fifo_we <= '1';
             
@@ -512,20 +627,20 @@ if clk'event and clk = '1' then
                 
                 b_to_subtract_fifo_we <= '1';
                 if binarize_b_value = '0' then
-                    b_to_subtract_fifo_din <= um_rx_data(511 downto 480);
+                    b_to_subtract_fifo_din <= internal_rx_data(511 downto 480);
                 else
-                    if um_rx_data(511 downto 480) = b_value_to_binarize_to then
+                    if internal_rx_data(511 downto 480) = b_value_to_binarize_to then
                         b_to_subtract_fifo_din <= X"3f800000";
                     else
                         b_to_subtract_fifo_din <= X"00000000";
                     end if;
                 end if;
 
-                ififo_din <= X"00000000" & um_rx_data(479 downto 0);
-                a_row_fifo_din <= X"00000000" & um_rx_data(479 downto 0);
+                ififo_din <= X"00000000" & internal_rx_data(479 downto 0);
+                a_row_fifo_din <= X"00000000" & internal_rx_data(479 downto 0);
             else
-                ififo_din <= um_rx_data;
-                a_row_fifo_din <= um_rx_data;
+                ififo_din <= internal_rx_data;
+                a_row_fifo_din <= internal_rx_data;
                 count_upto_a_whole_row <= count_upto_a_whole_row + 1;
             end if;
         end if;

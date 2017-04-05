@@ -997,10 +997,51 @@ void FPGAsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int
 {
   printf("Starting FPGAsgd_column\n");
 
-  float* result = reinterpret_cast<float*>(retBase);
-  for (int i = 0; i < numIterations+1; i++) {
-    result[i] = i;
+  uint32_t numCLsForX = numFeatures/16 + 1;
+
+  float* ab[numFeatures+1];
+  for (int i = 0; i < numFeatures; i++) {
+    ab[i] = reinterpret_cast<float*>(_a[i]);
   }
+  ab[numFeatures] = reinterpret_cast<float*>(_b);
+  int32_t* x_historyi = (int32_t*)( my_fpga->malloc(sizeof(int32_t)*numIterations*numCLsForX*16) );
+
+  Fthread sgd_column ( fthread_sgd(my_fpga, ab, 1, 3, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
+
+  MSG("FPGA thread created...");
+  void* ret_v = sgd_column.join();
+
+  float x_history[(numIterations+1)][numFeatures];
+  for (int j = 0; j < numFeatures; j++) {
+    x_history[0][j] = 0.0;
+  }
+  for (int iteration = 0; iteration < numIterations; iteration++) {
+    printf("---------------------------------- Iteration %d\n", iteration+1);
+    uint32_t offset = iteration*numCLsForX*16;
+    for (int j = 0; j < numFeatures; j++) {
+      int32_t temp = x_historyi[offset + j];
+      x_history[iteration+1][j] = (float)temp;
+      x_history[iteration+1][j] /= (float)0x00800000;
+      printf("x[%d]: %.10f\n", j, x_history[iteration+1][j]);
+    }
+  }
+
+  float* loss_history = reinterpret_cast<float*>(retBase);
+
+  // Calculate Loss
+  for (int iteration = 0; iteration < numIterations+1; iteration++) {
+    for (int i = 0; i < numTuples; i++) {
+      float dot = 0;
+      int offset = i*(numFeatures+1);
+      for (int j = 0; j < numFeatures; j++) {
+        dot += x_history[iteration][j]*ab[0][offset + j];
+      }
+      loss_history[iteration] += (dot - ab[0][offset + numFeatures])*(dot - ab[0][offset + numFeatures]);
+    }
+    loss_history[iteration] /= (float)(numTuples << 1);
+  }
+
+  sgd_column.printStatusLine();
 
   printf("End of FPGAsgd_column\n");
 }
@@ -1062,16 +1103,15 @@ void FPGAsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, vo
 
   uint32_t numCLsForX = numFeatures/16 + 1;
 
-  float* ab;
-  ab = reinterpret_cast<float*>(_ab);
+  float* ab[1];
+  ab[0] = reinterpret_cast<float*>(_ab);
   int32_t* x_historyi = (int32_t*)( my_fpga->malloc(sizeof(int32_t)*numIterations*numCLsForX*16) );
 
-  Fthread sgd_row ( fthread_sgd_row(my_fpga, ab, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
+  Fthread sgd_row ( fthread_sgd(my_fpga, ab, 0, 0, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
 
   MSG("FPGA thread created...");
   void* ret_v = sgd_row.join();
 
-  
   float x_history[(numIterations+1)][numFeatures];
   for (int j = 0; j < numFeatures; j++) {
     x_history[0][j] = 0.0;
@@ -1095,21 +1135,15 @@ void FPGAsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, vo
       float dot = 0;
       int offset = i*(numFeatures+1);
       for (int j = 0; j < numFeatures; j++) {
-        dot += x_history[iteration][j]*ab[offset + j];
+        dot += x_history[iteration][j]*ab[0][offset + j];
       }
-      loss_history[iteration] += (dot - ab[offset + numFeatures])*(dot - ab[offset + numFeatures]);
+      loss_history[iteration] += (dot - ab[0][offset + numFeatures])*(dot - ab[0][offset + numFeatures]);
     }
     loss_history[iteration] /= (float)(numTuples << 1);
   }
 
   sgd_row.printStatusLine();
 
-/*
-  float* result = reinterpret_cast<float*>(retBase);
-  for (int i = 0; i < numIterations+1; i++) {
-    result[i] = i;
-  }
-*/
   printf("End of FPGAsgd_row\n");
 }
 
