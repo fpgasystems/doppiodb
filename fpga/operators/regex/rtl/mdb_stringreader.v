@@ -326,13 +326,14 @@ module mdb_stringreader
 								//TODO maybe make it 0, optimize this??
 								
 								//pushLength <= curStrOffset[31:16] - curStrOffset[15:0];// + 1; //ingore lowest 6bits, because we want length in CLs
-								if (curStrOffset[31:22] > curStrOffset[15:6]) begin
-									remainingWords <= (curStrOffset[31:22] - curStrOffset[15:6]);
-									pushLength <= (curStrOffset[31:22] - curStrOffset[15:6]) + 1; //ingore lowest 6bits, because we want length in CLs
+								if (curStrOffset[31:22] < curStrOffset[15:6]) begin
+									//Set some fixed length
+									remainingWords <= 3;
+									pushLength <= 4;
 								end
 								else begin
-									remainingWords <= 4;
-									pushLength <= 5; //ingore lowest 6bits, because we want length in CLs
+									remainingWords <= (curStrOffset[31:22] - curStrOffset[15:6]);
+									pushLength <= (curStrOffset[31:22] - curStrOffset[15:6]) + 1; //ingore lowest 6bits, because we want length in CLs
 								end
 								offset_jdx <= offset_jdx + 1;
 								
@@ -342,13 +343,14 @@ module mdb_stringreader
 								// Check if end of cache line or last offset
 								if (offset_jdx == 31) begin
 									//if at end of CL we need to compute length differently
-									if (nextStrOffset[15:6] > curStrOffset[15:6]) begin
-										remainingWords <= (nextStrOffset[15:6] - curStrOffset[15:6]);
-										pushLength <= nextStrOffset[15:6] - curStrOffset[15:6] + 1;
+									if (nextStrOffset[15:6] < curStrOffset[15:6]) begin
+										//Set some fixed length
+										remainingWords <= 3;
+										pushLength <= 4;
 									end
 									else begin
-										remainingWords <= 4;
-										pushLength <= 5;
+										remainingWords <= (nextStrOffset[15:6] - curStrOffset[15:6]);
+										pushLength <= nextStrOffset[15:6] - curStrOffset[15:6] + 1;
 									end
 									if (fifoReload == 1) begin
 										remainingWords <= 1;
