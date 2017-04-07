@@ -49,6 +49,11 @@ end gather;
 
 architecture behavioral of gather is
 
+signal started : std_logic;
+signal start_1d : std_logic;
+signal start_2d : std_logic;
+
+signal NumberOfSamples : unsigned(31 downto 0) := (others => '0');
 signal NumberOfDimensions : integer range 0 to MAX_DIMENSION := MAX_DIMENSION;
 signal GatherDepth : unsigned(MAX_GATHER_DEPTH_BITS-1 downto 0) := (others => '1');
 
@@ -61,6 +66,7 @@ signal NumberOfCLsForOneColumn : unsigned(31 downto 0) := (others => '0');
 
 signal NumberOfRequestedReads : unsigned(31 downto 0);
 signal NumberOfCompletedReads : unsigned(31 downto 0);
+signal NumberOfForwarded : unsigned(31 downto 0) := (others => '0');
 
 signal ReadingAddress : std_logic_vector(57 downto 0);
 type ReadingAddressOffsetType is array (MAX_DIMENSION-1 downto 0) of unsigned(31 downto 0);
@@ -118,7 +124,7 @@ FIFOS: for k in 0 to MAX_GATHER_FACTOR-1 generate
 		FIFO_ALMOSTFULL_THRESHOLD => MAX_GATHER_DEPTH-32)
 	port map (
 		clk => clk,
-		reset_n => resetn,
+		reset_n => start,
 
 		we => gather_we(k),
 		din => gather_data_in(k),
@@ -146,7 +152,7 @@ COLLECTION_OUT: for j in 0 to Ks-1 generate
 end generate COLLECTION_OUT;
 
 
-
+GatherDepth <= unsigned(gather_depth);
 
 i <= to_integer(unsigned(um_rx_rd_tag));
 
@@ -159,25 +165,35 @@ um_rx_rd_ready <= '1';
 number_of_requested_reads <= std_logic_vector(NumberOfRequestedReads);
 number_of_completed_reads <= std_logic_vector(NumberOfCompletedReads);
 
+started <= start and start_1d and start_2d;
+
 process(clk)
 begin
 if clk'event and clk = '1' then
-	if start = '0' then
+	start_1d <= start;
+	start_2d <= start_1d;
+
+	if started = '0' then
+		NumberOfSamples <= unsigned(number_of_samples);
 		NumberOfDimensions <= MAX_DIMENSION;
-		GatherDepth <= (others => '1');
 
 		k <= 0;
 		r <= 0;
 	
 		NumberOfRequestedReads <= (others => '0');
 		NumberOfCompletedReads <= (others => '0');
+		NumberOfForwarded <= (others => '0');
 
 		ReadingAddressOffset <= (others => (others => '0'));
 
 		FinishedReading <= '0';
+
+		um_tx_rd_addr <= (others => '0');
+		um_tx_rd_tag <= (others => '0');
+		um_tx_rd_valid <= '0';
 	else
 		NumberOfDimensions <= to_integer( unsigned(number_of_dimensions) );
-		GatherDepth <= unsigned(gather_depth);
+		
 
 		um_tx_rd_valid <= '0';
 		if enable = '1' and um_tx_rd_ready = '1' and FinishedReading = '0' then
@@ -194,7 +210,7 @@ if clk'event and clk = '1' then
 				else
 					k <= k + 1;
 				end if;
-			elsif ReadingAddressOffset(k)(MAX_GATHER_DEPTH_BITS-1 downto 0) = GatherDepth-1 then
+			elsif (ReadingAddressOffset(k)(MAX_GATHER_DEPTH_BITS-1 downto 0) AND (GatherDepth-1)) = (GatherDepth-1) then
 				if k = NumberOfDimensions-1 then
 					k <= 0;
 				else
@@ -211,9 +227,10 @@ if clk'event and clk = '1' then
 		end if;
 
 		out_re <= (others => '0');
-		if gather_empty(NumberOfDimensions*Ks-1) = '0' then
+		if gather_empty(NumberOfDimensions*Ks-1) = '0' and NumberOfForwarded < NumberOfSamples then
+			NumberOfForwarded <= NumberOfForwarded + 1;
 			out_re(r) <= '1';
-			if r = NumberOfDimensions-1 then
+			if r = Ks-1 then
 				r <= 0;
 			else
 				r <= r + 1;
@@ -221,10 +238,10 @@ if clk'event and clk = '1' then
 		end if;
 
 		out_valid <= '0';
-		for i in 1 to MAX_DIMENSION loop
-			if gather_valid(i*Ks-1) = '1' then
+		for p in 0 to Ks-1 loop
+			if gather_valid(p) = '1' then
 				out_valid <= '1';
-				out_data <= out_Cls(i-1);
+				out_data <= out_Cls(p);
 			end if;
 		end loop;
 

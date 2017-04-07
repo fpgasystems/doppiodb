@@ -15,7 +15,7 @@
    	extern void  FPGAfree(void*);
 
    	//TODO make not extern
-	extern void* fpga_init();
+	extern void fpga_init();
 
 
 #ifdef __cplusplus

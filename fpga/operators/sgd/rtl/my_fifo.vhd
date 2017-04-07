@@ -79,7 +79,6 @@ internal_empty <= 	'0' when internal_count > 0 else
 process(clk)
 begin
 if clk'event and clk = '1' then
-	dout <= bram_dout;
 	empty <= internal_empty;
 	if internal_count < FIFO_DEPTH then
 		full <= '0';
@@ -120,8 +119,10 @@ if clk'event and clk = '1' then
 		end if;
 
 		valid <= '0';
+		dout <= (others => '0');
 		if bram_re_1d = '1' then
 			valid <= '1';
+			dout <= bram_dout;
 		end if;
 
 		bram_re_1d <= bram_re;

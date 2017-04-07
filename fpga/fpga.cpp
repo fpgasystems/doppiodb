@@ -13,7 +13,7 @@
 extern "C" 
 {
 
-bool fpga_init() {
+void fpga_init() {
 
   MSG(" Start FPGA Init"); 
   pthread_mutex_lock(&fpga_mutex);
@@ -88,12 +88,11 @@ void* FPGAreallocmax(void* ptr, size_t size, size_t *psize, int emergency)
 
 void FPGAfree(void *blk)
 {
-   ssize_t size = 0;
-   ssize_t *s = (ssize_t*) blk;
-   if (s == NULL)
-      return;
-   
-      my_fpga->free(blk);
+  ssize_t *s = (ssize_t*) blk;
+  if (s == NULL)
+    return;
+
+  my_fpga->free(blk);
 }
 
 //MAYBE add GDK_VAROFFSET
@@ -993,7 +992,7 @@ void FPGAskyline(void* tupleDims[],
                 status->afu_counters[7]);*/
 }
 
-void FPGAsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter)
+void FPGAsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter, unsigned int gatherDepth)
 {
   printf("Starting FPGAsgd_column\n");
 
@@ -1006,7 +1005,7 @@ void FPGAsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int
   ab[numFeatures] = reinterpret_cast<float*>(_b);
   int32_t* x_historyi = (int32_t*)( my_fpga->malloc(sizeof(int32_t)*numIterations*numCLsForX*16) );
 
-  Fthread sgd_column ( fthread_sgd(my_fpga, ab, 1, 3, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
+  Fthread sgd_column ( fthread_sgd(my_fpga, ab, 1, gatherDepth, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
 
   MSG("FPGA thread created...");
   void* ret_v = sgd_column.join();
@@ -1032,15 +1031,14 @@ void FPGAsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int
   for (int iteration = 0; iteration < numIterations+1; iteration++) {
     for (int i = 0; i < numTuples; i++) {
       float dot = 0;
-      int offset = i*(numFeatures+1);
       for (int j = 0; j < numFeatures; j++) {
-        dot += x_history[iteration][j]*ab[0][offset + j];
+        dot += x_history[iteration][j]*ab[j][i];
       }
-      loss_history[iteration] += (dot - ab[0][offset + numFeatures])*(dot - ab[0][offset + numFeatures]);
+      loss_history[iteration] += (dot - ab[numFeatures][i])*(dot - ab[numFeatures][i]);
     }
     loss_history[iteration] /= (float)(numTuples << 1);
   }
-
+  
   sgd_column.printStatusLine();
 
   printf("End of FPGAsgd_column\n");

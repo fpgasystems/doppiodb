@@ -76,7 +76,8 @@ signal internal_rx_data : std_logic_vector(511 downto 0);
 signal internal_rx_rd_valid : std_logic;
 
 -- GATHER SIGNALS
-signal gather_enable : std_logic;
+signal gather_enable : std_logic := '0';
+signal gather_start : std_logic := '0';
 
 signal gather_tx_rd_addr : std_logic_vector(57 downto 0);
 signal gather_tx_rd_tag : std_logic_vector(7 downto 0);
@@ -101,7 +102,6 @@ signal NumberOfEpochs : unsigned(13 downto 0);
 signal NumberOfEpochsCompleted : unsigned(13 downto 0);
 
 signal NumberOfSamples : unsigned(31 downto 0) := (others => '0');
-signal NumberOfSamplesInCacheLines : unsigned(31 downto 0) := (others => '0');
 signal sample_index_to_read : integer;
 signal sample_index_to_read_unsigned : unsigned(31 downto 0);
 signal gradient_valid_counter : integer;
@@ -141,7 +141,7 @@ signal x_for_dot_product_fp : std_logic_vector(511 downto 0);
 signal x_for_update : std_logic_vector(511 downto 0);
 
 signal write_back_the_model : std_logic;
-signal write_back_index : integer range 0 to X_CL_COUNT-1;
+signal write_back_index : integer range 0 to X_CL_COUNT-1 := 0;
 signal model_is_written : std_logic;
 
 signal ififo_we : std_logic;
@@ -367,7 +367,7 @@ port map (
     resetn => rst_n,
 
     enable => gather_enable,
-    start => started,
+    start => gather_start,
 
     -- TX RD
     um_tx_rd_addr => gather_tx_rd_addr,
@@ -534,6 +534,8 @@ gradient_valid_counter_unsigned <= to_unsigned(gradient_valid_counter, 32);
 process(clk)
 begin
 if clk'event and clk = '1' then
+    
+
     for k in 0 to 15 loop
         gradient_fixed(32*k+31 downto 32*k) <= convert_fp_to_signed(gradient(32*k+31 downto 32*k));
     end loop;
@@ -542,7 +544,6 @@ if clk'event and clk = '1' then
     NumberOfCLToProcess <= unsigned(number_of_CL_to_process);
     NumberOfEpochs <= unsigned(number_of_epochs);
     NumberOfSamples <= unsigned(number_of_samples);
-    NumberOfSamplesInCacheLines <= shift_right(NumberOfSamples,4) + 1;
 
     if rst_n = '0' then
         started <= '0';
@@ -551,6 +552,12 @@ if clk'event and clk = '1' then
     end if;
 
     if started = '0' then
+        internal_tx_rd_addr <= (others => '0');
+        internal_tx_rd_valid <= '0';
+
+        gather_enable <= '0';
+        gather_start <= '0';
+
         NumberOfRequestedReads <= (others => '0');
         NumberOfCompletedReads <= (others => '0');
         NumberOfRequestedWrites <= (others => '0');
@@ -591,18 +598,19 @@ if clk'event and clk = '1' then
         um_done <= '0';
     else
         internal_tx_rd_valid <= '0';
-        gather_enable <= '0';
         if do_gather = '0' and NumberOfRequestedReads < NumberOfCLToProcess and um_tx_wr_ready = '1' and um_tx_rd_ready = '1' and NumberOfRequestedReads - NumberOfCompletedReads < a_row_fifo_free_count then
             internal_tx_rd_valid <= '1';
             internal_tx_rd_addr <= std_logic_vector(unsigned(source_addresses(63 downto 6)) + NumberOfRequestedReads);
             NumberOfRequestedReads <= NumberOfRequestedReads + 1;
         end if;
 
+        gather_enable <= '0';
         if do_gather = '0' then
             if internal_rx_rd_valid = '1' then
                 NumberOfCompletedReads <= NumberOfCompletedReads + 1;
             end if;
         else
+            gather_start <= '1';
             if NumberOfRequestedReads - NumberOfCompletedReads < a_row_fifo_free_count then
                 gather_enable <= '1';
             end if;
@@ -704,8 +712,8 @@ if clk'event and clk = '1' then
         um_tx_wr_valid <= '0';
         if write_back_the_model = '1' and um_tx_wr_ready = '1' and new_CL_available(0) /= '1' then
             um_tx_wr_valid <= '1';
-            um_tx_wr_addr <= std_logic_vector(unsigned(destination_address(63 downto 6)) + NumberOfRequestedWrites);
             um_tx_data <= x(write_back_index);
+            um_tx_wr_addr <= std_logic_vector(unsigned(destination_address(63 downto 6)) + NumberOfRequestedWrites);
             if write_back_index = accumulation_count-1 then
                 write_back_index <= 0;
                 write_back_the_model <= '0';
@@ -716,6 +724,7 @@ if clk'event and clk = '1' then
                 else
                     NumberOfRequestedReads <= (others => '0');
                     NumberOfCompletedReads <= (others => '0');
+                    gather_start <= '0';
                 end if;
             else
                 write_back_index <= write_back_index + 1;

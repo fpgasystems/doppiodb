@@ -687,7 +687,7 @@ configure:15432: checking how to hardcode library paths into programs
 configure:15457: result: immediate
 configure:15551: checking for shl_load
 configure:15551: gcc -o conftest -g -O2   conftest.c  >&5
-/tmp/cclDpN2t.o: In function `main':
+/tmp/cchvMxCG.o: In function `main':
 /home/kkara/Projects/doppiodb/conftest.c:67: undefined reference to `shl_load'
 collect2: error: ld returned 1 exit status
 configure:15551: $? = 1
@@ -819,7 +819,7 @@ configure: failed program was:
 configure:15589: result: no
 configure:15594: checking for dlopen
 configure:15594: gcc -o conftest -g -O2   conftest.c  >&5
-/tmp/ccikQVvE.o: In function `main':
+/tmp/cc1ZGiIM.o: In function `main':
 /home/kkara/Projects/doppiodb/conftest.c:67: undefined reference to `dlopen'
 collect2: error: ld returned 1 exit status
 configure:15594: $? = 1
@@ -905,7 +905,7 @@ configure:15834: $? = 0
 configure:15852: result: yes
 configure:15857: checking whether a statically linked program can dlopen itself
 configure:15937: gcc -o conftest -g -O2  -DHAVE_DLFCN_H  -Wl,--export-dynamic -static conftest.c -ldl  >&5
-/tmp/ccH8IUHG.o: In function `main':
+/tmp/ccPXnQCR.o: In function `main':
 /home/kkara/Projects/doppiodb/configure:15916: warning: Using 'dlopen' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
 /usr/bin/ld: dynamic STT_GNU_IFUNC symbol `strcmp' with pointer equality in `/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libc.a(strcmp.o)' can not be used when making an executable; recompile with -fPIE and relink with -pie
 collect2: error: ld returned 1 exit status
@@ -1401,7 +1401,7 @@ configure:18736: $? = 0
 configure:18753: result: none required
 configure:18763: checking for library containing pthread_kill_other_threads_np
 configure:18794: gcc -o conftest -g -O2  -pthread  conftest.c  -pthread >&5
-/tmp/cc8S465S.o: In function `main':
+/tmp/cc1hKyOH.o: In function `main':
 /home/kkara/Projects/doppiodb/conftest.c:59: undefined reference to `pthread_kill_other_threads_np'
 collect2: error: ld returned 1 exit status
 configure:18794: $? = 1
@@ -1524,7 +1524,7 @@ configure:20205: result:
          extern size_t iconv (iconv_t cd, char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);
 configure:20219: checking for library containing uuid_generate
 configure:20250: gcc -o conftest -g -O2   conftest.c  >&5
-/tmp/ccPGZBUD.o: In function `main':
+/tmp/cc2nWUQu.o: In function `main':
 /home/kkara/Projects/doppiodb/conftest.c:64: undefined reference to `uuid_generate'
 collect2: error: ld returned 1 exit status
 configure:20250: $? = 1
@@ -7888,7 +7888,7 @@ configure:24002: $? = 0
 configure:24002: result: yes
 configure:24002: checking for fpclass
 configure:24002: gcc -o conftest -g -O2   conftest.c  -lm >&5
-/tmp/ccBgzGvr.o: In function `main':
+/tmp/ccXxidL8.o: In function `main':
 /home/kkara/Projects/doppiodb/conftest.c:182: undefined reference to `fpclass'
 collect2: error: ld returned 1 exit status
 configure:24002: $? = 1
@@ -8081,7 +8081,7 @@ configure: failed program was:
 configure:24002: result: no
 configure:24002: checking for fpclassify
 configure:24002: gcc -o conftest -g -O2   conftest.c  -lm >&5
-/tmp/ccgU0bly.o: In function `main':
+/tmp/ccboCQAb.o: In function `main':
 /home/kkara/Projects/doppiodb/conftest.c:182: undefined reference to `fpclassify'
 collect2: error: ld returned 1 exit status
 configure:24002: $? = 1
@@ -8282,7 +8282,7 @@ configure:24002: $? = 0
 configure:24002: result: yes
 configure:24002: checking for getexecname
 configure:24002: gcc -o conftest -g -O2   conftest.c  -lm >&5
-/tmp/cceZ0tOJ.o: In function `main':
+/tmp/ccIQVIan.o: In function `main':
 /home/kkara/Projects/doppiodb/conftest.c:184: undefined reference to `getexecname'
 collect2: error: ld returned 1 exit status
 configure:24002: $? = 1
@@ -8489,7 +8489,7 @@ configure:24002: $? = 0
 configure:24002: result: yes
 configure:24002: checking for GetSystemInfo
 configure:24002: gcc -o conftest -g -O2   conftest.c  -lm >&5
-/tmp/ccWj74I3.o: In function `main':
+/tmp/ccfNos6F.o: In function `main':
 /home/kkara/Projects/doppiodb/conftest.c:187: undefined reference to `GetSystemInfo'
 collect2: error: ld returned 1 exit status
 configure:24002: $? = 1
@@ -8740,7 +8740,7 @@ configure:24002: $? = 0
 configure:24002: result: yes
 configure:24002: checking for _NSGetExecutablePath
 configure:24002: gcc -o conftest -g -O2   conftest.c  -lm >&5
-/tmp/ccjipZ6N.o: In function `main':
+/tmp/ccpkLeOo.o: In function `main':
 /home/kkara/Projects/doppiodb/conftest.c:198: undefined reference to `_NSGetExecutablePath'
 collect2: error: ld returned 1 exit status
 configure:24002: $? = 1
@@ -9050,7 +9050,7 @@ configure:24002: $? = 0
 configure:24002: result: yes
 configure:24002: checking for task_info
 configure:24002: gcc -o conftest -g -O2   conftest.c  -lm >&5
-/tmp/ccRGU0Nf.o: In function `main':
+/tmp/ccAEhfVU.o: In function `main':
 /home/kkara/Projects/doppiodb/conftest.c:221: undefined reference to `task_info'
 collect2: error: ld returned 1 exit status
 configure:24002: $? = 1
@@ -10145,6 +10145,7 @@ config.status:1585: creating testing/MkillUsers
 config.status:1585: creating clients/perl/Tests/sqlsample.pl
 config.status:1585: creating clients/perl/Tests/malsample.pl
 config.status:1585: creating monetdb_config.h
+config.status:1766: monetdb_config.h is unchanged
 config.status:1814: executing depfiles commands
 config.status:1814: executing libtool commands
 
@@ -11075,3 +11076,21 @@ zlib_LIBS='-lz  '
 #define BINDIR "/home/kkara/Projects/MyMonetDB/bin"
 
 configure: exit 0
+
+## ---------------------- ##
+## Running config.status. ##
+## ---------------------- ##
+
+This file was extended by MonetDB config.status 11.21.19, which was
+generated by GNU Autoconf 2.69.  Invocation command line was
+
+  CONFIG_FILES    = 
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  $ ./config.status monetdb_config.h
+
+on kkara-desktop
+
+config.status:1585: creating monetdb_config.h
+config.status:1766: monetdb_config.h is unchanged

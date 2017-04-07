@@ -1197,7 +1197,7 @@ UDFBATskylinesw(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, con
 
 //Stochastic Gradient Descent
 char *
-UDFBATsgdfpga_column(bat *ret, const int* numIterations, const int* stepSizeShifter, const bat *a1, const bat *a2, const bat *a3, const bat *a4, const bat *a5, const bat *a6, const bat *a7, const bat *a8, const bat *a9, const bat *a10, const bat *a11, const bat *a12, const bat *a13, const bat *a14, const bat *a15, const bat *b)
+UDFBATsgdfpga_column(bat *ret, const int* numFeatures, const int* numIterations, const int* stepSizeShifter, const int* gatherDepth, const bat *a1, const bat *a2, const bat *a3, const bat *a4, const bat *a5, const bat *a6, const bat *a7, const bat *a8, const bat *a9, const bat *a10, const bat *a11, const bat *a12, const bat *a13, const bat *a14, const bat *a15, const bat *b)
 {
 	printf("Starting UDFBATsgdfpga_column\n");
 
@@ -1207,8 +1207,6 @@ UDFBATsgdfpga_column(bat *ret, const int* numIterations, const int* stepSizeShif
 
 	// assert calling sanity
 	assert(ret != NULL);
-
-	int numFeatures = 15;
 
 	BAT* _a[15];
 	BAT* _b;
@@ -1259,18 +1257,18 @@ UDFBATsgdfpga_column(bat *ret, const int* numIterations, const int* stepSizeShif
 	//set count
 	BATsetcount(bn, ((*numIterations) + 1) );
 
-	void* _aBase[numFeatures];
-	for(i = 0; i < numFeatures; i++)
+	void* _aBase[*numFeatures];
+	for(i = 0; i < *numFeatures; i++)
 	{
 		_aBase[i] = _a[i]->T->heap.base;
 	}
 	void* _bBase = _b->T->heap.base;
 
-	FPGAsgd_column(_aBase, _bBase, numFeatures, _b->batCount, bn->T->heap.base, *numIterations, *stepSizeShifter);
+	FPGAsgd_column(_aBase, _bBase, *numFeatures, _b->batCount, bn->T->heap.base, *numIterations, *stepSizeShifter, *gatherDepth);
 	res = bn;
 
 	// release input BAT-descriptor
-	for (i = 0; i < numFeatures; i++)
+	for (i = 0; i < *numFeatures; i++)
 	{
 	   BBPunfix(_a[i]->batCacheid);
 	}
@@ -1286,7 +1284,7 @@ UDFBATsgdfpga_column(bat *ret, const int* numIterations, const int* stepSizeShif
 
 //Stochastic Gradient Descent
 char *
-UDFBATsgdsw_column(bat *ret, const int* numIterations, const int* stepSizeShifter, const bat *a1, const bat *a2, const bat *a3, const bat *a4, const bat *a5, const bat *a6, const bat *a7, const bat *a8, const bat *a9, const bat *a10, const bat *a11, const bat *a12, const bat *a13, const bat *a14, const bat *a15, const bat *b)
+UDFBATsgdsw_column(bat *ret, const int* numFeatures, const int* numIterations, const int* stepSizeShifter, const bat *a1, const bat *a2, const bat *a3, const bat *a4, const bat *a5, const bat *a6, const bat *a7, const bat *a8, const bat *a9, const bat *a10, const bat *a11, const bat *a12, const bat *a13, const bat *a14, const bat *a15, const bat *b)
 {
 	printf("Starting UDFBATsgdsw_column\n");
 
@@ -1296,8 +1294,6 @@ UDFBATsgdsw_column(bat *ret, const int* numIterations, const int* stepSizeShifte
 
 	// assert calling sanity
 	assert(ret != NULL);
-
-	int numFeatures = 15;
 
 	BAT* _a[15];
 	BAT* _b;
@@ -1348,18 +1344,18 @@ UDFBATsgdsw_column(bat *ret, const int* numIterations, const int* stepSizeShifte
 	//set count
 	BATsetcount(bn, ((*numIterations) + 1) );
 
-	void* _aBase[numFeatures];
-	for(i = 0; i < numFeatures; i++)
+	void* _aBase[*numFeatures];
+	for(i = 0; i < *numFeatures; i++)
 	{
 		_aBase[i] = _a[i]->T->heap.base;
 	}
 	void* _bBase = _b->T->heap.base;
 
-	SWsgd_column(_aBase, _bBase, numFeatures, _b->batCount, bn->T->heap.base, *numIterations, *stepSizeShifter);
+	SWsgd_column(_aBase, _bBase, *numFeatures, _b->batCount, bn->T->heap.base, *numIterations, *stepSizeShifter);
 	res = bn;
 
 	// release input BAT-descriptor
-	for (i = 0; i < numFeatures; i++)
+	for (i = 0; i < *numFeatures; i++)
 	{
 	   BBPunfix(_a[i]->batCacheid);
 	}
