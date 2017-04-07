@@ -260,6 +260,8 @@ module mdb_batparser_string
 	
 	wire[31:0] string_stall_counter;
 	wire[31:0] meta_stall_counter;
+
+	reg[31:0] counter_for_pushes;
 	 
     mdb_stringreader string_reader
     (
@@ -471,8 +473,14 @@ module mdb_batparser_string
 			ext_off_req_counter <= 0;
 			dup_wr_counter <= 0;
 			dup_rd_counter <= 0;
+
+			counter_for_pushes <= 0;
 		end
 		else begin
+			if (parser2fifo_last && parser2fifo_valid && parser2fifo_ready) begin
+				counter_for_pushes <= counter_for_pushes + 1;
+			end
+
 		//internal
 			if (axis_read_rsp_valid_delay) begin
 					input_counter <= input_counter + 1;

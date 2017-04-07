@@ -25,7 +25,7 @@ select sgdsw_row(15, 4, 18, ab) from percolator_row;
 -- Salaries dataset
 CREATE TABLE salaries(Id integer, EmployeeName string, JobTitle string, BasePay real, OvertimePay real, OtherPay real, Benefits real, TotalPay real, TotalPayBenefits real, Years real, Notes real, Agency string, Status string);
 COPY 148655 RECORDS INTO salaries from '/home/kkara/Datasets/kaggle/salaries.csv' USING DELIMITERS ',','\n','"' NULL AS '';
-COPY 10 RECORDS INTO salaries from '/home/kkara/Datasets/kaggle/salaries.csv' USING DELIMITERS ',','\n','"' NULL AS '';
+COPY 160 RECORDS INTO salaries from '/home/kkara/Datasets/kaggle/salaries.csv' USING DELIMITERS ',','\n','"' NULL AS '';
 
 select regexfpga('MANAGER', jobtitle) from salaries;
 select sgdfpga_column(7, 4, 18, 3, BasePay, OvertimePay, OtherPay, Benefits, TotalPay, TotalPayBenefits, Years, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay ) from salaries;
