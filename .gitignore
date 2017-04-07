@@ -8,6 +8,14 @@ Makefile.msc
 *.lo
 *.la
 ._*
+*.o
+*.class
+
+#temp files
+.*
+*~
+*.swp
+*.log
 
 #executables
 Mdiff
@@ -15,8 +23,22 @@ MkillUsers
 Mlog
 Mtimeout
 libtool
-mserver5*
-monetdbd*
+mserver5
+monetdbd
+sample0
+sample1
+smaple2
+sample3
+sample4
+smack00
+smack01
+mclient
+msqldump
+stethoscope
+tachograph
+tomograph
+monetdb
+
 
 #some dirs
 .libs
