@@ -534,8 +534,6 @@ gradient_valid_counter_unsigned <= to_unsigned(gradient_valid_counter, 32);
 process(clk)
 begin
 if clk'event and clk = '1' then
-    
-
     for k in 0 to 15 loop
         gradient_fixed(32*k+31 downto 32*k) <= convert_fp_to_signed(gradient(32*k+31 downto 32*k));
     end loop;
