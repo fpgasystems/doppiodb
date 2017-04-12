@@ -194,7 +194,6 @@ if clk'event and clk = '1' then
 	else
 		NumberOfDimensions <= to_integer( unsigned(number_of_dimensions) );
 		
-
 		um_tx_rd_valid <= '0';
 		if enable = '1' and um_tx_rd_ready = '1' and FinishedReading = '0' then
 			um_tx_rd_valid <= '1';
