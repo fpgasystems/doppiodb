@@ -47,24 +47,7 @@ reg                          regex_done_d1 = 0;
 reg                          um_activated = 0;
 wire                         regex_done;
 
-reg  [7:0]                   um_rx_rd_tag_reg = 0;
-reg  [511:0]                 um_rx_data_reg = 0;
-reg                          um_rx_rd_valid_reg = 0;
- 
-///////////////////// RD RX /////////////////////////
-always@(posedge clk) begin
-    if(~rst_n) begin
-        um_rx_rd_valid_reg <= 0;
-    end
-    else begin
-        um_rx_rd_valid_reg <= um_rx_rd_valid;
-    end 
-end 
 
-always@(posedge clk) begin
-    um_rx_rd_tag_reg   <= um_rx_rd_tag;
-    um_rx_data_reg  <= um_rx_data;
-end 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////// Module Control Logic  ////////////////////////////
 // Register afu parameters
@@ -155,10 +138,10 @@ mdb_batparser_string myafu (
 		.m_axis_read_req_addr     (tx_rd_addr),
 		.m_axis_read_req_tag      (tx_rd_tag),
 		//read responses
-		.s_axis_read_rsp_valid    (um_rx_rd_valid_reg),
+		.s_axis_read_rsp_valid    (um_rx_rd_valid),
 		.s_axis_read_rsp_ready    (um_rx_rd_ready),
-		.s_axis_read_rsp_data     (um_rx_data_reg),
-		.s_axis_read_rsp_tag      (um_rx_rd_tag_reg[0]),
+		.s_axis_read_rsp_data     (um_rx_data),
+		.s_axis_read_rsp_tag      (um_rx_rd_tag[0]),
 		//parameters
         .re2xy_BatCount           (um_params_reg[223:192]),   // num_cl
         .re2xy_BaseAddr           (um_params_reg[57:0]),      // pSource

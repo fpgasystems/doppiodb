@@ -323,18 +323,9 @@ module mdb_stringreader
 								writeMetaEn <= 1; //Write only once
 								pushIsFirstLine <= 1;
 								pushOffset <= curStrOffset[5:2]; //ignoring lowest 2 bits, because we shift at granularity of 32bits/4bytes
-								//TODO maybe make it 0, optimize this??
-								
-								//pushLength <= curStrOffset[31:16] - curStrOffset[15:0];// + 1; //ingore lowest 6bits, because we want length in CLs
-								if (curStrOffset[31:22] < curStrOffset[15:6]) begin
-									//Set some fixed length
-									remainingWords <= 3;
-									pushLength <= 4;
-								end
-								else begin
-									remainingWords <= (curStrOffset[31:22] - curStrOffset[15:6]);
-									pushLength <= (curStrOffset[31:22] - curStrOffset[15:6]) + 1; //ingore lowest 6bits, because we want length in CLs
-								end
+								//TODO maybe make it 0-based, optimize this??
+								remainingWords <= (curStrOffset[31:22] - curStrOffset[15:6]);
+								pushLength <= (curStrOffset[31:22] - curStrOffset[15:6]) + 1; //ingore lowest 6bits, because we want length in CLs
 								offset_jdx <= offset_jdx + 1;
 								
 								//shift to new offset
@@ -343,15 +334,8 @@ module mdb_stringreader
 								// Check if end of cache line or last offset
 								if (offset_jdx == 31) begin
 									//if at end of CL we need to compute length differently
-									if (nextStrOffset[15:6] < curStrOffset[15:6]) begin
-										//Set some fixed length
-										remainingWords <= 3;
-										pushLength <= 4;
-									end
-									else begin
-										remainingWords <= (nextStrOffset[15:6] - curStrOffset[15:6]);
-										pushLength <= nextStrOffset[15:6] - curStrOffset[15:6] + 1;
-									end
+									remainingWords <= (nextStrOffset[15:6] - curStrOffset[15:6]);
+									pushLength <= nextStrOffset[15:6] - curStrOffset[15:6] + 1;
 									if (fifoReload == 1) begin
 										remainingWords <= 1;
 										pushLength <= 2; //TODO these are some assumptions
@@ -375,7 +359,7 @@ module mdb_stringreader
 								end
 								
 								// Check if remainingWords, TODO what about last one??
-								if ((curStrOffset[31:22] != curStrOffset[15:6]) || (offset_jdx == 31 && (nextStrOffset[15:6] != curStrOffset[15:6]))) begin
+								if (((curStrOffset[31:22] != curStrOffset[15:6]) && offset_jdx != 31) || (offset_jdx == 31 && (nextStrOffset[15:6] != curStrOffset[15:6]))) begin
 									//m_axis_read_req_valid <= 0; //TODO improve, req next cache line
 									/*if (~gfifo_outputPrep_i_almostfull && ~gfifo_string_metadata_almostfull) begin //TODO only need address
 										m_axis_read_req_valid <= 1;
@@ -428,7 +412,7 @@ module mdb_stringreader
 								end
 								
 								// Check if remainingWords, TODO what about last one??
-								if ((curStrOffset[63:38] != curStrOffset[31:6]) || (offset_jdx == 15 && (nextStrOffset[31:6] != curStrOffset[31:6]))) begin
+								if (((curStrOffset[63:38] != curStrOffset[31:6]) && offset_jdx != 31) || (offset_jdx == 15 && (nextStrOffset[31:6] != curStrOffset[31:6]))) begin
 									/*m_axis_read_req_valid <= 0; //TODO improve, req next cache line
 									if (~gfifo_outputPrep_i_almostfull && ~gfifo_string_metadata_almostfull) begin
 										m_axis_read_req_valid <= 1;

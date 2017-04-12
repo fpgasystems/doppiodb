@@ -24,7 +24,7 @@ FthreadRec* fthread_regex(FPGA * t_fpga, unsigned char* src, unsigned char* vsrc
   unsigned char configBytes[512];
   int configLen = 0;
   printf("Regex: %s\n", regex);
-  fregex_get_config(regex, 8, 16, configBytes, &configLen);
+  fregex_get_config(regex, 16, 8, configBytes, &configLen);
   printf("Config length: %i\n", configLen*8);
   printf("Config: ");
   for (int i = 0; i < 64; i++)
