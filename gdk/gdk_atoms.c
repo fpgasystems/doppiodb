@@ -1190,7 +1190,7 @@ strPut(Heap *h, var_t *dst, const char *v)
 			if (GDK_STRCMP(v, (str) (next + 1) + extralen) == 0) {
 				/* found */
 				pos = sizeof(stridx_t) + *ref + extralen;
-				return *dst = (var_t) (pos >> GDK_VARSHIFT);
+				//return *dst = (var_t) (pos >> GDK_VARSHIFT);
 			}
 		}
 		/* is there room for the next pointer in the padding space? */
@@ -1204,7 +1204,7 @@ strPut(Heap *h, var_t *dst, const char *v)
 		pos = elimbase + *bucket + extralen;
 		if (GDK_STRCMP(v, h->base + pos) == 0) {
 			/* already in heap; do not insert! */
-			return *dst = (var_t) (pos >> GDK_VARSHIFT);
+			//return *dst = (var_t) (pos >> GDK_VARSHIFT);
 		}
 #if SIZEOF_VAR_T >= SIZEOF_VOID_P /* in fact SIZEOF_VAR_T == SIZEOF_VOID_P */
 		if (extralen == 0)
