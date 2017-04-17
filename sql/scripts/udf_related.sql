@@ -14,10 +14,8 @@ COPY 30 RECORDS INTO Proteins_Column FROM '/home/kkara/Projects/doppiodb/DATASET
 COPY 87322 RECORDS INTO Proteins_Column FROM '/media/storage/doppiodb/DATASETS/percolator_column.tbl' USING DELIMITERS '|';
 COPY 30 RECORDS INTO Proteins_Column FROM '/media/storage/doppiodb/DATASETS/percolator_column.tbl' USING DELIMITERS '|';
 
-select sgdfpga_column(15, 2, 18, 1, Bias, deltLCn, deltCn, RefactoredXCorr, NegLog10PValue, PepLen, Charge1, Charge2, Charge3, enzN, enzC, enzInt, lnNumDSP, dM, absdM, Label) FROM Proteins_Column;
+select sgdfpga_column(15, 10, 18, 1, Bias, deltLCn, deltCn, RefactoredXCorr, NegLog10PValue, PepLen, Charge1, Charge2, Charge3, enzN, enzC, enzInt, lnNumDSP, dM, absdM, Label) FROM Proteins_Column;
 select sgdsw_column(15, 10, 18, Bias, deltLCn, deltCn, RefactoredXCorr, NegLog10PValue, PepLen, Charge1, Charge2, Charge3, enzN, enzC, enzInt, lnNumDSP, dM, absdM, Label) FROM Proteins_Column;
-
-select sgdfpga_column(15, 2, 18, 1, Bias, deltLCn, deltCn, RefactoredXCorr, NegLog10PValue, PepLen, Charge1, Charge2, Charge3, enzN, enzC, enzInt, lnNumDSP, dM, absdM, Label) FROM Proteins_Column;
 
 DELETE FROM Proteins_Column;
 
@@ -28,9 +26,10 @@ COPY 1600 RECORDS INTO Proteins_Row FROM '/home/kkara/Projects/doppiodb/DATASETS
 COPY 1397152 RECORDS INTO Proteins_Row FROM '/media/storage/doppiodb/DATASETS/percolator_row.tbl' USING DELIMITERS '|';
 COPY 1600 RECORDS INTO Proteins_Row FROM '/media/storage/doppiodb/DATASETS/percolator_row.tbl' USING DELIMITERS '|';
 
-SELECT sgdfpga_row(15, 50, 18, allFeatures) FROM Proteins_Row;
-SELECT sgdsw_row(15, 50, 18, allFeatures) FROM Proteins_Row;
+SELECT sgdfpga_row(15, 10, 18, allFeatures) FROM Proteins_Row;
+SELECT sgdsw_row(15, 10, 18, allFeatures) FROM Proteins_Row;
 
+DELETE FROM Proteins_Row;
 
 -- music dataset
 CREATE TABLE music_row (ab real);

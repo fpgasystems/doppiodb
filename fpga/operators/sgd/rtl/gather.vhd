@@ -91,6 +91,10 @@ signal gather_data_in : gather_data_type;
 signal gather_data_out : gather_data_type;
 type gather_count_type is array (MAX_GATHER_FACTOR-1 downto 0) of std_logic_vector(MAX_GATHER_DEPTH_BITS-1 downto 0);
 signal gather_count : gather_count_type;
+type gather_count_integer_type is array (MAX_GATHER_FACTOR-1 downto 0) of integer;
+signal gather_count_integer : gather_count_integer_type;
+
+signal gather_read_index : integer range 0 to MAX_GATHER_FACTOR-1;
 
 signal FinishedReading : std_logic;
 
@@ -117,6 +121,7 @@ end component;
 begin
 
 FIFOS: for k in 0 to MAX_GATHER_FACTOR-1 generate
+	gather_count_integer(k) <= to_integer(unsigned(gather_count(k)));
 	FIFOx: my_fifo
 	generic map (
 		FIFO_WIDTH => 32,
@@ -165,7 +170,9 @@ um_rx_rd_ready <= '1';
 number_of_requested_reads <= std_logic_vector(NumberOfRequestedReads);
 number_of_completed_reads <= std_logic_vector(NumberOfCompletedReads);
 
-started <= start and start_1d and start_2d;
+gather_read_index <= NumberOfDimensions*Ks-(16-r) when NumberOfDimensions > 0 else MAX_GATHER_FACTOR-1;
+
+--started <= start and start_1d and start_2d;
 
 process(clk)
 begin
@@ -173,7 +180,7 @@ if clk'event and clk = '1' then
 	start_1d <= start;
 	start_2d <= start_1d;
 
-	if started = '0' then
+	if start_2d = '0' then
 		NumberOfSamples <= unsigned(number_of_samples);
 		NumberOfDimensions <= MAX_DIMENSION;
 
@@ -226,7 +233,7 @@ if clk'event and clk = '1' then
 		end if;
 
 		out_re <= (others => '0');
-		if gather_empty(NumberOfDimensions*Ks-1) = '0' and NumberOfForwarded < NumberOfSamples then
+		if gather_count_integer(gather_read_index) > 0 and NumberOfForwarded < NumberOfSamples then
 			NumberOfForwarded <= NumberOfForwarded + 1;
 			out_re(r) <= '1';
 			if r = Ks-1 then
@@ -237,12 +244,64 @@ if clk'event and clk = '1' then
 		end if;
 
 		out_valid <= '0';
-		for p in 0 to Ks-1 loop
-			if gather_valid(p) = '1' then
-				out_valid <= '1';
-				out_data <= out_Cls(p);
-			end if;
-		end loop;
+		if gather_valid(0) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(0);
+		elsif gather_valid(1) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(1);
+		elsif gather_valid(2) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(2);
+		elsif gather_valid(3) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(3);
+		elsif gather_valid(4) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(4);
+		elsif gather_valid(5) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(5);
+		elsif gather_valid(6) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(6);
+		elsif gather_valid(7) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(7);
+		elsif gather_valid(8) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(8);
+		elsif gather_valid(9) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(9);
+		elsif gather_valid(10) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(10);
+		elsif gather_valid(11) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(11);
+		elsif gather_valid(12) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(12);
+		elsif gather_valid(13) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(13);
+		elsif gather_valid(14) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(14);
+		elsif gather_valid(15) = '1' then
+			out_valid <= '1';
+			out_data <= out_Cls(15);
+		end if;
+
+
+		--out_valid <= '0';
+		--for p in 0 to Ks-1 loop
+		--	if gather_valid(p) = '1' then
+		--		out_valid <= '1';
+		--		out_data <= out_Cls(p);
+		--	end if;
+		--end loop;
 
     end if;
 end if;

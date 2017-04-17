@@ -52,27 +52,27 @@ monet_version(void)
 			GDKnr_threads, GDKnr_threads != 1 ? "s" : ""); */
 	printf("Libraries:\n");
 	{
-		char pcreversion[] = "compiled with 8.31";
+		char pcreversion[] = "compiled with 8.38";
 		printf("  libpcre: %s", pcre_version());
 		if (*pcreversion)
 			printf(" (%s)", pcreversion);
 		printf("\n");
 	}
 	{
-		char opensslversion[] = "compiled with OpenSSL 1.0.1f 6 Jan 2014";
+		char opensslversion[] = "compiled with OpenSSL 1.0.2g  1 Mar 2016";
 		printf("  openssl: %s", OPENSSL_VERSION_TEXT);
 		if (*opensslversion)
 			printf(" (%s)", opensslversion);
 		printf("\n");
 	}
 	{
-		char libxml2version[] = "compiled with 2.9.1";
+		char libxml2version[] = "compiled with 2.9.3";
 		printf("  libxml2: %s", LIBXML_DOTTED_VERSION);
 		if (*libxml2version)
 			printf(" (%s)", libxml2version);
 		printf("\n");
 	}
-	printf("Compiled by: %s (" HOST ")\n", "kkara@kkara-desktop");
+	printf("Compiled by: %s (" HOST ")\n", "kkara@kkara-VirtualBox");
 	printf("Compilation: %s\n", "gcc -g -O2 ");
 #ifdef MONETDB_STATIC
 	printf("Linking    : %s (static)\n", "/usr/bin/ld -m elf_x86_64 ");
