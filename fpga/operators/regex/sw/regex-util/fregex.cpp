@@ -128,6 +128,10 @@ int parse_range(const char* regex_string, int pos, State* states, int* s_loc, To
 		states[(*s_loc)].out_cnt = 0;
 		states[(*s_loc)].is_accepting = false;
 
+		if (regex_string[cur_pos]==0) {
+			states[(*s_loc)].is_accepting = true;			
+		}
+
 	} else if (cnt>0 && is_range==false) {
 		int p;
 
@@ -148,6 +152,10 @@ int parse_range(const char* regex_string, int pos, State* states, int* s_loc, To
 		states[(*s_loc)].in_cnt = 0;
 		states[(*s_loc)].out_cnt = 0;
 		states[(*s_loc)].is_accepting = false;
+
+		if (regex_string[cur_pos]==0) {
+			states[(*s_loc)].is_accepting = true;			
+		}
 	}
 
 	return cur_pos;
@@ -206,6 +214,10 @@ int parse_choice(const char* regex_string, int pos, State* states, int* s_loc, T
 		states[(*s_loc)].in_cnt = 0;
 		states[(*s_loc)].out_cnt = 0;
 		states[(*s_loc)].is_accepting = false;
+
+		if (regex_string[cur_pos]==0) {
+			states[(*s_loc)].is_accepting = true;			
+		}
 	}
 
 	return cur_pos;
