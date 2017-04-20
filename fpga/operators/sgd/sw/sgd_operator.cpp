@@ -14,7 +14,7 @@ struct SGD_AFU_CONFIG {
       uint32_t  number_of_samples;
       uint32_t  number_of_CL_to_process;
       uint32_t  binarize_b_value;
-      uint32_t  b_value_to_binarize_to;
+      float     b_value_to_binarize_to;
       uint32_t  do_gather;
       uint32_t  gather_depth;
     };
@@ -61,7 +61,7 @@ FthreadRec * fthread_sgd(FPGA* my_fpga, float* ab[], uint32_t doGather, uint32_t
   afu_cfg->number_of_CL_to_process = numCacheLines;
 
   afu_cfg->binarize_b_value = 0;
-  afu_cfg->b_value_to_binarize_to = 0;
+  afu_cfg->b_value_to_binarize_to = 0.0;
   afu_cfg->do_gather = doGather;
   afu_cfg->gather_depth = gatherDepth;
 

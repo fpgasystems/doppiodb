@@ -51,12 +51,12 @@ COPY 160 RECORDS INTO salaries FROM '/media/storage/doppiodb/DATASETS/salaries.c
 DELETE FROM salaries;
 
 select regexfpga('MANAGER', jobtitle) FROM salaries;
+select sgdsw_column(7, 4, 18, BasePay, OvertimePay, OtherPay, Benefits, TotalPay, TotalPayBenefits, Years, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay ) FROM salaries;
 select sgdfpga_column(7, 4, 18, 3, BasePay, OvertimePay, OtherPay, Benefits, TotalPay, TotalPayBenefits, Years, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay ) FROM salaries;
 select sgdfpga_column(7, 4, 18, 3, BasePay, OvertimePay, OtherPay, Benefits, TotalPay, TotalPayBenefits, Years, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay, BasePay, regexfpga('MANAGER', jobtitle) ) FROM salaries;
 
-
 -- Fraud dataset
-CREATE TABLE fraud(step integer, type string, amount real, nameOrig string, oldbalanceOrg real, newbalanceOrig real, nameDest string, oldbalanceDest real, newbalanceDest real, isFraud integer, isFlaggedFraud integer);
+./mclient -u monetdb -d sig /media/storage/doppiodb/sql/scripts/udf_fraud.sql
 
 -- Selection queries
 CREATE TABLE employee (id integer, age integer, salary integer);

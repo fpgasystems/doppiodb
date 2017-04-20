@@ -992,243 +992,242 @@ void FPGAskyline(void* tupleDims[],
                 status->afu_counters[7]);*/
 }
 
-void FPGAsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter, unsigned int gatherDepth)
-{
-  printf("Starting FPGAsgd_column\n");
+
+// SGD
+float* global_x = NULL;
+int global_x_dimension = 0;
+
+void calculate_loss(float* loss_history, float* x_history[], float* ab[], int numIterations, int numFeatures, int numTuples) {
+  if (ab[1] == NULL) {
+    for(int iteration = 0; iteration < numIterations; iteration++) {
+      for (int i = 0; i < numTuples; i++) {
+        float dot = 0;
+        int offset = i*(numFeatures+1);
+        for (int j = 0; j < numFeatures; j++) {
+          dot += x_history[iteration][j]*ab[0][offset + j];
+        }
+        loss_history[iteration] += (dot - ab[0][offset + numFeatures])*(dot - ab[0][offset + numFeatures]);
+      }
+      loss_history[iteration] /= (float)(numTuples << 1);
+    }
+  }
+  else {
+    for (int iteration = 0; iteration < numIterations; iteration++) {
+      for (int i = 0; i < numTuples; i++) {
+        float dot = 0;
+        for (int j = 0; j < numFeatures; j++) {
+          dot += x_history[iteration][j]*ab[j][i];
+        }
+        loss_history[iteration] += (dot - ab[numFeatures][i])*(dot - ab[numFeatures][i]);
+      }
+      loss_history[iteration] /= (float)(numTuples << 1);
+    }
+  }
+}
+
+void calculate_accuracy(float* accuracy_history, float* x_history[], float* ab[], int numIterations, int numFeatures, int numTuples) {
+  int correct_count;
+  if (ab[1] == NULL) {
+    for (int iteration = 0; iteration < numIterations; iteration++) {
+      correct_count = 0;
+      for (int i = 0; i < numTuples; i++) {
+        float dot = 0;
+        int offset = i*(numFeatures+1);
+        for (int j = 0; j < numFeatures; j++) {
+          dot += x_history[iteration][j]*ab[0][offset + j];
+        }
+        if ( (dot >= 0.0 && ab[0][offset + numFeatures] == 1.0) || (dot < 0.0 && ab[0][offset + numFeatures] == -1.0) )
+          correct_count++;
+      }
+      accuracy_history[iteration] = (float)correct_count/(float)numTuples;
+    }
+  }
+  else {
+    for (int iteration = 0; iteration < numIterations; iteration++) {
+      correct_count = 0;
+      for (int i = 0; i < numTuples; i++) {
+        float dot = 0.0;
+        for (int j = 0; j < numFeatures; j++) {
+          dot += x_history[iteration][j]*ab[j][i];
+        }
+        if ( (dot >= 0.0 && ab[numFeatures][i] == 1.0) || (dot < 0.0 && ab[numFeatures][i] == -1.0) )
+          correct_count++;
+      }
+      accuracy_history[iteration] = (float)correct_count/(float)numTuples;
+    }
+  }
+}
+
+void sgd(void* _ab, void* _a[], void* _b, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter, unsigned int gatherDepth){
 
   uint32_t numCLsForX = numFeatures/16 + 1;
 
+  uint32_t doGather;
   float* ab[numFeatures+1];
-  for (int i = 0; i < numFeatures; i++) {
-    ab[i] = reinterpret_cast<float*>(_a[i]);
+  if (_ab == NULL) {
+    doGather = 1;
+    for (int i = 0; i < numFeatures; i++) {
+      ab[i] = reinterpret_cast<float*>(_a[i]);
+    }
+    ab[numFeatures] = reinterpret_cast<float*>(_b);
   }
-  ab[numFeatures] = reinterpret_cast<float*>(_b);
-  int32_t* x_historyi = (int32_t*)( my_fpga->malloc(sizeof(int32_t)*numIterations*numCLsForX*16) );
+  else {
+    doGather = 0;
+    ab[0] = reinterpret_cast<float*>(_ab);
+    ab[1] = NULL;
+  }
 
-  Fthread sgd_column ( fthread_sgd(my_fpga, ab, 1, gatherDepth, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
+  printf("doGather: %d and gatherDepth: %d\n", doGather, gatherDepth);
 
-  MSG("FPGA thread created...");
-  void* ret_v = sgd_column.join();
-
-  float x_history[(numIterations+1)][numFeatures];
+  float* x_history[(numIterations+1)];
+  for(int iteration = 0; iteration < numIterations+1; iteration++) {
+    x_history[iteration] = (float*)malloc(numFeatures*sizeof(float));
+  }
   for (int j = 0; j < numFeatures; j++) {
     x_history[0][j] = 0.0;
   }
-  for (int iteration = 0; iteration < numIterations; iteration++) {
-    printf("---------------------------------- Iteration %d\n", iteration+1);
-    uint32_t offset = iteration*numCLsForX*16;
+
+
+  if (gatherDepth > 0) { // FPGA
+    int32_t* x_historyi = (int32_t*)( my_fpga->malloc(sizeof(int32_t)*numIterations*numCLsForX*16) );
+    if (doGather == 1) {
+      Fthread sgd_column ( fthread_sgd(my_fpga, ab, 1, gatherDepth, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
+      MSG("FPGA thread created...");
+      void* ret_v = sgd_column.join();
+      sgd_column.printStatusLine();
+    }
+    else {
+      Fthread sgd_row ( fthread_sgd(my_fpga, ab, 0, 0, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
+      MSG("FPGA thread created...");
+      void* ret_v = sgd_row.join();
+      sgd_row.printStatusLine();
+    }
+    
+    for (int iteration = 0; iteration < numIterations; iteration++) {
+      uint32_t offset = iteration*numCLsForX*16;
+      for (int j = 0; j < numFeatures; j++) {
+        int32_t temp = x_historyi[offset + j];
+        x_history[iteration+1][j] = (float)temp;
+        x_history[iteration+1][j] /= (float)0x00800000;
+      }
+    }
+  }
+  else { // CPU
+    float stepSize = 1.0/(float)(1 << stepSizeShifter);
+    float x[numFeatures];
     for (int j = 0; j < numFeatures; j++) {
-      int32_t temp = x_historyi[offset + j];
-      x_history[iteration+1][j] = (float)temp;
-      x_history[iteration+1][j] /= (float)0x00800000;
-      printf("x[%d]: %.10f\n", j, x_history[iteration+1][j]);
+      x[j] = 0.0;
+    }
+    if (doGather == 1) {
+      for(int iteration = 0; iteration < numIterations; iteration++) {
+        // Update x
+        for (int i = 0; i < numTuples; i++) {
+          float dot = 0;
+          for (int j = 0; j < numFeatures; j++) {
+            dot += x[j]*ab[j][i];
+          }
+          for (int j = 0; j < numFeatures; j++) {
+            x[j] -= stepSize*(dot - ab[numFeatures][i])*ab[j][i];
+          }
+        }
+
+        for (int j = 0; j < numFeatures; j++) {
+          x_history[iteration+1][j] = x[j];
+        }
+      }
+    }
+    else {
+      for(int iteration = 0; iteration < numIterations; iteration++) {
+        // Update x
+        for (int i = 0; i < numTuples; i++) {
+          float dot = 0;
+          int offset = i*(numFeatures+1);
+          for (int j = 0; j < numFeatures; j++) {
+            dot += x[j]*ab[0][offset + j];
+          }
+          for (int j = 0; j < numFeatures; j++) {
+            x[j] -= stepSize*(dot - ab[0][offset + numFeatures])*ab[0][offset + j];
+          }
+        }
+        for (int j = 0; j < numFeatures; j++) {
+          x_history[iteration+1][j] = x[j];
+        }
+      }
     }
   }
 
-  float* loss_history = reinterpret_cast<float*>(retBase);
 
   // Calculate Loss
-  for (int iteration = 0; iteration < numIterations+1; iteration++) {
-    for (int i = 0; i < numTuples; i++) {
-      float dot = 0;
-      for (int j = 0; j < numFeatures; j++) {
-        dot += x_history[iteration][j]*ab[j][i];
-      }
-      loss_history[iteration] += (dot - ab[numFeatures][i])*(dot - ab[numFeatures][i]);
-    }
-    loss_history[iteration] /= (float)(numTuples << 1);
-  }
+  //float* loss_history = reinterpret_cast<float*>(retBase);
+  //calculate_loss(loss_history, x_history, ab, numIterations+1, numFeatures, numTuples);
   
-  sgd_column.printStatusLine();
+  // Calculate accuracy
+  float* accuracy_history = reinterpret_cast<float*>(retBase);
+  calculate_accuracy(accuracy_history, x_history, ab, numIterations+1, numFeatures, numTuples);
 
-  printf("End of FPGAsgd_column\n");
-}
 
-void SWsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter)
-{
-  printf("Starting SWsgd_column\n");
-  
-  float* a[numFeatures];
-  float* b;
+  //if (global_x != NULL)
+  //  free(global_x);
+  global_x_dimension = numFeatures;
+  global_x = (float*)malloc(numFeatures*sizeof(float));
   for (int j = 0; j < numFeatures; j++) {
-    a[j] = reinterpret_cast<float*>(_a[j]);
+    global_x[j] = x_history[numIterations][j];
   }
-  b = reinterpret_cast<float*>(_b);
-
-  float x_history[numIterations][numFeatures];
-  float x[numFeatures];
-  for (int j = 0; j < numFeatures; j++) {
-    x[j] = 0.0;
-  }
-
-  float stepSize = 1.0/(float)(1 << stepSizeShifter);
-
-  for(int iteration = 0; iteration < numIterations; iteration++) {
-    // Update x
-    for (int i = 0; i < numTuples; i++) {
-      float dot = 0;
-      for (int j = 0; j < numFeatures; j++) {
-        dot += x[j]*a[j][i];
-      }
-      for (int j = 0; j < numFeatures; j++) {
-        x[j] -= stepSize*(dot - b[i])*a[j][i];
-      }
-    }
-
-    for (int j = 0; j < numFeatures; j++) {
-      x_history[iteration][j] = x[j];
-    }
-  }
-
-  // Calculate Loss
   /*
-  float* loss_history = reinterpret_cast<float*>(retBase);
-  // Initial Loss
-  for (int i = 0; i < numTuples; i++) {
-    loss_history[0] += b[i]*b[i];
-  }
-  loss_history[0] /= (float)(numTuples << 1);
-  for(int iteration = 0; iteration < numIterations; iteration++) {
-    for (int i = 0; i < numTuples; i++) {
-      float dot = 0;
-      for (int j = 0; j < numFeatures; j++) {
-        dot += x_history[iteration][j]*a[j][i];
-      }
-      loss_history[iteration+1] += (dot - b[i])*(dot - b[i]);
-    }
-    loss_history[iteration+1] /= (float)(numTuples << 1);
+  for(int iteration = 0; iteration < numIterations+1; iteration++) {
+    free(x_history);
   }
   */
-  // Calculate accuracy
+}
 
-  float* accuracy_history = reinterpret_cast<float*>(retBase);
-  // Initial accuracy
-  int correct_count = 0;
-  for (int i = 0; i < numTuples; i++) {
-    float dot = 0.0;
-    if ( (dot >= 0.0 && b[i] == 1.0) || (dot < 0.0 && b[i] == -1.0) )
-      correct_count++;
+void infer(void* _ar, void* _ac[], unsigned int numFeatures, unsigned int numTuples, void* retBase)
+{
+  if (global_x == NULL) {
+    printf("global_x is NULL!!!\n");
+    return;
   }
-  accuracy_history[0] = (float)correct_count/(float)numTuples;
-  for (int iteration = 0; iteration < numIterations; iteration++) {
-    correct_count = 0;
+  if (global_x_dimension != numFeatures) {
+    printf("global_x_dimension does NOT match numFeatures!!!\n");
+    return;
+  }
+
+  if (_ar == NULL) {
+    float* a[numFeatures];
+    for (int j = 0; j < numFeatures; j++) {
+      a[j] = reinterpret_cast<float*>(_ac[j]);
+    }
+    int* labels = reinterpret_cast<int*>(retBase);
+    labels[0] = 0;
+
     for (int i = 0; i < numTuples; i++) {
       float dot = 0.0;
       for (int j = 0; j < numFeatures; j++) {
-        dot += x_history[iteration][j]*a[j][i];
+        dot += global_x[j]*a[j][i];
       }
-      if ( (dot >= 0.0 && b[i] == 1.0) || (dot < 0.0 && b[i] == -1.0) )
-        correct_count++;
+      if (dot >= 0)
+        labels[0] += 1;
     }
-    accuracy_history[iteration+1] = (float)correct_count/(float)numTuples;
+
+    printf("labels[0] %d\n", labels[0]);
   }
+  else {
+    float* a;
+    a = reinterpret_cast<float*>(_ar);
+    int* labels = reinterpret_cast<int*>(retBase);
+    labels[0] = 0;
 
-  printf("End of SWsgd_column\n");
-}
-
-void FPGAsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter) 
-{
-  printf("Starting FPGAsgd_row\n");
-
-  uint32_t numCLsForX = numFeatures/16 + 1;
-
-  float* ab[1];
-  ab[0] = reinterpret_cast<float*>(_ab);
-  int32_t* x_historyi = (int32_t*)( my_fpga->malloc(sizeof(int32_t)*numIterations*numCLsForX*16) );
-
-  Fthread sgd_row ( fthread_sgd(my_fpga, ab, 0, 0, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
-
-  MSG("FPGA thread created...");
-  void* ret_v = sgd_row.join();
-
-  float x_history[(numIterations+1)][numFeatures];
-  for (int j = 0; j < numFeatures; j++) {
-    x_history[0][j] = 0.0;
-  }
-  for (int iteration = 0; iteration < numIterations; iteration++) {
-    printf("---------------------------------- Iteration %d\n", iteration+1);
-    uint32_t offset = iteration*numCLsForX*16;
-    for (int j = 0; j < numFeatures; j++) {
-      int32_t temp = x_historyi[offset + j];
-      x_history[iteration+1][j] = (float)temp;
-      x_history[iteration+1][j] /= (float)0x00800000;
-      printf("x[%d]: %.10f\n", j, x_history[iteration+1][j]);
-    }
-  }
-
-  float* loss_history = reinterpret_cast<float*>(retBase);
-
-  // Calculate Loss
-  for (int iteration = 0; iteration < numIterations+1; iteration++) {
     for (int i = 0; i < numTuples; i++) {
       float dot = 0;
-      int offset = i*(numFeatures+1);
+      int offset = i*(numFeatures);
       for (int j = 0; j < numFeatures; j++) {
-        dot += x_history[iteration][j]*ab[0][offset + j];
+        dot += global_x[j]*a[offset + j];
       }
-      loss_history[iteration] += (dot - ab[0][offset + numFeatures])*(dot - ab[0][offset + numFeatures]);
-    }
-    loss_history[iteration] /= (float)(numTuples << 1);
-  }
-
-  sgd_row.printStatusLine();
-
-  printf("End of FPGAsgd_row\n");
-}
-
-void SWsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter)
-{
-  printf("Starting SWsgd_row\n");
-
-  float* ab;
-  ab = reinterpret_cast<float*>(_ab);
-  
-  float* loss_history = reinterpret_cast<float*>(retBase);
-  float x[numFeatures];
-  for (int j = 0; j < numFeatures; j++) {
-    x[j] = 0.0;
-  }
-
-  // Initial Loss
-  for (int i = 0; i < numTuples; i++) {
-    loss_history[0] += ab[i*(numFeatures+1) + numFeatures]*ab[i*(numFeatures+1) + numFeatures];
-  }
-  loss_history[0] /= (float)(numTuples << 1);
-
-  float stepSize = 1.0/(float)(1 << stepSizeShifter);
-
-  for(int iteration = 0; iteration < numIterations; iteration++) {
-    printf("---------------------------------- Iteration %d\n", iteration+1);
-
-    // Update x
-    for (int i = 0; i < numTuples; i++) {
-      float dot = 0;
-      int offset = i*(numFeatures+1);
-      for (int j = 0; j < numFeatures; j++) {
-        dot += x[j]*ab[offset + j];
-      }
-      for (int j = 0; j < numFeatures; j++) {
-        x[j] -= stepSize*(dot - ab[offset + numFeatures])*ab[offset + j];
-      }
+      if (dot >= 0)
+        labels[0] += 1;
     }
 
-    for (int j = 0; j < numFeatures; j++) {
-      printf("x[%d]: %.10f\n", j, x[j]);
-    }
-
-    // Calculate Loss
-    for (int i = 0; i < numTuples; i++) {
-      float dot = 0;
-      int offset = i*(numFeatures+1);
-      for (int j = 0; j < numFeatures; j++) {
-        dot += x[j]*ab[offset + j];
-      }
-      loss_history[iteration+1] += (dot - ab[offset + numFeatures])*(dot - ab[offset + numFeatures]);
-    }
-    loss_history[iteration+1] /= (float)(numTuples << 1);
+    printf("labels[0] %d\n", labels[0]);
   }
-
-  printf("End of SWsgd_row\n");
 }
 
 } //extern C

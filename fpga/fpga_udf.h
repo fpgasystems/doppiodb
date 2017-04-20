@@ -27,11 +27,8 @@ extern "C" {
   extern void FPGAskyline(void* tupleDims[], unsigned int numDims, unsigned int numTuples, void* retBase);
   extern void SWskyline(void* tupleDims[], unsigned int numDims, unsigned int numTuples, void* retBase);
 //SGD
-  extern void FPGAsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter, unsigned int gatherDepth);
-  extern void SWsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter);
-
-  extern void FPGAsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter);
-  extern void SWsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter);
+  extern void sgd(void* _ab, void* _a[], void* _b, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter, unsigned int gatherDepth);
+  extern void infer(void* _ar, void* _ac[], unsigned int numFeatures, unsigned int numTuples, void* retBase);
 
 #ifdef __cplusplus
 }
