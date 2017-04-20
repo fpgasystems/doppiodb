@@ -1055,17 +1055,11 @@ void SWsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int n
   }
   b = reinterpret_cast<float*>(_b);
 
-  float* loss_history = reinterpret_cast<float*>(retBase);
+  float x_history[numIterations][numFeatures];
   float x[numFeatures];
   for (int j = 0; j < numFeatures; j++) {
     x[j] = 0.0;
   }
-
-  // Initial Loss
-  for (int i = 0; i < numTuples; i++) {
-    loss_history[0] += b[i]*b[i];
-  }
-  loss_history[0] /= (float)(numTuples << 1);
 
   float stepSize = 1.0/(float)(1 << stepSizeShifter);
 
@@ -1081,15 +1075,52 @@ void SWsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int n
       }
     }
 
-    // Calculate Loss
+    for (int j = 0; j < numFeatures; j++) {
+      x_history[iteration][j] = x[j];
+    }
+  }
+
+  // Calculate Loss
+  /*
+  float* loss_history = reinterpret_cast<float*>(retBase);
+  // Initial Loss
+  for (int i = 0; i < numTuples; i++) {
+    loss_history[0] += b[i]*b[i];
+  }
+  loss_history[0] /= (float)(numTuples << 1);
+  for(int iteration = 0; iteration < numIterations; iteration++) {
     for (int i = 0; i < numTuples; i++) {
       float dot = 0;
       for (int j = 0; j < numFeatures; j++) {
-        dot += x[j]*a[j][i];
+        dot += x_history[iteration][j]*a[j][i];
       }
       loss_history[iteration+1] += (dot - b[i])*(dot - b[i]);
     }
     loss_history[iteration+1] /= (float)(numTuples << 1);
+  }
+  */
+  // Calculate accuracy
+
+  float* accuracy_history = reinterpret_cast<float*>(retBase);
+  // Initial accuracy
+  int correct_count = 0;
+  for (int i = 0; i < numTuples; i++) {
+    float dot = 0.0;
+    if ( (dot >= 0.0 && b[i] == 1.0) || (dot < 0.0 && b[i] == -1.0) )
+      correct_count++;
+  }
+  accuracy_history[0] = (float)correct_count/(float)numTuples;
+  for (int iteration = 0; iteration < numIterations; iteration++) {
+    correct_count = 0;
+    for (int i = 0; i < numTuples; i++) {
+      float dot = 0.0;
+      for (int j = 0; j < numFeatures; j++) {
+        dot += x_history[iteration][j]*a[j][i];
+      }
+      if ( (dot >= 0.0 && b[i] == 1.0) || (dot < 0.0 && b[i] == -1.0) )
+        correct_count++;
+    }
+    accuracy_history[iteration+1] = (float)correct_count/(float)numTuples;
   }
 
   printf("End of SWsgd_column\n");
