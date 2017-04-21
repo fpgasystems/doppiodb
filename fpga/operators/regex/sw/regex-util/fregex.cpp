@@ -552,7 +552,7 @@ int fregex_get_config(const char* regex_string, int char_cnt, int state_cnt, uns
 		for (i=0; i<tokens[t].size; i++) {
 			ochars[cpos] = tokens[t].characters[i];
 			oseq[cpos] = (i>0 && !tokens[t].is_range) ? true : false;
-			orange[cpos] =  (i>0 && tokens[t].is_range) ? true : false;			
+			orange[cpos/2] =  (i>0 && tokens[t].is_range) ? true : false;			
 			cpos++;
 
 			if (cpos > char_cnt) {
