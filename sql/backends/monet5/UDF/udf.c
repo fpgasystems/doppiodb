@@ -1264,7 +1264,7 @@ UDFBATsgdfpga_column(bat *ret, const int* numFeatures, const int* numIterations,
 	}
 	void* _bBase = _b->T->heap.base;
 
-	FPGAsgd_column(_aBase, _bBase, *numFeatures, _b->batCount, bn->T->heap.base, *numIterations, *stepSizeShifter, *gatherDepth);
+	sgd(NULL, _aBase, _bBase, *numFeatures, _b->batCount, bn->T->heap.base, *numIterations, *stepSizeShifter, *gatherDepth);
 	res = bn;
 
 	// release input BAT-descriptor
@@ -1351,7 +1351,7 @@ UDFBATsgdsw_column(bat *ret, const int* numFeatures, const int* numIterations, c
 	}
 	void* _bBase = _b->T->heap.base;
 
-	SWsgd_column(_aBase, _bBase, *numFeatures, _b->batCount, bn->T->heap.base, *numIterations, *stepSizeShifter);
+	sgd(NULL, _aBase, _bBase, *numFeatures, _b->batCount, bn->T->heap.base, *numIterations, *stepSizeShifter, 0);
 	res = bn;
 
 	// release input BAT-descriptor
@@ -1408,7 +1408,7 @@ UDFBATsgdfpga_row(bat *ret, const int* numFeatures, const int* numIterations, co
 
 	void* _abBase = _ab->T->heap.base;
 
-	FPGAsgd_row(_abBase, (*numFeatures), _ab->batCount/(*numFeatures + 1), bn->T->heap.base, (*numIterations), (*stepSizeShifter));
+	sgd(_abBase, NULL, NULL, (*numFeatures), _ab->batCount/(*numFeatures + 1), bn->T->heap.base, (*numIterations), (*stepSizeShifter), 1);
 	res = bn;
 
 	// release input BAT-descriptor
@@ -1424,7 +1424,7 @@ UDFBATsgdfpga_row(bat *ret, const int* numFeatures, const int* numIterations, co
 char *
 UDFBATsgdsw_row(bat *ret, const int* numFeatures, const int* numIterations, const int* stepSizeShifter, const bat *ab)
 {
-	printf("Starting UDFBATsgdfpga_row\n");
+	printf("Starting UDFBATsgdsw_row\n");
 
 	BATiter li;
 	BAT *res = NULL;
@@ -1459,7 +1459,7 @@ UDFBATsgdsw_row(bat *ret, const int* numFeatures, const int* numIterations, cons
 
 	void* _abBase = _ab->T->heap.base;
 
-	SWsgd_row(_abBase, (*numFeatures), _ab->batCount/(*numFeatures + 1), bn->T->heap.base, (*numIterations), (*stepSizeShifter));
+	sgd(_abBase, NULL, NULL, (*numFeatures), _ab->batCount/(*numFeatures + 1), bn->T->heap.base, (*numIterations), (*stepSizeShifter), 0);
 	res = bn;
 
 	// release input BAT-descriptor
@@ -1470,6 +1470,138 @@ UDFBATsgdsw_row(bat *ret, const int* numFeatures, const int* numIterations, cons
 
 	return MAL_SUCCEED;
 }
+
+//Inference
+char *
+UDFBATinfersw_column(bat *ret, const int* numFeatures, const bat *a1, const bat *a2, const bat *a3, const bat *a4, const bat *a5, const bat *a6, const bat *a7, const bat *a8, const bat *a9, const bat *a10, const bat *a11, const bat *a12, const bat *a13, const bat *a14, const bat *a15)
+{
+	printf("Starting UDFBATinfersw_column\n");
+
+	BATiter li;
+	BAT *res = NULL;
+	BAT *bn = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL);
+
+	BAT* _a[15];
+
+	// Feature Columns
+	_a[0] = BATdescriptor(*a1);
+	_a[1] = BATdescriptor(*a2);
+	_a[2] = BATdescriptor(*a3);
+	_a[3] = BATdescriptor(*a4);
+	_a[4] = BATdescriptor(*a5);
+	_a[5] = BATdescriptor(*a6);
+	_a[6] = BATdescriptor(*a7);
+	_a[7] = BATdescriptor(*a8);
+	_a[8] = BATdescriptor(*a9);
+	_a[9] = BATdescriptor(*a10);
+	_a[10] = BATdescriptor(*a11);
+	_a[11] = BATdescriptor(*a12);
+	_a[12] = BATdescriptor(*a13);
+	_a[13] = BATdescriptor(*a14);
+	_a[14] = BATdescriptor(*a15);
+
+	// handle NULL pointer
+	int i = 0;
+	for(i = 0; i < 15; i++)
+	{
+		if (_a[i] == NULL)
+			throw(MAL, "batudf.sgd", RUNTIME_OBJECT_MISSING);
+	}
+
+	// allocate result BAT 
+	bn = BATnew(TYPE_void, TYPE_int, 1, TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.sgd", MAL_MALLOC_FAIL);
+	}
+
+	BATseqbase(bn, _a[0]->hseqbase);
+
+	//update free pointer
+	bn->H->heap.free += (bn->H->width * 1 );
+	bn->T->heap.free += (bn->T->width * 1 );
+	//set dirty bit, not sure if necessary
+	bn->H->heap.dirty = 1;
+	bn->T->heap.dirty = 1;
+	//set count
+	BATsetcount(bn, 1);
+
+	void* _aBase[*numFeatures];
+	for(i = 0; i < *numFeatures; i++)
+	{
+		_aBase[i] = _a[i]->T->heap.base;
+	}
+
+	infer(NULL, _aBase, *numFeatures, _a[0]->batCount, bn->T->heap.base);
+	res = bn;
+
+	// release input BAT-descriptor
+	for (i = 0; i < *numFeatures; i++)
+	{
+	   BBPunfix(_a[i]->batCacheid);
+	}
+
+	// register result BAT in buffer pool
+	BBPkeepref((*ret = res->batCacheid));
+
+	fflush(stdout);
+
+	return MAL_SUCCEED;
+}
+
+//Inference
+char *
+UDFBATinfersw_row(bat *ret, const int* numFeatures, const bat *a)
+{
+	printf("Starting UDFBATinfersw_row\n");
+
+	BATiter li;
+	BAT *res = NULL;
+	BAT *bn = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL);
+
+	// All features and labels in one column
+	BAT* _a = BATdescriptor(*a);
+
+	// handle NULL pointer
+	if (_a == NULL)
+		throw(MAL, "batudf.sgd", RUNTIME_OBJECT_MISSING);
+	
+	// allocate result BAT 
+	bn = BATnew(TYPE_void, TYPE_int, 1, TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.sgd", MAL_MALLOC_FAIL);
+	}
+
+	BATseqbase(bn, _a->hseqbase);
+
+	//update free pointer
+	bn->H->heap.free += (bn->H->width * 1 );
+	bn->T->heap.free += (bn->T->width * 1 );
+	//set dirty bit, not sure if necessary
+	bn->H->heap.dirty = 1;
+	bn->T->heap.dirty = 1;
+	//set count
+	BATsetcount(bn, 1);
+
+	void* _aBase = _a->T->heap.base;
+
+	infer(_aBase, NULL, (*numFeatures), _a->batCount/(*numFeatures + 1), bn->T->heap.base);
+	res = bn;
+
+	// release input BAT-descriptor
+	BBPunfix(_a->batCacheid);
+
+	// register result BAT in buffer pool
+	BBPkeepref((*ret = res->batCacheid));
+
+	return MAL_SUCCEED;
+}
+
 
 /* actual implementation */
 static char *
