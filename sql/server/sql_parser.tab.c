@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.2"
+#define YYBISON_VERSION "3.0.4"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -816,7 +816,7 @@ extern int sqldebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE YYSTYPE;
+
 union YYSTYPE
 {
 #line 108 "sql_parser.y" /* yacc.c:355  */
@@ -832,6 +832,8 @@ union YYSTYPE
 
 #line 834 "y.tab.c" /* yacc.c:355  */
 };
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -850,7 +852,7 @@ extern int sqllex( YYSTYPE *yylval, void *m );
 int yydebug=1;
 */
 
-#line 854 "y.tab.c" /* yacc.c:358  */
+#line 856 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -6200,7 +6202,7 @@ yyreduce:
 		}
 		YYACCEPT;
 	}
-#line 6204 "y.tab.c" /* yacc.c:1646  */
+#line 6206 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
@@ -6210,7 +6212,7 @@ yyreduce:
 			  m->scanner.as = m->scanner.yycur; 
 			  m->scanner.key = 0;
 			}
-#line 6214 "y.tab.c" /* yacc.c:1646  */
+#line 6216 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
@@ -6224,7 +6226,7 @@ yyreduce:
 			  }
 			  YYACCEPT;
 			}
-#line 6228 "y.tab.c" /* yacc.c:1646  */
+#line 6230 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
@@ -6234,7 +6236,7 @@ yyreduce:
 			  m->scanner.as = m->scanner.yycur; 
 			  m->scanner.key = 0;
 			}
-#line 6238 "y.tab.c" /* yacc.c:1646  */
+#line 6240 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
@@ -6248,7 +6250,7 @@ yyreduce:
 			  }
 			  YYACCEPT;
 			}
-#line 6252 "y.tab.c" /* yacc.c:1646  */
+#line 6254 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
@@ -6258,7 +6260,7 @@ yyreduce:
 			  m->scanner.as = m->scanner.yycur; 
 			  m->scanner.key = 0;
 			}
-#line 6262 "y.tab.c" /* yacc.c:1646  */
+#line 6264 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
@@ -6272,7 +6274,7 @@ yyreduce:
 			  }
 			  YYACCEPT;
 			}
-#line 6276 "y.tab.c" /* yacc.c:1646  */
+#line 6278 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
@@ -6282,7 +6284,7 @@ yyreduce:
 			  m->scanner.as = m->scanner.yycur; 
 			  m->scanner.key = 0;
 			}
-#line 6286 "y.tab.c" /* yacc.c:1646  */
+#line 6288 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
@@ -6296,7 +6298,7 @@ yyreduce:
 			  }
 			  YYACCEPT;
 			}
-#line 6300 "y.tab.c" /* yacc.c:1646  */
+#line 6302 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
@@ -6310,13 +6312,13 @@ yyreduce:
 			  m->scanner.as = m->scanner.yycur; 
 			  m->scanner.key = 0;
 			}
-#line 6314 "y.tab.c" /* yacc.c:1646  */
+#line 6316 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
 #line 685 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); YYACCEPT; }
-#line 6320 "y.tab.c" /* yacc.c:1646  */
+#line 6322 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
@@ -6326,43 +6328,43 @@ yyreduce:
 			  m->scanner.as = m->scanner.yycur; 
 			  m->scanner.key = 0;
 			}
-#line 6330 "y.tab.c" /* yacc.c:1646  */
+#line 6332 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
 #line 691 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); YYACCEPT; }
-#line 6336 "y.tab.c" /* yacc.c:1646  */
+#line 6338 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
 #line 692 "sql_parser.y" /* yacc.c:1646  */
     { m->sym = (yyval.sym) = (yyvsp[-1].sym); YYACCEPT; }
-#line 6342 "y.tab.c" /* yacc.c:1646  */
+#line 6344 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
 #line 693 "sql_parser.y" /* yacc.c:1646  */
     { m->sym = (yyval.sym) = NULL; YYACCEPT; }
-#line 6348 "y.tab.c" /* yacc.c:1646  */
+#line 6350 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
 #line 694 "sql_parser.y" /* yacc.c:1646  */
     { m->sym = (yyval.sym) = NULL; YYACCEPT; }
-#line 6354 "y.tab.c" /* yacc.c:1646  */
+#line 6356 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
 #line 695 "sql_parser.y" /* yacc.c:1646  */
     { m->sym = (yyval.sym) = NULL; YYACCEPT; }
-#line 6360 "y.tab.c" /* yacc.c:1646  */
+#line 6362 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
 #line 696 "sql_parser.y" /* yacc.c:1646  */
     { m->sym = (yyval.sym) = NULL; YYABORT; }
-#line 6366 "y.tab.c" /* yacc.c:1646  */
+#line 6368 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
@@ -6373,31 +6375,31 @@ yyreduce:
 		append_symbol(l, (yyvsp[-1].sym));
 		append_int(l, (yyvsp[0].i_val));
 		(yyval.sym) = _symbol_create_list( SQL_ANALYZE, l); }
-#line 6377 "y.tab.c" /* yacc.c:1646  */
+#line 6379 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
 #line 733 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 6383 "y.tab.c" /* yacc.c:1646  */
+#line 6385 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
 #line 734 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 6389 "y.tab.c" /* yacc.c:1646  */
+#line 6391 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
 #line 739 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_DECLARE, (yyvsp[0].l)); }
-#line 6395 "y.tab.c" /* yacc.c:1646  */
+#line 6397 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
 #line 740 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 6401 "y.tab.c" /* yacc.c:1646  */
+#line 6403 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
@@ -6406,7 +6408,7 @@ yyreduce:
 		append_list(l, (yyvsp[-1].l) );
 		append_type(l, &(yyvsp[0].type) );
 		(yyval.l) = append_symbol(L(), _symbol_create_list( SQL_DECLARE, l)); }
-#line 6410 "y.tab.c" /* yacc.c:1646  */
+#line 6412 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
@@ -6415,7 +6417,7 @@ yyreduce:
 		append_list(l, (yyvsp[-1].l) );
 		append_type(l, &(yyvsp[0].type) );
 		(yyval.l) = append_symbol((yyvsp[-3].l), _symbol_create_list( SQL_DECLARE, l)); }
-#line 6419 "y.tab.c" /* yacc.c:1646  */
+#line 6421 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
@@ -6424,7 +6426,7 @@ yyreduce:
 		append_string(l, (yyvsp[-2].sval) );
 		append_symbol(l, (yyvsp[0].sym) );
 		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
-#line 6428 "y.tab.c" /* yacc.c:1646  */
+#line 6430 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
@@ -6436,7 +6438,7 @@ yyreduce:
 		append_symbol(l,
 			_newAtomNode( _atom_string(&t, sql2str((yyvsp[0].sval)))) );
 		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
-#line 6440 "y.tab.c" /* yacc.c:1646  */
+#line 6442 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
@@ -6448,7 +6450,7 @@ yyreduce:
 		append_symbol(l,
 			_newAtomNode( _atom_string(&t, sql2str((yyvsp[0].sval)))) );
 		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
-#line 6452 "y.tab.c" /* yacc.c:1646  */
+#line 6454 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
@@ -6460,7 +6462,7 @@ yyreduce:
 		append_symbol(l,
 			_newAtomNode( _atom_string(&t, sql2str((yyvsp[0].sval)))) );
 		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
-#line 6464 "y.tab.c" /* yacc.c:1646  */
+#line 6466 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
@@ -6472,7 +6474,7 @@ yyreduce:
 		append_symbol(l,
 			_newAtomNode( _atom_string(&t, sql2str((yyvsp[0].sval)))) );
 		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
-#line 6476 "y.tab.c" /* yacc.c:1646  */
+#line 6478 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
@@ -6482,7 +6484,7 @@ yyreduce:
 		append_symbol(l, _symbol_create_list( SQL_OP, append_list(L(),
 			append_string( L(), sa_strdup(SA, "local_timezone")))));
 		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
-#line 6486 "y.tab.c" /* yacc.c:1646  */
+#line 6488 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
@@ -6491,7 +6493,7 @@ yyreduce:
 		append_string(l, sa_strdup(SA, "current_timezone"));
 		append_symbol(l, (yyvsp[0].sym) );
 		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
-#line 6495 "y.tab.c" /* yacc.c:1646  */
+#line 6497 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
@@ -6502,7 +6504,7 @@ yyreduce:
 		append_symbol(l, (yyvsp[-1].sym));
 		append_list(l, (yyvsp[0].l));
 		(yyval.sym) = _symbol_create_list( SQL_CREATE_SCHEMA, l); }
-#line 6506 "y.tab.c" /* yacc.c:1646  */
+#line 6508 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
@@ -6511,7 +6513,7 @@ yyreduce:
 		append_list(l, (yyvsp[-1].l));
 		append_int(l, (yyvsp[0].i_val));
 		(yyval.sym) = _symbol_create_list( SQL_DROP_SCHEMA, l); }
-#line 6515 "y.tab.c" /* yacc.c:1646  */
+#line 6517 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
@@ -6519,7 +6521,7 @@ yyreduce:
     { (yyval.l) = L();
 	  append_string((yyval.l), (yyvsp[0].sval) );
 	  append_string((yyval.l), NULL ); }
-#line 6523 "y.tab.c" /* yacc.c:1646  */
+#line 6525 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
@@ -6527,7 +6529,7 @@ yyreduce:
     { (yyval.l) = L();
 	  append_string((yyval.l), NULL );
 	  append_string((yyval.l), (yyvsp[0].sval) ); }
-#line 6531 "y.tab.c" /* yacc.c:1646  */
+#line 6533 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
@@ -6535,61 +6537,61 @@ yyreduce:
     { (yyval.l) = L();
 	  append_string((yyval.l), (yyvsp[-2].sval) );
 	  append_string((yyval.l), (yyvsp[0].sval) ); }
-#line 6539 "y.tab.c" /* yacc.c:1646  */
+#line 6541 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
 #line 842 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 6545 "y.tab.c" /* yacc.c:1646  */
+#line 6547 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
 #line 843 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create( SQL_CHARSET, (yyvsp[0].sval) ); }
-#line 6551 "y.tab.c" /* yacc.c:1646  */
+#line 6553 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
 #line 847 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = L(); }
-#line 6557 "y.tab.c" /* yacc.c:1646  */
+#line 6559 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
 #line 852 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym)); }
-#line 6563 "y.tab.c" /* yacc.c:1646  */
+#line 6565 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
 #line 854 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-1].l), (yyvsp[0].sym) ); }
-#line 6569 "y.tab.c" /* yacc.c:1646  */
+#line 6571 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
 #line 860 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = cur_user; }
-#line 6575 "y.tab.c" /* yacc.c:1646  */
+#line 6577 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
 #line 861 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[0].i_val); }
-#line 6581 "y.tab.c" /* yacc.c:1646  */
+#line 6583 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 66:
 #line 865 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = cur_user; }
-#line 6587 "y.tab.c" /* yacc.c:1646  */
+#line 6589 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 67:
 #line 866 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = cur_role; }
-#line 6593 "y.tab.c" /* yacc.c:1646  */
+#line 6595 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 68:
@@ -6601,7 +6603,7 @@ yyreduce:
 	  append_int(l, (yyvsp[0].i_val));
 	(yyval.sym) = _symbol_create_list( SQL_GRANT, l);
 	}
-#line 6605 "y.tab.c" /* yacc.c:1646  */
+#line 6607 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 69:
@@ -6612,55 +6614,55 @@ yyreduce:
 	  append_int(l, (yyvsp[-1].bval));
 	  append_int(l, (yyvsp[0].i_val));
 	(yyval.sym) = _symbol_create_list( SQL_GRANT_ROLES, l); }
-#line 6616 "y.tab.c" /* yacc.c:1646  */
+#line 6618 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 70:
 #line 890 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(L(), (yyvsp[0].sval)); }
-#line 6622 "y.tab.c" /* yacc.c:1646  */
+#line 6624 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 71:
 #line 892 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string((yyvsp[-2].l), (yyvsp[0].sval)); }
-#line 6628 "y.tab.c" /* yacc.c:1646  */
+#line 6630 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 72:
 #line 896 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 0; }
-#line 6634 "y.tab.c" /* yacc.c:1646  */
+#line 6636 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 73:
 #line 897 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 1; }
-#line 6640 "y.tab.c" /* yacc.c:1646  */
+#line 6642 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 74:
 #line 901 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 0; }
-#line 6646 "y.tab.c" /* yacc.c:1646  */
+#line 6648 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 75:
 #line 902 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 1; }
-#line 6652 "y.tab.c" /* yacc.c:1646  */
+#line 6654 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 76:
 #line 907 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = cur_user; }
-#line 6658 "y.tab.c" /* yacc.c:1646  */
+#line 6660 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 77:
 #line 908 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[0].i_val); }
-#line 6664 "y.tab.c" /* yacc.c:1646  */
+#line 6666 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 78:
@@ -6672,7 +6674,7 @@ yyreduce:
 	  append_int(l, 0);
 	  append_int(l, (yyvsp[0].i_val));
 	(yyval.sym) = _symbol_create_list( SQL_REVOKE, l); }
-#line 6676 "y.tab.c" /* yacc.c:1646  */
+#line 6678 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 79:
@@ -6683,31 +6685,31 @@ yyreduce:
 	  append_int(l, (yyvsp[-4].bval));
 	  append_int(l, (yyvsp[0].i_val));
 	(yyval.sym) = _symbol_create_list( SQL_REVOKE_ROLES, l); }
-#line 6687 "y.tab.c" /* yacc.c:1646  */
+#line 6689 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 80:
 #line 930 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 0; }
-#line 6693 "y.tab.c" /* yacc.c:1646  */
+#line 6695 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 81:
 #line 931 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 1; }
-#line 6699 "y.tab.c" /* yacc.c:1646  */
+#line 6701 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 82:
 #line 935 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 0; }
-#line 6705 "y.tab.c" /* yacc.c:1646  */
+#line 6707 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 83:
 #line 936 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 1; }
-#line 6711 "y.tab.c" /* yacc.c:1646  */
+#line 6713 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 84:
@@ -6715,103 +6717,103 @@ yyreduce:
     { (yyval.l) = L();
 	  append_list((yyval.l), (yyvsp[-2].l));
 	  append_symbol((yyval.l), (yyvsp[0].sym)); }
-#line 6719 "y.tab.c" /* yacc.c:1646  */
+#line 6721 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 85:
 #line 947 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_TABLE, (yyvsp[0].l)); }
-#line 6725 "y.tab.c" /* yacc.c:1646  */
+#line 6727 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 86:
 #line 948 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_NAME, (yyvsp[0].l)); }
-#line 6731 "y.tab.c" /* yacc.c:1646  */
+#line 6733 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 87:
 #line 960 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = NULL; }
-#line 6737 "y.tab.c" /* yacc.c:1646  */
+#line 6739 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 88:
 #line 961 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = NULL; }
-#line 6743 "y.tab.c" /* yacc.c:1646  */
+#line 6745 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 90:
 #line 966 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym)); }
-#line 6749 "y.tab.c" /* yacc.c:1646  */
+#line 6751 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 91:
 #line 968 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-2].l), (yyvsp[0].sym)); }
-#line 6755 "y.tab.c" /* yacc.c:1646  */
+#line 6757 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 92:
 #line 972 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create(SQL_INSERT,NULL); }
-#line 6761 "y.tab.c" /* yacc.c:1646  */
+#line 6763 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 93:
 #line 973 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create(SQL_DELETE,NULL); }
-#line 6767 "y.tab.c" /* yacc.c:1646  */
+#line 6769 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 94:
 #line 974 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_UPDATE,(yyvsp[0].l)); }
-#line 6773 "y.tab.c" /* yacc.c:1646  */
+#line 6775 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 95:
 #line 975 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_SELECT,(yyvsp[0].l)); }
-#line 6779 "y.tab.c" /* yacc.c:1646  */
+#line 6781 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 96:
 #line 976 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_SELECT,(yyvsp[0].l)); }
-#line 6785 "y.tab.c" /* yacc.c:1646  */
+#line 6787 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 97:
 #line 977 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create(SQL_EXECUTE,NULL); }
-#line 6791 "y.tab.c" /* yacc.c:1646  */
+#line 6793 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 98:
 #line 981 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(L(), (yyvsp[0].sval)); }
-#line 6797 "y.tab.c" /* yacc.c:1646  */
+#line 6799 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 99:
 #line 983 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string((yyvsp[-2].l), (yyvsp[0].sval)); }
-#line 6803 "y.tab.c" /* yacc.c:1646  */
+#line 6805 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 100:
 #line 987 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = NULL; }
-#line 6809 "y.tab.c" /* yacc.c:1646  */
+#line 6811 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 101:
 #line 988 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 6815 "y.tab.c" /* yacc.c:1646  */
+#line 6817 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 102:
@@ -6820,7 +6822,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-3].l));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
-#line 6824 "y.tab.c" /* yacc.c:1646  */
+#line 6826 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 103:
@@ -6829,7 +6831,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-3].l));
 	  append_symbol(l, _symbol_create_list( SQL_TABLE, (yyvsp[0].l)));
 	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
-#line 6833 "y.tab.c" /* yacc.c:1646  */
+#line 6835 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 104:
@@ -6838,7 +6840,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-2].l));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
-#line 6842 "y.tab.c" /* yacc.c:1646  */
+#line 6844 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 105:
@@ -6847,7 +6849,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-2].l));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
-#line 6851 "y.tab.c" /* yacc.c:1646  */
+#line 6853 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 106:
@@ -6856,7 +6858,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-3].l));
 	  append_symbol(l, _symbol_create_int(SQL_ALTER_TABLE, tr_readonly));
 	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
-#line 6860 "y.tab.c" /* yacc.c:1646  */
+#line 6862 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 107:
@@ -6865,7 +6867,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-3].l));
 	  append_symbol(l, _symbol_create_int(SQL_ALTER_TABLE, tr_append));
 	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
-#line 6869 "y.tab.c" /* yacc.c:1646  */
+#line 6871 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 108:
@@ -6874,7 +6876,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-3].l));
 	  append_symbol(l, _symbol_create_int(SQL_ALTER_TABLE, tr_writable));
 	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
-#line 6878 "y.tab.c" /* yacc.c:1646  */
+#line 6880 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 109:
@@ -6883,7 +6885,7 @@ yyreduce:
 	  append_string(l, (yyvsp[-1].sval));
 	  append_list(l, (yyvsp[0].l));
 	  (yyval.sym) = _symbol_create_list( SQL_ALTER_USER, l ); }
-#line 6887 "y.tab.c" /* yacc.c:1646  */
+#line 6889 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 110:
@@ -6892,7 +6894,7 @@ yyreduce:
 	  append_string(l, (yyvsp[-3].sval));
 	  append_string(l, (yyvsp[0].sval));
 	  (yyval.sym) = _symbol_create_list( SQL_RENAME_USER, l ); }
-#line 6896 "y.tab.c" /* yacc.c:1646  */
+#line 6898 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 111:
@@ -6906,7 +6908,7 @@ yyreduce:
 	  append_string(p, (yyvsp[0].sval));
 	  append_list(l, p);
 	  (yyval.sym) = _symbol_create_list( SQL_ALTER_USER, l ); }
-#line 6910 "y.tab.c" /* yacc.c:1646  */
+#line 6912 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 112:
@@ -6917,7 +6919,7 @@ yyreduce:
 				  append_int(l, (yyvsp[-2].i_val));
 				  append_string(l, NULL);
 				  (yyval.l) = l; }
-#line 6921 "y.tab.c" /* yacc.c:1646  */
+#line 6923 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 113:
@@ -6928,7 +6930,7 @@ yyreduce:
 				  append_int(l, 0);
 				  append_string(l, NULL);
 				  (yyval.l) = l; }
-#line 6932 "y.tab.c" /* yacc.c:1646  */
+#line 6934 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 114:
@@ -6939,7 +6941,7 @@ yyreduce:
 				  append_int(l, (yyvsp[-5].i_val));
 				  append_string(l, NULL);
 				  (yyval.l) = l; }
-#line 6943 "y.tab.c" /* yacc.c:1646  */
+#line 6945 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 115:
@@ -6948,7 +6950,7 @@ yyreduce:
 	  append_string(l, (yyvsp[-3].sval));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_DEFAULT, l); }
-#line 6952 "y.tab.c" /* yacc.c:1646  */
+#line 6954 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 116:
@@ -6956,7 +6958,7 @@ yyreduce:
     { dlist *l = L();
 	  append_string(l, (yyvsp[-2].sval));
 	  (yyval.sym) = _symbol_create_list( SQL_NULL, l); }
-#line 6960 "y.tab.c" /* yacc.c:1646  */
+#line 6962 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 117:
@@ -6964,13 +6966,13 @@ yyreduce:
     { dlist *l = L();
 	  append_string(l, (yyvsp[-3].sval));
 	  (yyval.sym) = _symbol_create_list( SQL_NOT_NULL, l); }
-#line 6968 "y.tab.c" /* yacc.c:1646  */
+#line 6970 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 118:
 #line 1089 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create( SQL_DROP_DEFAULT, (yyvsp[-2].sval)); }
-#line 6974 "y.tab.c" /* yacc.c:1646  */
+#line 6976 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 119:
@@ -6982,7 +6984,7 @@ yyreduce:
 	  else
 	  	append_string(l, (yyvsp[0].sval));
 	  (yyval.sym) = _symbol_create_list( SQL_STORAGE, l); }
-#line 6986 "y.tab.c" /* yacc.c:1646  */
+#line 6988 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 120:
@@ -6991,7 +6993,7 @@ yyreduce:
 	  append_string(l, (yyvsp[-3].sval));
 	  append_string(l, NULL);
 	  (yyval.sym) = _symbol_create_list( SQL_STORAGE, l); }
-#line 6995 "y.tab.c" /* yacc.c:1646  */
+#line 6997 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 121:
@@ -7000,7 +7002,7 @@ yyreduce:
 	  append_string(l, (yyvsp[-1].sval) );
 	  append_int(l, (yyvsp[0].i_val) );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_COLUMN, l ); }
-#line 7004 "y.tab.c" /* yacc.c:1646  */
+#line 7006 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 122:
@@ -7009,7 +7011,7 @@ yyreduce:
 	  append_string(l, (yyvsp[-1].sval) );
 	  append_int(l, (yyvsp[0].i_val) );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_CONSTRAINT, l ); }
-#line 7013 "y.tab.c" /* yacc.c:1646  */
+#line 7015 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 123:
@@ -7018,37 +7020,37 @@ yyreduce:
 	  append_string(l, (yyvsp[-1].sval) );
 	  append_int(l, (yyvsp[0].i_val) );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_TABLE, l ); }
-#line 7022 "y.tab.c" /* yacc.c:1646  */
+#line 7024 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 124:
 #line 1124 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 7028 "y.tab.c" /* yacc.c:1646  */
+#line 7030 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 125:
 #line 1125 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 7034 "y.tab.c" /* yacc.c:1646  */
+#line 7036 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 126:
 #line 1129 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 7040 "y.tab.c" /* yacc.c:1646  */
+#line 7042 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 127:
 #line 1130 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 7046 "y.tab.c" /* yacc.c:1646  */
+#line 7048 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 128:
 #line 1131 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 7052 "y.tab.c" /* yacc.c:1646  */
+#line 7054 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 134:
@@ -7060,7 +7062,7 @@ yyreduce:
 		append_list(l, (yyvsp[0].l));
 		(yyval.sym) = _symbol_create_list(SQL_CREATE_SEQ, l);
 	}
-#line 7064 "y.tab.c" /* yacc.c:1646  */
+#line 7066 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 135:
@@ -7070,7 +7072,7 @@ yyreduce:
 		append_list(l, (yyvsp[0].l));
 		(yyval.sym) = _symbol_create_list(SQL_DROP_SEQ, l);
 	}
-#line 7074 "y.tab.c" /* yacc.c:1646  */
+#line 7076 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 136:
@@ -7082,7 +7084,7 @@ yyreduce:
 		append_list(l, (yyvsp[0].l));
 		(yyval.sym) = _symbol_create_list(SQL_ALTER_SEQ, l);
 	}
-#line 7086 "y.tab.c" /* yacc.c:1646  */
+#line 7088 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 137:
@@ -7097,7 +7099,7 @@ yyreduce:
 	  append_int(l, 0);	/* bedropped */
 	  (yyval.l) = l;
 	}
-#line 7101 "y.tab.c" /* yacc.c:1646  */
+#line 7103 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 138:
@@ -7111,121 +7113,121 @@ yyreduce:
 	  append_int(l, (yyvsp[0].i_val));
 	  (yyval.l) = l;
 	}
-#line 7115 "y.tab.c" /* yacc.c:1646  */
+#line 7117 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 139:
 #line 1231 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l_val) = 1; }
-#line 7121 "y.tab.c" /* yacc.c:1646  */
+#line 7123 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 140:
 #line 1232 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l_val) = (yyvsp[0].l_val); }
-#line 7127 "y.tab.c" /* yacc.c:1646  */
+#line 7129 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 141:
 #line 1245 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_int(L(), -1); }
-#line 7133 "y.tab.c" /* yacc.c:1646  */
+#line 7135 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 142:
 #line 1246 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_int(L(), 0); }
-#line 7139 "y.tab.c" /* yacc.c:1646  */
+#line 7141 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 143:
 #line 1248 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_lng(append_int(L(), 2), (yyvsp[0].l_val)); }
-#line 7145 "y.tab.c" /* yacc.c:1646  */
+#line 7147 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 144:
 #line 1250 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(append_int(L(), 1), (yyvsp[0].sym)); }
-#line 7151 "y.tab.c" /* yacc.c:1646  */
+#line 7153 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 145:
 #line 1260 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l_val) = -1; }
-#line 7157 "y.tab.c" /* yacc.c:1646  */
+#line 7159 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 146:
 #line 1261 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l_val) = (yyvsp[0].l_val); }
-#line 7163 "y.tab.c" /* yacc.c:1646  */
+#line 7165 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 147:
 #line 1272 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l_val) = -1; }
-#line 7169 "y.tab.c" /* yacc.c:1646  */
+#line 7171 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 148:
 #line 1273 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l_val) = (yyvsp[0].l_val); }
-#line 7175 "y.tab.c" /* yacc.c:1646  */
+#line 7177 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 149:
 #line 1274 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l_val) =  0; }
-#line 7181 "y.tab.c" /* yacc.c:1646  */
+#line 7183 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 150:
 #line 1285 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l_val) = -1; }
-#line 7187 "y.tab.c" /* yacc.c:1646  */
+#line 7189 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 151:
 #line 1286 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l_val) = (yyvsp[0].l_val); }
-#line 7193 "y.tab.c" /* yacc.c:1646  */
+#line 7195 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 152:
 #line 1287 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l_val) =  0; }
-#line 7199 "y.tab.c" /* yacc.c:1646  */
+#line 7201 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 153:
 #line 1297 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l_val) = -1; }
-#line 7205 "y.tab.c" /* yacc.c:1646  */
+#line 7207 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 154:
 #line 1298 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l_val) = (yyvsp[0].l_val); }
-#line 7211 "y.tab.c" /* yacc.c:1646  */
+#line 7213 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 155:
 #line 1308 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 7217 "y.tab.c" /* yacc.c:1646  */
+#line 7219 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 156:
 #line 1309 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 7223 "y.tab.c" /* yacc.c:1646  */
+#line 7225 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 157:
 #line 1310 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 7229 "y.tab.c" /* yacc.c:1646  */
+#line 7231 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 158:
@@ -7236,19 +7238,19 @@ yyreduce:
 	  append_list(l, (yyvsp[-3].l));
 	  append_list(l, (yyvsp[-1].l));
 	  (yyval.sym) = _symbol_create_list( SQL_CREATE_INDEX, l); }
-#line 7240 "y.tab.c" /* yacc.c:1646  */
+#line 7242 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 159:
 #line 1326 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = hash_idx; }
-#line 7246 "y.tab.c" /* yacc.c:1646  */
+#line 7248 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 160:
 #line 1327 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = hash_idx; }
-#line 7252 "y.tab.c" /* yacc.c:1646  */
+#line 7254 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 161:
@@ -7257,7 +7259,7 @@ yyreduce:
 	  append_string(l, (yyvsp[-1].sval));
 	  append_int(l, (yyvsp[0].i_val));
 	  (yyval.sym) = _symbol_create_list( SQL_CREATE_ROLE, l ); }
-#line 7261 "y.tab.c" /* yacc.c:1646  */
+#line 7263 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 162:
@@ -7269,25 +7271,25 @@ yyreduce:
 	  append_string(l, (yyvsp[0].sval));
 	  append_int(l, (yyvsp[-6].i_val));
 	  (yyval.sym) = _symbol_create_list( SQL_CREATE_USER, l ); }
-#line 7273 "y.tab.c" /* yacc.c:1646  */
+#line 7275 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 163:
 #line 1363 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = SQL_PW_UNENCRYPTED; }
-#line 7279 "y.tab.c" /* yacc.c:1646  */
+#line 7281 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 164:
 #line 1364 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = SQL_PW_UNENCRYPTED; }
-#line 7285 "y.tab.c" /* yacc.c:1646  */
+#line 7287 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 165:
 #line 1365 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = SQL_PW_ENCRYPTED; }
-#line 7291 "y.tab.c" /* yacc.c:1646  */
+#line 7293 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 166:
@@ -7301,7 +7303,7 @@ yyreduce:
 	  append_int(l, commit_action);
 	  append_string(l, NULL);
 	  (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
-#line 7305 "y.tab.c" /* yacc.c:1646  */
+#line 7307 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 167:
@@ -7315,7 +7317,7 @@ yyreduce:
 	  append_int(l, commit_action);
 	  append_string(l, NULL);
 	  (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
-#line 7319 "y.tab.c" /* yacc.c:1646  */
+#line 7321 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 168:
@@ -7329,7 +7331,7 @@ yyreduce:
 	  append_int(l, commit_action);
 	  append_string(l, NULL);
 	  (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
-#line 7333 "y.tab.c" /* yacc.c:1646  */
+#line 7335 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 169:
@@ -7343,7 +7345,7 @@ yyreduce:
 	  append_int(l, commit_action);
 	  append_string(l, NULL);
 	  (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
-#line 7347 "y.tab.c" /* yacc.c:1646  */
+#line 7349 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 170:
@@ -7357,7 +7359,7 @@ yyreduce:
 	  append_int(l, commit_action);
 	  append_string(l, (yyvsp[0].sval));
 	  (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
-#line 7361 "y.tab.c" /* yacc.c:1646  */
+#line 7363 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 171:
@@ -7373,79 +7375,79 @@ yyreduce:
 	  append_int(l, commit_action);
 	  append_string(l, NULL);
 	  (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
-#line 7377 "y.tab.c" /* yacc.c:1646  */
+#line 7379 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 172:
 #line 1435 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = SQL_LOCAL_TEMP; }
-#line 7383 "y.tab.c" /* yacc.c:1646  */
+#line 7385 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 173:
 #line 1436 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = SQL_LOCAL_TEMP; }
-#line 7389 "y.tab.c" /* yacc.c:1646  */
+#line 7391 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 174:
 #line 1437 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = SQL_LOCAL_TEMP; }
-#line 7395 "y.tab.c" /* yacc.c:1646  */
+#line 7397 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 175:
 #line 1438 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = SQL_LOCAL_TEMP; }
-#line 7401 "y.tab.c" /* yacc.c:1646  */
+#line 7403 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 176:
 #line 1439 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = SQL_GLOBAL_TEMP; }
-#line 7407 "y.tab.c" /* yacc.c:1646  */
+#line 7409 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 177:
 #line 1440 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = SQL_GLOBAL_TEMP; }
-#line 7413 "y.tab.c" /* yacc.c:1646  */
+#line 7415 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 178:
 #line 1444 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = CA_COMMIT; }
-#line 7419 "y.tab.c" /* yacc.c:1646  */
+#line 7421 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 179:
 #line 1445 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = CA_DELETE; }
-#line 7425 "y.tab.c" /* yacc.c:1646  */
+#line 7427 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 180:
 #line 1446 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = CA_PRESERVE; }
-#line 7431 "y.tab.c" /* yacc.c:1646  */
+#line 7433 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 181:
 #line 1447 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = CA_DROP; }
-#line 7437 "y.tab.c" /* yacc.c:1646  */
+#line 7439 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 182:
 #line 1451 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, (yyvsp[-1].l)); }
-#line 7443 "y.tab.c" /* yacc.c:1646  */
+#line 7445 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 183:
 #line 1452 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_SELECT, (yyvsp[0].l)); }
-#line 7449 "y.tab.c" /* yacc.c:1646  */
+#line 7451 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 184:
@@ -7453,43 +7455,43 @@ yyreduce:
     { (yyval.l) = append_list(L(), (yyvsp[-3].l));
 			  append_symbol((yyval.l), (yyvsp[-1].sym)); 
 			  append_int((yyval.l), (yyvsp[0].i_val)); }
-#line 7457 "y.tab.c" /* yacc.c:1646  */
+#line 7459 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 185:
 #line 1466 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 7463 "y.tab.c" /* yacc.c:1646  */
+#line 7465 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 186:
 #line 1467 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 7469 "y.tab.c" /* yacc.c:1646  */
+#line 7471 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 187:
 #line 1472 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym)); }
-#line 7475 "y.tab.c" /* yacc.c:1646  */
+#line 7477 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 188:
 #line 1474 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-2].l), (yyvsp[0].sym) ); }
-#line 7481 "y.tab.c" /* yacc.c:1646  */
+#line 7483 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 194:
 #line 1481 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 7487 "y.tab.c" /* yacc.c:1646  */
+#line 7489 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 195:
 #line 1482 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 7493 "y.tab.c" /* yacc.c:1646  */
+#line 7495 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 196:
@@ -7501,7 +7503,7 @@ yyreduce:
 			append_list(l, (yyvsp[0].l));
 			(yyval.sym) = _symbol_create_list(SQL_COLUMN, l);
 		}
-#line 7505 "y.tab.c" /* yacc.c:1646  */
+#line 7507 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 197:
@@ -7563,25 +7565,25 @@ yyreduce:
 			append_list(l, o);
 			(yyval.sym) = _symbol_create_list(SQL_COLUMN, l);
 		}
-#line 7567 "y.tab.c" /* yacc.c:1646  */
+#line 7569 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 198:
 #line 1555 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = NULL; }
-#line 7573 "y.tab.c" /* yacc.c:1646  */
+#line 7575 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 200:
 #line 1561 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym) ); }
-#line 7579 "y.tab.c" /* yacc.c:1646  */
+#line 7581 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 201:
 #line 1563 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-1].l), (yyvsp[0].sym) ); }
-#line 7585 "y.tab.c" /* yacc.c:1646  */
+#line 7587 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 202:
@@ -7590,31 +7592,31 @@ yyreduce:
 	  append_string(l, (yyvsp[-5].sval) );
 	  append_list(l, (yyvsp[-1].l) );
 	  (yyval.sym) = _symbol_create_list( SQL_COLUMN_OPTIONS, l ); }
-#line 7594 "y.tab.c" /* yacc.c:1646  */
+#line 7596 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 203:
 #line 1577 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym) ); }
-#line 7600 "y.tab.c" /* yacc.c:1646  */
+#line 7602 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 204:
 #line 1579 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-2].l), (yyvsp[0].sym) ); }
-#line 7606 "y.tab.c" /* yacc.c:1646  */
+#line 7608 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 208:
 #line 1585 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_symbol(SQL_DEFAULT, (yyvsp[0].sym)); }
-#line 7612 "y.tab.c" /* yacc.c:1646  */
+#line 7614 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 209:
 #line 1589 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 7618 "y.tab.c" /* yacc.c:1646  */
+#line 7620 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 210:
@@ -7623,7 +7625,7 @@ yyreduce:
 	  append_string(l, (yyvsp[-1].sval) );
 	  append_symbol(l, (yyvsp[0].sym) );
 	  (yyval.sym) = _symbol_create_list( SQL_CONSTRAINT, l ); }
-#line 7627 "y.tab.c" /* yacc.c:1646  */
+#line 7629 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 211:
@@ -7654,7 +7656,7 @@ yyreduce:
 		}	
 		append_symbol(stmts, _symbol_create_list(SQL_CREATE_SEQ, l));
 	}
-#line 7658 "y.tab.c" /* yacc.c:1646  */
+#line 7660 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 212:
@@ -7701,7 +7703,7 @@ yyreduce:
 		}	
 		append_symbol(stmts, _symbol_create_list(SQL_CREATE_SEQ, l));
 	}
-#line 7705 "y.tab.c" /* yacc.c:1646  */
+#line 7707 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 213:
@@ -7716,13 +7718,13 @@ yyreduce:
 	  append_int((yyval.l), 0);  /* cycle */
 	  append_int((yyval.l), 0);  /* bedropped */
 	}
-#line 7720 "y.tab.c" /* yacc.c:1646  */
+#line 7722 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 214:
 #line 1686 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = (yyvsp[-1].l); }
-#line 7726 "y.tab.c" /* yacc.c:1646  */
+#line 7728 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 215:
@@ -7731,151 +7733,151 @@ yyreduce:
 	  append_string(l, (yyvsp[-1].sval) );
 	  append_symbol(l, (yyvsp[0].sym) );
 	  (yyval.sym) = _symbol_create_list( SQL_CONSTRAINT, l ); }
-#line 7735 "y.tab.c" /* yacc.c:1646  */
+#line 7737 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 216:
 #line 1702 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = NULL; }
-#line 7741 "y.tab.c" /* yacc.c:1646  */
+#line 7743 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 217:
 #line 1703 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 7747 "y.tab.c" /* yacc.c:1646  */
+#line 7749 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 218:
 #line 1707 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 7753 "y.tab.c" /* yacc.c:1646  */
+#line 7755 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 219:
 #line 1708 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 7759 "y.tab.c" /* yacc.c:1646  */
+#line 7761 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 220:
 #line 1709 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 2; }
-#line 7765 "y.tab.c" /* yacc.c:1646  */
+#line 7767 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 221:
 #line 1710 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 3; }
-#line 7771 "y.tab.c" /* yacc.c:1646  */
+#line 7773 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 222:
 #line 1711 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 4; }
-#line 7777 "y.tab.c" /* yacc.c:1646  */
+#line 7779 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 223:
 #line 1715 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = ((yyvsp[0].i_val) << 8); }
-#line 7783 "y.tab.c" /* yacc.c:1646  */
+#line 7785 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 224:
 #line 1719 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[0].i_val); }
-#line 7789 "y.tab.c" /* yacc.c:1646  */
+#line 7791 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 225:
 #line 1723 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (2 << 8) + 2; /* defaults are RESTRICT */ }
-#line 7795 "y.tab.c" /* yacc.c:1646  */
+#line 7797 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 226:
 #line 1724 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[0].i_val); }
-#line 7801 "y.tab.c" /* yacc.c:1646  */
+#line 7803 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 227:
 #line 1725 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[0].i_val); }
-#line 7807 "y.tab.c" /* yacc.c:1646  */
+#line 7809 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 228:
 #line 1726 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[-1].i_val) + (yyvsp[0].i_val); }
-#line 7813 "y.tab.c" /* yacc.c:1646  */
+#line 7815 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 229:
 #line 1727 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[-1].i_val) + (yyvsp[0].i_val); }
-#line 7819 "y.tab.c" /* yacc.c:1646  */
+#line 7821 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 230:
 #line 1731 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 7825 "y.tab.c" /* yacc.c:1646  */
+#line 7827 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 231:
 #line 1732 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 7831 "y.tab.c" /* yacc.c:1646  */
+#line 7833 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 232:
 #line 1733 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 2; }
-#line 7837 "y.tab.c" /* yacc.c:1646  */
+#line 7839 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 233:
 #line 1734 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 7843 "y.tab.c" /* yacc.c:1646  */
+#line 7845 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 234:
 #line 1738 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 7849 "y.tab.c" /* yacc.c:1646  */
+#line 7851 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 235:
 #line 1739 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[0].i_val); }
-#line 7855 "y.tab.c" /* yacc.c:1646  */
+#line 7857 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 236:
 #line 1743 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create( SQL_NOT_NULL, NULL); }
-#line 7861 "y.tab.c" /* yacc.c:1646  */
+#line 7863 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 237:
 #line 1744 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create( SQL_NULL, NULL); }
-#line 7867 "y.tab.c" /* yacc.c:1646  */
+#line 7869 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 238:
 #line 1745 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create( SQL_UNIQUE, NULL ); }
-#line 7873 "y.tab.c" /* yacc.c:1646  */
+#line 7875 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 239:
 #line 1746 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create( SQL_PRIMARY_KEY, NULL ); }
-#line 7879 "y.tab.c" /* yacc.c:1646  */
+#line 7881 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 240:
@@ -7886,19 +7888,19 @@ yyreduce:
 			  append_int(l, (yyvsp[-1].i_val) );
 			  append_int(l, (yyvsp[0].i_val) );
 			  (yyval.sym) = _symbol_create_list( SQL_FOREIGN_KEY, l); }
-#line 7890 "y.tab.c" /* yacc.c:1646  */
+#line 7892 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 242:
 #line 1762 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_UNIQUE, (yyvsp[0].l)); }
-#line 7896 "y.tab.c" /* yacc.c:1646  */
+#line 7898 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 243:
 #line 1764 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_PRIMARY_KEY, (yyvsp[0].l)); }
-#line 7902 "y.tab.c" /* yacc.c:1646  */
+#line 7904 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 244:
@@ -7910,31 +7912,31 @@ yyreduce:
 			  append_int(l, (yyvsp[-1].i_val) );
 			  append_int(l, (yyvsp[0].i_val) );
 			  (yyval.sym) = _symbol_create_list( SQL_FOREIGN_KEY, l); }
-#line 7914 "y.tab.c" /* yacc.c:1646  */
+#line 7916 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 245:
 #line 1780 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 7920 "y.tab.c" /* yacc.c:1646  */
+#line 7922 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 246:
 #line 1785 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(L(), (yyvsp[0].sval)); }
-#line 7926 "y.tab.c" /* yacc.c:1646  */
+#line 7928 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 247:
 #line 1787 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string( (yyvsp[-2].l), (yyvsp[0].sval) ); }
-#line 7932 "y.tab.c" /* yacc.c:1646  */
+#line 7934 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 248:
 #line 1791 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_LIKE, (yyvsp[0].l) ); }
-#line 7938 "y.tab.c" /* yacc.c:1646  */
+#line 7940 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 249:
@@ -7947,31 +7949,31 @@ yyreduce:
 	  append_int(l, TRUE);	/* persistent view */
 	  (yyval.sym) = _symbol_create_list( SQL_CREATE_VIEW, l ); 
 	}
-#line 7951 "y.tab.c" /* yacc.c:1646  */
+#line 7953 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 252:
 #line 1812 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = FALSE; }
-#line 7957 "y.tab.c" /* yacc.c:1646  */
+#line 7959 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 253:
 #line 1813 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = TRUE; }
-#line 7963 "y.tab.c" /* yacc.c:1646  */
+#line 7965 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 254:
 #line 1817 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = NULL; }
-#line 7969 "y.tab.c" /* yacc.c:1646  */
+#line 7971 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 256:
 #line 1822 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = (yyvsp[-1].l); }
-#line 7975 "y.tab.c" /* yacc.c:1646  */
+#line 7977 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 257:
@@ -7980,13 +7982,13 @@ yyreduce:
 				append_string(l, (yyvsp[-3].sval));
 				append_string(l, (yyvsp[0].sval));
 			  (yyval.sym) = _symbol_create_list( SQL_CREATE_TYPE, l ); }
-#line 7984 "y.tab.c" /* yacc.c:1646  */
+#line 7986 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 258:
 #line 1834 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(append_string(L(), (yyvsp[-2].sval)), (yyvsp[0].sval)); }
-#line 7990 "y.tab.c" /* yacc.c:1646  */
+#line 7992 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 259:
@@ -8000,7 +8002,7 @@ yyreduce:
 				append_int(f, F_FUNC);
 				append_int(f, FUNC_LANG_MAL);
 			  (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
-#line 8004 "y.tab.c" /* yacc.c:1646  */
+#line 8006 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 260:
@@ -8014,7 +8016,7 @@ yyreduce:
 				append_int(f, F_FUNC);
 				append_int(f, FUNC_LANG_SQL);
 			  (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
-#line 8018 "y.tab.c" /* yacc.c:1646  */
+#line 8020 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 261:
@@ -8041,7 +8043,7 @@ yyreduce:
 			append_int(f, F_FUNC);
 			append_int(f, lang);
 			(yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
-#line 8045 "y.tab.c" /* yacc.c:1646  */
+#line 8047 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 262:
@@ -8056,7 +8058,7 @@ yyreduce:
 				append_int(f, F_FILT);
 				append_int(f, FUNC_LANG_MAL);
 			  (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
-#line 8060 "y.tab.c" /* yacc.c:1646  */
+#line 8062 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 263:
@@ -8070,7 +8072,7 @@ yyreduce:
 				append_int(f, F_AGGR);
 				append_int(f, FUNC_LANG_MAL);
 			  (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
-#line 8074 "y.tab.c" /* yacc.c:1646  */
+#line 8076 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 264:
@@ -8097,7 +8099,7 @@ yyreduce:
 			append_int(f, F_AGGR);
 			append_int(f, lang);
 			(yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
-#line 8101 "y.tab.c" /* yacc.c:1646  */
+#line 8103 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 265:
@@ -8111,7 +8113,7 @@ yyreduce:
 				append_int(f, F_PROC);
 				append_int(f, FUNC_LANG_MAL);
 			  (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
-#line 8115 "y.tab.c" /* yacc.c:1646  */
+#line 8117 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 266:
@@ -8125,61 +8127,61 @@ yyreduce:
 				append_int(f, F_PROC);
 				append_int(f, FUNC_LANG_SQL);
 			  (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
-#line 8129 "y.tab.c" /* yacc.c:1646  */
+#line 8131 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 267:
 #line 1969 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = L(); append_symbol( (yyval.l), (yyvsp[0].sym)); }
-#line 8135 "y.tab.c" /* yacc.c:1646  */
+#line 8137 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 268:
 #line 1973 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-3].l),(yyvsp[-2].sym)); }
-#line 8141 "y.tab.c" /* yacc.c:1646  */
+#line 8143 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 269:
 #line 1977 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-3].l),(yyvsp[-2].sym)); }
-#line 8147 "y.tab.c" /* yacc.c:1646  */
+#line 8149 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 270:
 #line 1992 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = L(); }
-#line 8153 "y.tab.c" /* yacc.c:1646  */
+#line 8155 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 271:
 #line 1994 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-2].l),(yyvsp[-1].sym));}
-#line 8159 "y.tab.c" /* yacc.c:1646  */
+#line 8161 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 272:
 #line 1998 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = L(); }
-#line 8165 "y.tab.c" /* yacc.c:1646  */
+#line 8167 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 273:
 #line 2000 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-2].l),(yyvsp[-1].sym));}
-#line 8171 "y.tab.c" /* yacc.c:1646  */
+#line 8173 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 300:
 #line 2048 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 8177 "y.tab.c" /* yacc.c:1646  */
+#line 8179 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 301:
 #line 2052 "sql_parser.y" /* yacc.c:1646  */
     {(yyval.sym) = _symbol_create_symbol(SQL_CALL, (yyvsp[0].sym));}
-#line 8183 "y.tab.c" /* yacc.c:1646  */
+#line 8185 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 302:
@@ -8190,37 +8192,37 @@ yyreduce:
 		  assert(0);
 		  (yyval.sym) = _symbol_create_list( SQL_FUNC, l);
 		}
-#line 8194 "y.tab.c" /* yacc.c:1646  */
+#line 8196 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 304:
 #line 2068 "sql_parser.y" /* yacc.c:1646  */
     {(yyval.l) = L();}
-#line 8200 "y.tab.c" /* yacc.c:1646  */
+#line 8202 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 305:
 #line 2069 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( L(), (yyvsp[0].sym)); }
-#line 8206 "y.tab.c" /* yacc.c:1646  */
+#line 8208 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 306:
 #line 2071 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-2].l), (yyvsp[0].sym)); }
-#line 8212 "y.tab.c" /* yacc.c:1646  */
+#line 8214 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 307:
 #line 2076 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_symbol(SQL_RETURN, (yyvsp[0].sym)); }
-#line 8218 "y.tab.c" /* yacc.c:1646  */
+#line 8220 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 310:
 #line 2083 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_symbol(SQL_TABLE, (yyvsp[-1].sym)); }
-#line 8224 "y.tab.c" /* yacc.c:1646  */
+#line 8226 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 311:
@@ -8230,7 +8232,7 @@ yyreduce:
 		    append_list(
 		     append_symbol(
 		      L(),(yyvsp[-4].sym)),(yyvsp[-3].l)),(yyvsp[-2].l))); }
-#line 8234 "y.tab.c" /* yacc.c:1646  */
+#line 8236 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 312:
@@ -8239,7 +8241,7 @@ yyreduce:
 		   append_list(
 		    append_list(
 		     L(),(yyvsp[-3].l)),(yyvsp[-2].l))); }
-#line 8243 "y.tab.c" /* yacc.c:1646  */
+#line 8245 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 313:
@@ -8248,19 +8250,19 @@ yyreduce:
 			   append_list(
 			    append_symbol(
 			     L(), (yyvsp[-2].sym)),(yyvsp[0].l))); }
-#line 8252 "y.tab.c" /* yacc.c:1646  */
+#line 8254 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 314:
 #line 2110 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( L(), (yyvsp[0].sym));}
-#line 8258 "y.tab.c" /* yacc.c:1646  */
+#line 8260 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 315:
 #line 2112 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-1].l), (yyvsp[0].sym)); }
-#line 8264 "y.tab.c" /* yacc.c:1646  */
+#line 8266 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 316:
@@ -8269,31 +8271,31 @@ yyreduce:
 			   append_list(
 			    append_symbol(
 			     L(), (yyvsp[-2].sym)),(yyvsp[0].l))); }
-#line 8273 "y.tab.c" /* yacc.c:1646  */
+#line 8275 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 317:
 #line 2125 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( L(), (yyvsp[0].sym)); }
-#line 8279 "y.tab.c" /* yacc.c:1646  */
+#line 8281 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 318:
 #line 2127 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-1].l), (yyvsp[0].sym)); }
-#line 8285 "y.tab.c" /* yacc.c:1646  */
+#line 8287 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 319:
 #line 2131 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = NULL; }
-#line 8291 "y.tab.c" /* yacc.c:1646  */
+#line 8293 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 320:
 #line 2132 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = (yyvsp[0].l); }
-#line 8297 "y.tab.c" /* yacc.c:1646  */
+#line 8299 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 321:
@@ -8304,19 +8306,19 @@ yyreduce:
 		  append_symbol(l, (yyvsp[-2].sym));
 		  (yyval.sym) = _symbol_create_list(SQL_IF, l);
 		}
-#line 8308 "y.tab.c" /* yacc.c:1646  */
+#line 8310 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 322:
 #line 2153 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 8314 "y.tab.c" /* yacc.c:1646  */
+#line 8316 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 323:
 #line 2155 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_ELSE, (yyvsp[0].l)); }
-#line 8320 "y.tab.c" /* yacc.c:1646  */
+#line 8322 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 324:
@@ -8327,7 +8329,7 @@ yyreduce:
 		  append_symbol(l, (yyvsp[0].sym));
 		  { (yyval.sym) = _symbol_create_list(SQL_IF, l); }
 		}
-#line 8331 "y.tab.c" /* yacc.c:1646  */
+#line 8333 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 325:
@@ -8345,19 +8347,19 @@ yyreduce:
 		  append_string(l, label);
 		  (yyval.sym) = _symbol_create_list(SQL_WHILE, l);
 		}
-#line 8349 "y.tab.c" /* yacc.c:1646  */
+#line 8351 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 326:
 #line 2188 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = NULL; }
-#line 8355 "y.tab.c" /* yacc.c:1646  */
+#line 8357 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 328:
 #line 2193 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = NULL; }
-#line 8361 "y.tab.c" /* yacc.c:1646  */
+#line 8363 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 330:
@@ -8366,7 +8368,7 @@ yyreduce:
 				  append_string((yyval.l), (yyvsp[-1].sval));
 			  	  append_type((yyval.l), &(yyvsp[0].type));
 				}
-#line 8370 "y.tab.c" /* yacc.c:1646  */
+#line 8372 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 331:
@@ -8375,19 +8377,19 @@ yyreduce:
 				  append_string((yyval.l), (yyvsp[-1].sval));
 			  	  append_type((yyval.l), &(yyvsp[0].type));
 				}
-#line 8379 "y.tab.c" /* yacc.c:1646  */
+#line 8381 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 332:
 #line 2212 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_TABLE, (yyvsp[-1].l)); }
-#line 8385 "y.tab.c" /* yacc.c:1646  */
+#line 8387 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 333:
 #line 2214 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_TYPE, append_type(L(),&(yyvsp[0].type))); }
-#line 8391 "y.tab.c" /* yacc.c:1646  */
+#line 8393 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 335:
@@ -8396,13 +8398,13 @@ yyreduce:
 			  append_string(vararg, "*");
 			  append_type(vararg, NULL);
 			  (yyval.l) = append_list(L(), vararg); }
-#line 8400 "y.tab.c" /* yacc.c:1646  */
+#line 8402 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 336:
 #line 2223 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = NULL; }
-#line 8406 "y.tab.c" /* yacc.c:1646  */
+#line 8408 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 337:
@@ -8411,7 +8413,7 @@ yyreduce:
 			  append_string(p, (yyvsp[-1].sval));
 			  append_type(p, &(yyvsp[0].type));
 			  (yyval.l) = append_list((yyvsp[-3].l), p); }
-#line 8415 "y.tab.c" /* yacc.c:1646  */
+#line 8417 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 338:
@@ -8421,7 +8423,7 @@ yyreduce:
 			  append_string(p, (yyvsp[-1].sval));
 			  append_type(p, &(yyvsp[0].type));
 			  (yyval.l) = append_list(l, p); }
-#line 8425 "y.tab.c" /* yacc.c:1646  */
+#line 8427 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 339:
@@ -8435,91 +8437,91 @@ yyreduce:
 	  append_list(l, (yyvsp[0].l));
 	  (yyval.sym) = _symbol_create_list(SQL_CREATE_TRIGGER, l); 
 	}
-#line 8439 "y.tab.c" /* yacc.c:1646  */
+#line 8441 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 340:
 #line 2295 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 8445 "y.tab.c" /* yacc.c:1646  */
+#line 8447 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 341:
 #line 2296 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 8451 "y.tab.c" /* yacc.c:1646  */
+#line 8453 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 342:
 #line 2300 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_INSERT, NULL); }
-#line 8457 "y.tab.c" /* yacc.c:1646  */
+#line 8459 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 343:
 #line 2301 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_DELETE, NULL); }
-#line 8463 "y.tab.c" /* yacc.c:1646  */
+#line 8465 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 344:
 #line 2302 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_UPDATE, NULL); }
-#line 8469 "y.tab.c" /* yacc.c:1646  */
+#line 8471 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 345:
 #line 2303 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_UPDATE, (yyvsp[0].l)); }
-#line 8475 "y.tab.c" /* yacc.c:1646  */
+#line 8477 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 346:
 #line 2307 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = NULL; }
-#line 8481 "y.tab.c" /* yacc.c:1646  */
+#line 8483 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 347:
 #line 2308 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = (yyvsp[0].l); }
-#line 8487 "y.tab.c" /* yacc.c:1646  */
+#line 8489 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 348:
 #line 2312 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_list(L(), (yyvsp[0].l)); }
-#line 8493 "y.tab.c" /* yacc.c:1646  */
+#line 8495 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 349:
 #line 2314 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_list((yyvsp[-1].l), (yyvsp[0].l)); }
-#line 8499 "y.tab.c" /* yacc.c:1646  */
+#line 8501 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 350:
 #line 2319 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(append_int(L(), 0), (yyvsp[0].sval)); }
-#line 8505 "y.tab.c" /* yacc.c:1646  */
+#line 8507 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 351:
 #line 2320 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(append_int(L(), 1), (yyvsp[0].sval)); }
-#line 8511 "y.tab.c" /* yacc.c:1646  */
+#line 8513 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 352:
 #line 2321 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(append_int(L(), 0), (yyvsp[0].sval)); }
-#line 8517 "y.tab.c" /* yacc.c:1646  */
+#line 8519 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 353:
 #line 2322 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(append_int(L(), 1), (yyvsp[0].sval)); }
-#line 8523 "y.tab.c" /* yacc.c:1646  */
+#line 8525 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 358:
@@ -8529,55 +8531,55 @@ yyreduce:
 	  append_symbol((yyval.l), (yyvsp[-1].sym));
 	  append_list((yyval.l), (yyvsp[0].l));
 	}
-#line 8533 "y.tab.c" /* yacc.c:1646  */
+#line 8535 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 359:
 #line 2344 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 8539 "y.tab.c" /* yacc.c:1646  */
+#line 8541 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 360:
 #line 2345 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[0].i_val); }
-#line 8545 "y.tab.c" /* yacc.c:1646  */
+#line 8547 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 361:
 #line 2349 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 8551 "y.tab.c" /* yacc.c:1646  */
+#line 8553 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 362:
 #line 2350 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 8557 "y.tab.c" /* yacc.c:1646  */
+#line 8559 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 363:
 #line 2354 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 8563 "y.tab.c" /* yacc.c:1646  */
+#line 8565 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 364:
 #line 2355 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 8569 "y.tab.c" /* yacc.c:1646  */
+#line 8571 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 365:
 #line 2360 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym)); }
-#line 8575 "y.tab.c" /* yacc.c:1646  */
+#line 8577 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 366:
 #line 2363 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = (yyvsp[-1].l); }
-#line 8581 "y.tab.c" /* yacc.c:1646  */
+#line 8583 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 367:
@@ -8586,7 +8588,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-1].l) );
 	  append_int(l, (yyvsp[0].i_val) );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_TABLE, l ); }
-#line 8590 "y.tab.c" /* yacc.c:1646  */
+#line 8592 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 368:
@@ -8598,7 +8600,7 @@ yyreduce:
 	  append_int(l, (yyvsp[0].i_val) );
 	  append_int(l, F_FUNC );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
-#line 8602 "y.tab.c" /* yacc.c:1646  */
+#line 8604 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 369:
@@ -8610,7 +8612,7 @@ yyreduce:
 	  append_int(l, (yyvsp[0].i_val) );
 	  append_int(l, F_FILT );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
-#line 8614 "y.tab.c" /* yacc.c:1646  */
+#line 8616 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 370:
@@ -8622,7 +8624,7 @@ yyreduce:
 	  append_int(l, (yyvsp[0].i_val) );
 	  append_int(l, F_AGGR );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
-#line 8626 "y.tab.c" /* yacc.c:1646  */
+#line 8628 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 371:
@@ -8634,7 +8636,7 @@ yyreduce:
 	  append_int(l, (yyvsp[0].i_val) );
 	  append_int(l, F_PROC );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
-#line 8638 "y.tab.c" /* yacc.c:1646  */
+#line 8640 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 372:
@@ -8646,7 +8648,7 @@ yyreduce:
 	  append_int(l, (yyvsp[0].i_val) );
 	  append_int(l, F_FUNC );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
-#line 8650 "y.tab.c" /* yacc.c:1646  */
+#line 8652 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 373:
@@ -8658,7 +8660,7 @@ yyreduce:
 	  append_int(l, (yyvsp[0].i_val) );
 	  append_int(l, F_FILT );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
-#line 8662 "y.tab.c" /* yacc.c:1646  */
+#line 8664 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 374:
@@ -8670,7 +8672,7 @@ yyreduce:
 	  append_int(l, (yyvsp[0].i_val) );
 	  append_int(l, F_AGGR );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
-#line 8674 "y.tab.c" /* yacc.c:1646  */
+#line 8676 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 375:
@@ -8682,7 +8684,7 @@ yyreduce:
 	  append_int(l, (yyvsp[0].i_val) );
 	  append_int(l, F_PROC );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
-#line 8686 "y.tab.c" /* yacc.c:1646  */
+#line 8688 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 376:
@@ -8691,49 +8693,49 @@ yyreduce:
 	  append_list(l, (yyvsp[-1].l) );
 	  append_int(l, (yyvsp[0].i_val) );
 	  (yyval.sym) = _symbol_create_list( SQL_DROP_VIEW, l ); }
-#line 8695 "y.tab.c" /* yacc.c:1646  */
+#line 8697 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 377:
 #line 2441 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create( SQL_DROP_ROLE, (yyvsp[0].sval) ); }
-#line 8701 "y.tab.c" /* yacc.c:1646  */
+#line 8703 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 378:
 #line 2442 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create( SQL_DROP_USER, (yyvsp[0].sval) ); }
-#line 8707 "y.tab.c" /* yacc.c:1646  */
+#line 8709 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 379:
 #line 2443 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_DROP_INDEX, (yyvsp[0].l) ); }
-#line 8713 "y.tab.c" /* yacc.c:1646  */
+#line 8715 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 380:
 #line 2444 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_DROP_TRIGGER, (yyvsp[0].l) ); }
-#line 8719 "y.tab.c" /* yacc.c:1646  */
+#line 8721 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 381:
 #line 2448 "sql_parser.y" /* yacc.c:1646  */
     {(yyval.l) = NULL;}
-#line 8725 "y.tab.c" /* yacc.c:1646  */
+#line 8727 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 382:
 #line 2449 "sql_parser.y" /* yacc.c:1646  */
     {(yyval.l) = (yyvsp[-1].l);}
-#line 8731 "y.tab.c" /* yacc.c:1646  */
+#line 8733 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 383:
 #line 2450 "sql_parser.y" /* yacc.c:1646  */
     {(yyval.l) = L(); }
-#line 8737 "y.tab.c" /* yacc.c:1646  */
+#line 8739 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 384:
@@ -8741,32 +8743,32 @@ yyreduce:
     { dlist *l = L();
 				  append_type(l, &(yyvsp[0].type) );
 				  (yyval.l)= l; }
-#line 8745 "y.tab.c" /* yacc.c:1646  */
+#line 8747 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 385:
 #line 2457 "sql_parser.y" /* yacc.c:1646  */
     { append_type((yyvsp[0].l), &(yyvsp[-2].type));
 				  (yyval.l) = (yyvsp[0].l); }
-#line 8752 "y.tab.c" /* yacc.c:1646  */
+#line 8754 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 386:
 #line 2462 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 8758 "y.tab.c" /* yacc.c:1646  */
+#line 8760 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 387:
 #line 2463 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 8764 "y.tab.c" /* yacc.c:1646  */
+#line 8766 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 388:
 #line 2464 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 8770 "y.tab.c" /* yacc.c:1646  */
+#line 8772 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 395:
@@ -8774,25 +8776,25 @@ yyreduce:
     {
 	  (yyval.sym) = (yyvsp[0].sym);
 	  m->type = Q_TRANS;					}
-#line 8778 "y.tab.c" /* yacc.c:1646  */
+#line 8780 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 396:
 #line 2490 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_int( TR_COMMIT, (yyvsp[0].bval));  }
-#line 8784 "y.tab.c" /* yacc.c:1646  */
+#line 8786 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 397:
 #line 2492 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create( TR_SAVEPOINT, (yyvsp[0].sval)); }
-#line 8790 "y.tab.c" /* yacc.c:1646  */
+#line 8792 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 398:
 #line 2494 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create( TR_RELEASE, (yyvsp[0].sval)); }
-#line 8796 "y.tab.c" /* yacc.c:1646  */
+#line 8798 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 399:
@@ -8800,109 +8802,109 @@ yyreduce:
     { (yyval.sym) = _symbol_create_list( TR_ROLLBACK,
 		   append_string(
 			append_int(L(), (yyvsp[-1].bval)), (yyvsp[0].sval) )); }
-#line 8804 "y.tab.c" /* yacc.c:1646  */
+#line 8806 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 400:
 #line 2500 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_int( TR_START, (yyvsp[0].i_val)); }
-#line 8810 "y.tab.c" /* yacc.c:1646  */
+#line 8812 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 401:
 #line 2502 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_int( TR_MODE, (yyvsp[0].i_val)); }
-#line 8816 "y.tab.c" /* yacc.c:1646  */
+#line 8818 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 402:
 #line 2504 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_int( TR_MODE, (yyvsp[0].i_val)); }
-#line 8822 "y.tab.c" /* yacc.c:1646  */
+#line 8824 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 403:
 #line 2508 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = tr_none; }
-#line 8828 "y.tab.c" /* yacc.c:1646  */
+#line 8830 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 405:
 #line 2514 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[0].i_val); }
-#line 8834 "y.tab.c" /* yacc.c:1646  */
+#line 8836 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 406:
 #line 2516 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = ((yyvsp[-2].i_val) | (yyvsp[0].i_val)); }
-#line 8840 "y.tab.c" /* yacc.c:1646  */
+#line 8842 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 407:
 #line 2521 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = tr_readonly; }
-#line 8846 "y.tab.c" /* yacc.c:1646  */
+#line 8848 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 408:
 #line 2522 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = tr_writable; }
-#line 8852 "y.tab.c" /* yacc.c:1646  */
+#line 8854 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 409:
 #line 2523 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = tr_serializable; }
-#line 8858 "y.tab.c" /* yacc.c:1646  */
+#line 8860 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 410:
 #line 2524 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = tr_none; /* not supported */ }
-#line 8864 "y.tab.c" /* yacc.c:1646  */
+#line 8866 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 415:
 #line 2535 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 0; }
-#line 8870 "y.tab.c" /* yacc.c:1646  */
+#line 8872 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 416:
 #line 2536 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 0; }
-#line 8876 "y.tab.c" /* yacc.c:1646  */
+#line 8878 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 417:
 #line 2540 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 1; }
-#line 8882 "y.tab.c" /* yacc.c:1646  */
+#line 8884 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 418:
 #line 2541 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 0; }
-#line 8888 "y.tab.c" /* yacc.c:1646  */
+#line 8890 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 419:
 #line 2542 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 0; }
-#line 8894 "y.tab.c" /* yacc.c:1646  */
+#line 8896 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 420:
 #line 2546 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = NULL; }
-#line 8900 "y.tab.c" /* yacc.c:1646  */
+#line 8902 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 421:
 #line 2547 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 8906 "y.tab.c" /* yacc.c:1646  */
+#line 8908 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 422:
@@ -8919,7 +8921,7 @@ yyreduce:
 	  append_int(l, (yyvsp[-1].bval));
 	  append_int(l, (yyvsp[0].bval));
 	  (yyval.sym) = _symbol_create_list( SQL_COPYFROM, l ); }
-#line 8923 "y.tab.c" /* yacc.c:1646  */
+#line 8925 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 423:
@@ -8936,7 +8938,7 @@ yyreduce:
 	  append_int(l, (yyvsp[-1].bval));
 	  append_int(l, (yyvsp[0].bval));
 	  (yyval.sym) = _symbol_create_list( SQL_COPYFROM, l ); }
-#line 8940 "y.tab.c" /* yacc.c:1646  */
+#line 8942 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 424:
@@ -8950,7 +8952,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-1].l));
 	  append_int(l, (yyvsp[0].bval));
 	  (yyval.sym) = _symbol_create_list( SQL_BINCOPYFROM, l ); }
-#line 8954 "y.tab.c" /* yacc.c:1646  */
+#line 8956 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 425:
@@ -8961,7 +8963,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-1].l));
 	  append_string(l, (yyvsp[0].sval));
 	  (yyval.sym) = _symbol_create_list( SQL_COPYTO, l ); }
-#line 8965 "y.tab.c" /* yacc.c:1646  */
+#line 8967 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 426:
@@ -8972,31 +8974,31 @@ yyreduce:
 	  append_list(l, (yyvsp[-1].l));
 	  append_string(l, (yyvsp[0].sval));
 	  (yyval.sym) = _symbol_create_list( SQL_COPYTO, l ); }
-#line 8976 "y.tab.c" /* yacc.c:1646  */
+#line 8978 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 427:
 #line 2604 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = NULL; }
-#line 8982 "y.tab.c" /* yacc.c:1646  */
+#line 8984 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 428:
 #line 2605 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = (yyvsp[-1].l); }
-#line 8988 "y.tab.c" /* yacc.c:1646  */
+#line 8990 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 429:
 #line 2609 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_list(L(), (yyvsp[0].l)); }
-#line 8994 "y.tab.c" /* yacc.c:1646  */
+#line 8996 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 430:
 #line 2610 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_list((yyvsp[-2].l), (yyvsp[0].l)); }
-#line 9000 "y.tab.c" /* yacc.c:1646  */
+#line 9002 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 431:
@@ -9004,7 +9006,7 @@ yyreduce:
     { dlist *l = L();
 			  append_string(l, (yyvsp[0].sval) );
 			  (yyval.l) = l; }
-#line 9008 "y.tab.c" /* yacc.c:1646  */
+#line 9010 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 432:
@@ -9013,7 +9015,7 @@ yyreduce:
 			  append_string(l, (yyvsp[-1].sval) );
 			  append_string(l, (yyvsp[0].sval) );
 			  (yyval.l) = l; }
-#line 9017 "y.tab.c" /* yacc.c:1646  */
+#line 9019 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 433:
@@ -9022,7 +9024,7 @@ yyreduce:
 				  append_string(l, sa_strdup(SA, "|"));
 				  append_string(l, sa_strdup(SA, "\\n"));
 				  (yyval.l) = l; }
-#line 9026 "y.tab.c" /* yacc.c:1646  */
+#line 9028 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 434:
@@ -9031,7 +9033,7 @@ yyreduce:
 				  append_string(l, (yyvsp[0].sval));
 				  append_string(l, sa_strdup(SA, "\\n"));
 				  (yyval.l) = l; }
-#line 9035 "y.tab.c" /* yacc.c:1646  */
+#line 9037 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 435:
@@ -9040,7 +9042,7 @@ yyreduce:
 				  append_string(l, (yyvsp[-2].sval));
 				  append_string(l, (yyvsp[0].sval));
 				  (yyval.l) = l; }
-#line 9044 "y.tab.c" /* yacc.c:1646  */
+#line 9046 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 436:
@@ -9050,121 +9052,121 @@ yyreduce:
 				  append_string(l, (yyvsp[-2].sval));
 				  append_string(l, sql2str((yyvsp[0].sval)));
 				  (yyval.l) = l; }
-#line 9054 "y.tab.c" /* yacc.c:1646  */
+#line 9056 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 437:
 #line 2650 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = NULL; }
-#line 9060 "y.tab.c" /* yacc.c:1646  */
+#line 9062 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 438:
 #line 2651 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = NULL; }
-#line 9066 "y.tab.c" /* yacc.c:1646  */
+#line 9068 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 439:
 #line 2655 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = NULL; }
-#line 9072 "y.tab.c" /* yacc.c:1646  */
+#line 9074 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 440:
 #line 2656 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_lng(append_lng(L(), (yyvsp[-1].l_val)), 0); }
-#line 9078 "y.tab.c" /* yacc.c:1646  */
+#line 9080 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 441:
 #line 2657 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_lng(append_lng(L(), -1), (yyvsp[0].l_val)); }
-#line 9084 "y.tab.c" /* yacc.c:1646  */
+#line 9086 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 442:
 #line 2659 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_lng(append_lng(L(), (yyvsp[-3].l_val)), (yyvsp[-1].l_val)); }
-#line 9090 "y.tab.c" /* yacc.c:1646  */
+#line 9092 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 443:
 #line 2661 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_lng(append_lng(L(), (yyvsp[-3].l_val)), (yyvsp[0].l_val)); }
-#line 9096 "y.tab.c" /* yacc.c:1646  */
+#line 9098 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 444:
 #line 2665 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = NULL; }
-#line 9102 "y.tab.c" /* yacc.c:1646  */
+#line 9104 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 445:
 #line 2666 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 9108 "y.tab.c" /* yacc.c:1646  */
+#line 9110 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 446:
 #line 2670 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = FALSE; }
-#line 9114 "y.tab.c" /* yacc.c:1646  */
+#line 9116 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 447:
 #line 2671 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = TRUE; }
-#line 9120 "y.tab.c" /* yacc.c:1646  */
+#line 9122 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 448:
 #line 2675 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = FALSE; }
-#line 9126 "y.tab.c" /* yacc.c:1646  */
+#line 9128 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 449:
 #line 2676 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = TRUE; }
-#line 9132 "y.tab.c" /* yacc.c:1646  */
+#line 9134 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 450:
 #line 2680 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = TRUE; }
-#line 9138 "y.tab.c" /* yacc.c:1646  */
+#line 9140 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 451:
 #line 2681 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = FALSE; }
-#line 9144 "y.tab.c" /* yacc.c:1646  */
+#line 9146 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 452:
 #line 2685 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = (yyvsp[0].l); }
-#line 9150 "y.tab.c" /* yacc.c:1646  */
+#line 9152 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 453:
 #line 2686 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = (yyvsp[-1].l); }
-#line 9156 "y.tab.c" /* yacc.c:1646  */
+#line 9158 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 454:
 #line 2690 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(L(), (yyvsp[0].sval)); }
-#line 9162 "y.tab.c" /* yacc.c:1646  */
+#line 9164 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 455:
 #line 2692 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string((yyvsp[-2].l), (yyvsp[0].sval)); }
-#line 9168 "y.tab.c" /* yacc.c:1646  */
+#line 9170 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 456:
@@ -9173,7 +9175,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-1].l));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_DELETE, l ); }
-#line 9177 "y.tab.c" /* yacc.c:1646  */
+#line 9179 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 457:
@@ -9183,7 +9185,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-1].l));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_UPDATE, l ); }
-#line 9187 "y.tab.c" /* yacc.c:1646  */
+#line 9189 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 458:
@@ -9193,7 +9195,7 @@ yyreduce:
 	  append_list(l, NULL);
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_INSERT, l ); }
-#line 9197 "y.tab.c" /* yacc.c:1646  */
+#line 9199 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 459:
@@ -9203,61 +9205,61 @@ yyreduce:
 	  append_list(l, (yyvsp[-1].l));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_INSERT, l ); }
-#line 9207 "y.tab.c" /* yacc.c:1646  */
+#line 9209 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 460:
 #line 2765 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_VALUES, L()); }
-#line 9213 "y.tab.c" /* yacc.c:1646  */
+#line 9215 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 461:
 #line 2767 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_VALUES, L()); }
-#line 9219 "y.tab.c" /* yacc.c:1646  */
+#line 9221 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 462:
 #line 2769 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_VALUES, (yyvsp[0].l)); }
-#line 9225 "y.tab.c" /* yacc.c:1646  */
+#line 9227 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 464:
 #line 2775 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_list(L(), (yyvsp[-1].l)); }
-#line 9231 "y.tab.c" /* yacc.c:1646  */
+#line 9233 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 465:
 #line 2777 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_list((yyvsp[-4].l), (yyvsp[-1].l)); }
-#line 9237 "y.tab.c" /* yacc.c:1646  */
+#line 9239 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 466:
 #line 2781 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym)); }
-#line 9243 "y.tab.c" /* yacc.c:1646  */
+#line 9245 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 467:
 #line 2783 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-2].l), (yyvsp[0].sym)); }
-#line 9249 "y.tab.c" /* yacc.c:1646  */
+#line 9251 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 468:
 #line 2787 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym)); }
-#line 9255 "y.tab.c" /* yacc.c:1646  */
+#line 9257 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 469:
 #line 2789 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-2].l), (yyvsp[0].sym)); }
-#line 9261 "y.tab.c" /* yacc.c:1646  */
+#line 9263 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 470:
@@ -9274,37 +9276,37 @@ yyreduce:
 		(yyval.sym) = _symbol_create(SQL_NULL, NULL );
 	   }
 	}
-#line 9278 "y.tab.c" /* yacc.c:1646  */
+#line 9280 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 475:
 #line 2823 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = FALSE; }
-#line 9284 "y.tab.c" /* yacc.c:1646  */
+#line 9286 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 476:
 #line 2824 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = FALSE; }
-#line 9290 "y.tab.c" /* yacc.c:1646  */
+#line 9292 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 477:
 #line 2825 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = TRUE; }
-#line 9296 "y.tab.c" /* yacc.c:1646  */
+#line 9298 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 478:
 #line 2829 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym) ); }
-#line 9302 "y.tab.c" /* yacc.c:1646  */
+#line 9304 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 479:
 #line 2831 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-2].l), (yyvsp[0].sym) ); }
-#line 9308 "y.tab.c" /* yacc.c:1646  */
+#line 9310 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 480:
@@ -9313,7 +9315,7 @@ yyreduce:
 	  append_symbol(l, (yyvsp[0].sym) );
 	  append_string(l, (yyvsp[-2].sval));
 	  (yyval.sym) = _symbol_create_list( SQL_ASSIGN, l); }
-#line 9317 "y.tab.c" /* yacc.c:1646  */
+#line 9319 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 481:
@@ -9322,25 +9324,25 @@ yyreduce:
 	  append_symbol(l, (yyvsp[0].sym));
 	  append_list(l, (yyvsp[-2].l));
 	  (yyval.sym) = _symbol_create_list( SQL_ASSIGN, l ); }
-#line 9326 "y.tab.c" /* yacc.c:1646  */
+#line 9328 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 482:
 #line 2848 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 9332 "y.tab.c" /* yacc.c:1646  */
+#line 9334 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 483:
 #line 2849 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 9338 "y.tab.c" /* yacc.c:1646  */
+#line 9340 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 484:
 #line 2856 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[-1].sym); }
-#line 9344 "y.tab.c" /* yacc.c:1646  */
+#line 9346 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 485:
@@ -9349,7 +9351,7 @@ yyreduce:
 	  append_symbol(l, (yyvsp[-3].sym));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_CROSS, l); }
-#line 9353 "y.tab.c" /* yacc.c:1646  */
+#line 9355 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 486:
@@ -9361,7 +9363,7 @@ yyreduce:
 	  append_symbol(l, (yyvsp[-1].sym));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_UNIONJOIN, l); }
-#line 9365 "y.tab.c" /* yacc.c:1646  */
+#line 9367 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 487:
@@ -9373,7 +9375,7 @@ yyreduce:
 	  append_symbol(l, (yyvsp[-1].sym));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_JOIN, l); }
-#line 9377 "y.tab.c" /* yacc.c:1646  */
+#line 9379 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 488:
@@ -9385,7 +9387,7 @@ yyreduce:
 	  append_symbol(l, (yyvsp[0].sym));
 	  append_symbol(l, NULL);
 	  (yyval.sym) = _symbol_create_list( SQL_JOIN, l); }
-#line 9389 "y.tab.c" /* yacc.c:1646  */
+#line 9391 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 489:
@@ -9397,7 +9399,7 @@ yyreduce:
 	  append_symbol(l, (yyvsp[-1].sym));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_JOIN, l); }
-#line 9401 "y.tab.c" /* yacc.c:1646  */
+#line 9403 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 490:
@@ -9409,55 +9411,55 @@ yyreduce:
 	  append_symbol(l, (yyvsp[0].sym));
 	  append_symbol(l, NULL);
 	  (yyval.sym) = _symbol_create_list( SQL_JOIN, l); }
-#line 9413 "y.tab.c" /* yacc.c:1646  */
+#line 9415 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 491:
 #line 2906 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 9419 "y.tab.c" /* yacc.c:1646  */
+#line 9421 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 492:
 #line 2907 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1 + (yyvsp[-1].i_val); }
-#line 9425 "y.tab.c" /* yacc.c:1646  */
+#line 9427 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 493:
 #line 2908 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1 + (yyvsp[0].i_val); }
-#line 9431 "y.tab.c" /* yacc.c:1646  */
+#line 9433 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 494:
 #line 2912 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 9437 "y.tab.c" /* yacc.c:1646  */
+#line 9439 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 495:
 #line 2913 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 9443 "y.tab.c" /* yacc.c:1646  */
+#line 9445 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 496:
 #line 2914 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 2; }
-#line 9449 "y.tab.c" /* yacc.c:1646  */
+#line 9451 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 497:
 #line 2918 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 9455 "y.tab.c" /* yacc.c:1646  */
+#line 9457 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 498:
 #line 2920 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_USING, (yyvsp[0].l)); }
-#line 9461 "y.tab.c" /* yacc.c:1646  */
+#line 9463 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 500:
@@ -9468,19 +9470,19 @@ yyreduce:
 	  	append_symbol(l, (yyvsp[0].sym));
 	  	(yyval.sym) = _symbol_create_list( SQL_WITH, l ); 
 	}
-#line 9472 "y.tab.c" /* yacc.c:1646  */
+#line 9474 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 501:
 #line 2953 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-2].l), (yyvsp[0].sym)); }
-#line 9478 "y.tab.c" /* yacc.c:1646  */
+#line 9480 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 502:
 #line 2954 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym)); }
-#line 9484 "y.tab.c" /* yacc.c:1646  */
+#line 9486 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 503:
@@ -9493,7 +9495,7 @@ yyreduce:
 	  append_int(l, FALSE);	/* inlined view  (ie not persistent) */
 	  (yyval.sym) = _symbol_create_list( SQL_CREATE_VIEW, l ); 
 	}
-#line 9497 "y.tab.c" /* yacc.c:1646  */
+#line 9499 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 507:
@@ -9505,7 +9507,7 @@ yyreduce:
 		(yyvsp[0].l)->h->next->next->next->data.sym,
 		NULL, NULL, NULL, NULL, NULL);
 	}
-#line 9509 "y.tab.c" /* yacc.c:1646  */
+#line 9511 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 508:
@@ -9517,7 +9519,7 @@ yyreduce:
 		(yyvsp[0].l)->h->next->next->next->data.sym,
 		NULL, NULL, NULL, NULL, NULL);
 	}
-#line 9521 "y.tab.c" /* yacc.c:1646  */
+#line 9523 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 509:
@@ -9549,19 +9551,19 @@ yyreduce:
 	  	}
 	 } 
 	}
-#line 9553 "y.tab.c" /* yacc.c:1646  */
+#line 9555 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 510:
 #line 3034 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(L(), (yyvsp[0].sval)); }
-#line 9559 "y.tab.c" /* yacc.c:1646  */
+#line 9561 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 511:
 #line 3036 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string((yyvsp[-2].l), (yyvsp[0].sval)); }
-#line 9565 "y.tab.c" /* yacc.c:1646  */
+#line 9567 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 513:
@@ -9572,7 +9574,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-1].l));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_UNION, l); }
-#line 9576 "y.tab.c" /* yacc.c:1646  */
+#line 9578 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 514:
@@ -9583,7 +9585,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-1].l));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_EXCEPT, l); }
-#line 9587 "y.tab.c" /* yacc.c:1646  */
+#line 9589 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 515:
@@ -9594,49 +9596,49 @@ yyreduce:
 	  append_list(l, (yyvsp[-1].l));
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_INTERSECT, l); }
-#line 9598 "y.tab.c" /* yacc.c:1646  */
+#line 9600 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 516:
 #line 3070 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[-1].sym); }
-#line 9604 "y.tab.c" /* yacc.c:1646  */
+#line 9606 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 518:
 #line 3075 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = TRUE; }
-#line 9610 "y.tab.c" /* yacc.c:1646  */
+#line 9612 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 519:
 #line 3076 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = FALSE; }
-#line 9616 "y.tab.c" /* yacc.c:1646  */
+#line 9618 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 520:
 #line 3077 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = TRUE; }
-#line 9622 "y.tab.c" /* yacc.c:1646  */
+#line 9624 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 521:
 #line 3082 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = NULL; }
-#line 9628 "y.tab.c" /* yacc.c:1646  */
+#line 9630 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 522:
 #line 3084 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = L(); }
-#line 9634 "y.tab.c" /* yacc.c:1646  */
+#line 9636 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 523:
 #line 3086 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = (yyvsp[-1].l); }
-#line 9640 "y.tab.c" /* yacc.c:1646  */
+#line 9642 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 525:
@@ -9646,31 +9648,31 @@ yyreduce:
 	  append_symbol((yyval.l), (yyvsp[-2].sym));
 	  append_symbol((yyval.l), (yyvsp[-1].sym));
 	  append_symbol((yyval.l), (yyvsp[0].sym)); }
-#line 9650 "y.tab.c" /* yacc.c:1646  */
+#line 9652 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 526:
 #line 3104 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 9656 "y.tab.c" /* yacc.c:1646  */
+#line 9658 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 527:
 #line 3105 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_FROM, (yyvsp[0].l)); }
-#line 9662 "y.tab.c" /* yacc.c:1646  */
+#line 9664 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 528:
 #line 3109 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym)); }
-#line 9668 "y.tab.c" /* yacc.c:1646  */
+#line 9670 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 529:
 #line 3111 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-2].l), (yyvsp[0].sym)); }
-#line 9674 "y.tab.c" /* yacc.c:1646  */
+#line 9676 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 530:
@@ -9679,7 +9681,7 @@ yyreduce:
 		  		  append_list(l, (yyvsp[0].l));
 		  	  	  append_symbol(l, NULL);
 		  		  (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
-#line 9683 "y.tab.c" /* yacc.c:1646  */
+#line 9685 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 531:
@@ -9688,7 +9690,7 @@ yyreduce:
 		  		  append_list(l, (yyvsp[-1].l));
 		  	  	  append_symbol(l, (yyvsp[0].sym));
 		  		  (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
-#line 9692 "y.tab.c" /* yacc.c:1646  */
+#line 9694 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 532:
@@ -9697,7 +9699,7 @@ yyreduce:
 		  		  append_symbol(l, (yyvsp[-1].sym));
 		  	  	  append_symbol(l, (yyvsp[0].sym));
 		  		  (yyval.sym) = _symbol_create_list(SQL_TABLE, l); }
-#line 9701 "y.tab.c" /* yacc.c:1646  */
+#line 9703 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 533:
@@ -9706,7 +9708,7 @@ yyreduce:
 		  		  append_symbol(l, (yyvsp[0].sym));
 		  	  	  append_symbol(l, NULL);
 		  		  (yyval.sym) = _symbol_create_list(SQL_TABLE, l); }
-#line 9710 "y.tab.c" /* yacc.c:1646  */
+#line 9712 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 535:
@@ -9720,7 +9722,7 @@ yyreduce:
 				  	append_symbol((yyvsp[-1].sym)->data.lval, (yyvsp[0].sym));
 				  }
 				}
-#line 9724 "y.tab.c" /* yacc.c:1646  */
+#line 9726 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 536:
@@ -9729,20 +9731,20 @@ yyreduce:
 				  yyerror(m, "subquery table reference needs alias, use AS xxx");
 				  YYABORT;
 				}
-#line 9733 "y.tab.c" /* yacc.c:1646  */
+#line 9735 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 537:
 #line 3150 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym);
 				  append_symbol((yyvsp[0].sym)->data.lval, NULL); }
-#line 9740 "y.tab.c" /* yacc.c:1646  */
+#line 9742 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 538:
 #line 3160 "sql_parser.y" /* yacc.c:1646  */
     { m->caching = 0; }
-#line 9746 "y.tab.c" /* yacc.c:1646  */
+#line 9748 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 539:
@@ -9754,7 +9756,7 @@ yyreduce:
 		append_symbol(op, (yyvsp[0].sym));
 		(yyval.sym) = _symbol_create_list(SQL_TABLE_OPERATOR, op); 
 	}
-#line 9758 "y.tab.c" /* yacc.c:1646  */
+#line 9760 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 540:
@@ -9763,7 +9765,7 @@ yyreduce:
 		  		  append_string(l, (yyvsp[-3].sval));
 		  	  	  append_list(l, (yyvsp[-1].l));
 		  		  (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
-#line 9767 "y.tab.c" /* yacc.c:1646  */
+#line 9769 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 541:
@@ -9772,7 +9774,7 @@ yyreduce:
 		  		  append_string(l, (yyvsp[0].sval));
 		  	  	  append_list(l, NULL);
 		  		  (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
-#line 9776 "y.tab.c" /* yacc.c:1646  */
+#line 9778 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 542:
@@ -9781,7 +9783,7 @@ yyreduce:
 		  		  append_string(l, (yyvsp[-3].sval));
 		  	  	  append_list(l, (yyvsp[-1].l));
 		  		  (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
-#line 9785 "y.tab.c" /* yacc.c:1646  */
+#line 9787 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 543:
@@ -9790,45 +9792,45 @@ yyreduce:
 		  		  append_string(l, (yyvsp[0].sval));
 		  	  	  append_list(l, NULL);
 		  		  (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
-#line 9794 "y.tab.c" /* yacc.c:1646  */
+#line 9796 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 544:
 #line 3195 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 9800 "y.tab.c" /* yacc.c:1646  */
+#line 9802 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 545:
 #line 3196 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_GROUPBY, (yyvsp[0].l) );}
-#line 9806 "y.tab.c" /* yacc.c:1646  */
+#line 9808 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 546:
 #line 3200 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(),
 			       _symbol_create_list(SQL_COLUMN,(yyvsp[0].l))); }
-#line 9813 "y.tab.c" /* yacc.c:1646  */
+#line 9815 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 547:
 #line 3203 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-2].l),
 			       _symbol_create_list(SQL_COLUMN,(yyvsp[0].l))); }
-#line 9820 "y.tab.c" /* yacc.c:1646  */
+#line 9822 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 548:
 #line 3208 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 9826 "y.tab.c" /* yacc.c:1646  */
+#line 9828 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 549:
 #line 3209 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 9832 "y.tab.c" /* yacc.c:1646  */
+#line 9834 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 550:
@@ -9837,13 +9839,13 @@ yyreduce:
 		  append_symbol(l, (yyvsp[-2].sym));
 		  append_symbol(l, (yyvsp[0].sym));
 		  (yyval.sym) = _symbol_create_list(SQL_OR, l ); }
-#line 9841 "y.tab.c" /* yacc.c:1646  */
+#line 9843 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 551:
 #line 3219 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 9847 "y.tab.c" /* yacc.c:1646  */
+#line 9849 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 552:
@@ -9852,31 +9854,31 @@ yyreduce:
 		  append_symbol(l, (yyvsp[-2].sym));
 		  append_symbol(l, (yyvsp[0].sym));
 		  (yyval.sym) = _symbol_create_list(SQL_AND, l ); }
-#line 9856 "y.tab.c" /* yacc.c:1646  */
+#line 9858 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 553:
 #line 3228 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 9862 "y.tab.c" /* yacc.c:1646  */
+#line 9864 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 554:
 #line 3232 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 9868 "y.tab.c" /* yacc.c:1646  */
+#line 9870 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 555:
 #line 3234 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_ORDERBY, (yyvsp[0].l)); }
-#line 9874 "y.tab.c" /* yacc.c:1646  */
+#line 9876 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 556:
 #line 3238 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 9880 "y.tab.c" /* yacc.c:1646  */
+#line 9882 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 557:
@@ -9885,19 +9887,19 @@ yyreduce:
 		  	  sql_subtype *t = sql_bind_localtype("wrd");
 			  (yyval.sym) = _newAtomNode( atom_int(SA, t, (yyvsp[0].w_val))); 
 			}
-#line 9889 "y.tab.c" /* yacc.c:1646  */
+#line 9891 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 558:
 #line 3243 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 9895 "y.tab.c" /* yacc.c:1646  */
+#line 9897 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 559:
 #line 3247 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 9901 "y.tab.c" /* yacc.c:1646  */
+#line 9903 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 560:
@@ -9906,19 +9908,19 @@ yyreduce:
 		  	  sql_subtype *t = sql_bind_localtype("wrd");
 			  (yyval.sym) = _newAtomNode( atom_int(SA, t, (yyvsp[0].w_val))); 
 			}
-#line 9910 "y.tab.c" /* yacc.c:1646  */
+#line 9912 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 561:
 #line 3252 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 9916 "y.tab.c" /* yacc.c:1646  */
+#line 9918 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 562:
 #line 3256 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 9922 "y.tab.c" /* yacc.c:1646  */
+#line 9924 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 563:
@@ -9927,7 +9929,7 @@ yyreduce:
 		  	  sql_subtype *t = sql_bind_localtype("wrd");
 			  (yyval.sym) = _newAtomNode( atom_int(SA, t, (yyvsp[0].w_val)));
 			}
-#line 9931 "y.tab.c" /* yacc.c:1646  */
+#line 9933 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 564:
@@ -9936,25 +9938,25 @@ yyreduce:
 		  	  sql_subtype *t = sql_bind_localtype("dbl");
 			  (yyval.sym) = _newAtomNode( atom_float(SA, t, strtod((yyvsp[0].sval),NULL)));
 			}
-#line 9940 "y.tab.c" /* yacc.c:1646  */
+#line 9942 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 565:
 #line 3265 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 9946 "y.tab.c" /* yacc.c:1646  */
+#line 9948 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 566:
 #line 3269 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym)); }
-#line 9952 "y.tab.c" /* yacc.c:1646  */
+#line 9954 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 567:
 #line 3271 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-2].l), (yyvsp[0].sym) ); }
-#line 9958 "y.tab.c" /* yacc.c:1646  */
+#line 9960 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 568:
@@ -9963,25 +9965,25 @@ yyreduce:
 	  append_symbol(l, (yyvsp[-1].sym));
 	  append_int(l, (yyvsp[0].bval));
 	  (yyval.sym) = _symbol_create_list(SQL_COLUMN, l ); }
-#line 9967 "y.tab.c" /* yacc.c:1646  */
+#line 9969 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 569:
 #line 3284 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = TRUE; }
-#line 9973 "y.tab.c" /* yacc.c:1646  */
+#line 9975 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 570:
 #line 3285 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = TRUE; }
-#line 9979 "y.tab.c" /* yacc.c:1646  */
+#line 9981 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 571:
 #line 3286 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = FALSE; }
-#line 9985 "y.tab.c" /* yacc.c:1646  */
+#line 9987 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 581:
@@ -10002,13 +10004,13 @@ yyreduce:
 			(yyval.sym)->token = SQL_NOT_LIKE;
 		  else
 			(yyval.sym) = _symbol_create_symbol(SQL_NOT, (yyvsp[0].sym)); }
-#line 10006 "y.tab.c" /* yacc.c:1646  */
+#line 10008 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 582:
 #line 3319 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 10012 "y.tab.c" /* yacc.c:1646  */
+#line 10014 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 583:
@@ -10019,7 +10021,7 @@ yyreduce:
 		  append_string(l, (yyvsp[-1].sval));
 		  append_symbol(l, (yyvsp[0].sym));
 		  (yyval.sym) = _symbol_create_list(SQL_COMPARE, l ); }
-#line 10023 "y.tab.c" /* yacc.c:1646  */
+#line 10025 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 584:
@@ -10030,7 +10032,7 @@ yyreduce:
 		  append_string(l, sa_strdup(SA, "="));
 		  append_symbol(l, (yyvsp[0].sym));
 		  (yyval.sym) = _symbol_create_list(SQL_COMPARE, l ); }
-#line 10034 "y.tab.c" /* yacc.c:1646  */
+#line 10036 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 585:
@@ -10041,7 +10043,7 @@ yyreduce:
 		  append_symbol(l, (yyvsp[-2].sym));
 		  append_symbol(l, (yyvsp[0].sym));
 		  (yyval.sym) = _symbol_create_list(SQL_NOT_BETWEEN, l ); }
-#line 10045 "y.tab.c" /* yacc.c:1646  */
+#line 10047 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 586:
@@ -10052,25 +10054,25 @@ yyreduce:
 		  append_symbol(l, (yyvsp[-2].sym));
 		  append_symbol(l, (yyvsp[0].sym));
 		  (yyval.sym) = _symbol_create_list(SQL_BETWEEN, l ); }
-#line 10056 "y.tab.c" /* yacc.c:1646  */
+#line 10058 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 587:
 #line 3357 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 10062 "y.tab.c" /* yacc.c:1646  */
+#line 10064 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 588:
 #line 3358 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 10068 "y.tab.c" /* yacc.c:1646  */
+#line 10070 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 589:
 #line 3359 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 10074 "y.tab.c" /* yacc.c:1646  */
+#line 10076 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 590:
@@ -10081,7 +10083,7 @@ yyreduce:
 		  append_int(l, FALSE);  /* case sensitive */
 		  append_int(l, TRUE);  /* anti */
 		  (yyval.sym) = _symbol_create_list( SQL_LIKE, l ); }
-#line 10085 "y.tab.c" /* yacc.c:1646  */
+#line 10087 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 591:
@@ -10092,7 +10094,7 @@ yyreduce:
 		  append_int(l, TRUE);  /* case insensitive */
 		  append_int(l, TRUE);  /* anti */
 		  (yyval.sym) = _symbol_create_list( SQL_LIKE, l ); }
-#line 10096 "y.tab.c" /* yacc.c:1646  */
+#line 10098 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 592:
@@ -10103,7 +10105,7 @@ yyreduce:
 		  append_int(l, FALSE);  /* case sensitive */
 		  append_int(l, FALSE);  /* anti */
 		  (yyval.sym) = _symbol_create_list( SQL_LIKE, l ); }
-#line 10107 "y.tab.c" /* yacc.c:1646  */
+#line 10109 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 593:
@@ -10114,7 +10116,7 @@ yyreduce:
 		  append_int(l, TRUE);  /* case insensitive */
 		  append_int(l, FALSE);  /* anti */
 		  (yyval.sym) = _symbol_create_list( SQL_LIKE, l ); }
-#line 10118 "y.tab.c" /* yacc.c:1646  */
+#line 10120 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 594:
@@ -10122,7 +10124,7 @@ yyreduce:
     { dlist *l = L();
 	  append_symbol(l, (yyvsp[0].sym));
 	  (yyval.sym) = _symbol_create_list(SQL_ESCAPE, l ); }
-#line 10126 "y.tab.c" /* yacc.c:1646  */
+#line 10128 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 595:
@@ -10141,19 +10143,19 @@ yyreduce:
 		(yyval.sym) = _symbol_create_list(SQL_ESCAPE, l);
 	  }
 	}
-#line 10145 "y.tab.c" /* yacc.c:1646  */
+#line 10147 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 596:
 #line 3416 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_symbol( SQL_IS_NOT_NULL, (yyvsp[-3].sym) );}
-#line 10151 "y.tab.c" /* yacc.c:1646  */
+#line 10153 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 597:
 #line 3417 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_symbol( SQL_IS_NULL, (yyvsp[-2].sym) ); }
-#line 10157 "y.tab.c" /* yacc.c:1646  */
+#line 10159 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 598:
@@ -10163,7 +10165,7 @@ yyreduce:
 		  append_symbol(l, (yyvsp[-4].sym));
 		  append_list(l, (yyvsp[-1].l));
 		  (yyval.sym) = _symbol_create_list(SQL_NOT_IN, l ); }
-#line 10167 "y.tab.c" /* yacc.c:1646  */
+#line 10169 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 599:
@@ -10173,7 +10175,7 @@ yyreduce:
 		  append_symbol(l, (yyvsp[-4].sym));
 		  append_list(l, (yyvsp[-1].l));
 		  (yyval.sym) = _symbol_create_list(SQL_IN, l ); }
-#line 10177 "y.tab.c" /* yacc.c:1646  */
+#line 10179 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 600:
@@ -10182,7 +10184,7 @@ yyreduce:
 		  append_list(l, (yyvsp[-5].l));
 		  append_list(l, (yyvsp[-1].l));
 		  (yyval.sym) = _symbol_create_list(SQL_NOT_IN, l ); }
-#line 10186 "y.tab.c" /* yacc.c:1646  */
+#line 10188 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 601:
@@ -10191,19 +10193,19 @@ yyreduce:
 		  append_list(l, (yyvsp[-5].l));
 		  append_list(l, (yyvsp[-1].l));
 		  (yyval.sym) = _symbol_create_list(SQL_IN, l ); }
-#line 10195 "y.tab.c" /* yacc.c:1646  */
+#line 10197 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 602:
 #line 3447 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( L(), (yyvsp[0].sym));}
-#line 10201 "y.tab.c" /* yacc.c:1646  */
+#line 10203 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 603:
 #line 3449 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-2].l), (yyvsp[0].sym)); }
-#line 10207 "y.tab.c" /* yacc.c:1646  */
+#line 10209 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 604:
@@ -10214,49 +10216,49 @@ yyreduce:
 		  append_symbol(l, (yyvsp[0].sym));
 		  append_int(l, (yyvsp[-1].i_val));
 		  (yyval.sym) = _symbol_create_list(SQL_COMPARE, l ); }
-#line 10218 "y.tab.c" /* yacc.c:1646  */
+#line 10220 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 605:
 #line 3464 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 10224 "y.tab.c" /* yacc.c:1646  */
+#line 10226 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 606:
 #line 3465 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 10230 "y.tab.c" /* yacc.c:1646  */
+#line 10232 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 607:
 #line 3466 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 10236 "y.tab.c" /* yacc.c:1646  */
+#line 10238 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 608:
 #line 3470 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_symbol( SQL_EXISTS, (yyvsp[0].sym) ); }
-#line 10242 "y.tab.c" /* yacc.c:1646  */
+#line 10244 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 609:
 #line 3474 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym)); }
-#line 10248 "y.tab.c" /* yacc.c:1646  */
+#line 10250 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 610:
 #line 3475 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-2].l), (yyvsp[0].sym));  }
-#line 10254 "y.tab.c" /* yacc.c:1646  */
+#line 10256 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 611:
 #line 3479 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = (yyvsp[-1].l); }
-#line 10260 "y.tab.c" /* yacc.c:1646  */
+#line 10262 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 612:
@@ -10266,25 +10268,25 @@ yyreduce:
 		  append_list(l, (yyvsp[-1].l));
 		  append_list(l, (yyvsp[0].l));
 		  (yyval.sym) = _symbol_create_list(SQL_FILTER, l ); }
-#line 10270 "y.tab.c" /* yacc.c:1646  */
+#line 10272 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 613:
 #line 3492 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[-1].sym); }
-#line 10276 "y.tab.c" /* yacc.c:1646  */
+#line 10278 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 614:
 #line 3494 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_VALUES, (yyvsp[-1].l)); }
-#line 10282 "y.tab.c" /* yacc.c:1646  */
+#line 10284 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 615:
 #line 3496 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[-1].sym); }
-#line 10288 "y.tab.c" /* yacc.c:1646  */
+#line 10290 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 617:
@@ -10295,7 +10297,7 @@ yyreduce:
 	  		  append_symbol(l, (yyvsp[-2].sym));
 	  		  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10299 "y.tab.c" /* yacc.c:1646  */
+#line 10301 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 618:
@@ -10306,7 +10308,7 @@ yyreduce:
 	  		  append_symbol(l, (yyvsp[-2].sym));
 	  		  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10310 "y.tab.c" /* yacc.c:1646  */
+#line 10312 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 619:
@@ -10317,7 +10319,7 @@ yyreduce:
 	  		  append_symbol(l, (yyvsp[-2].sym));
 	  		  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10321 "y.tab.c" /* yacc.c:1646  */
+#line 10323 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 620:
@@ -10328,7 +10330,7 @@ yyreduce:
 	  		  append_symbol(l, (yyvsp[-2].sym));
 	  		  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10332 "y.tab.c" /* yacc.c:1646  */
+#line 10334 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 621:
@@ -10339,7 +10341,7 @@ yyreduce:
 	  		  append_symbol(l, (yyvsp[-2].sym));
 	  		  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10343 "y.tab.c" /* yacc.c:1646  */
+#line 10345 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 622:
@@ -10350,7 +10352,7 @@ yyreduce:
 	  		  append_symbol(l, (yyvsp[-2].sym));
 	  		  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10354 "y.tab.c" /* yacc.c:1646  */
+#line 10356 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 623:
@@ -10361,7 +10363,7 @@ yyreduce:
 	  		  append_symbol(l, (yyvsp[-2].sym));
 			  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10365 "y.tab.c" /* yacc.c:1646  */
+#line 10367 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 624:
@@ -10372,7 +10374,7 @@ yyreduce:
 	  		  append_symbol(l, (yyvsp[-2].sym));
 	  		  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10376 "y.tab.c" /* yacc.c:1646  */
+#line 10378 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 625:
@@ -10382,7 +10384,7 @@ yyreduce:
 			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "bit_not")));
 	  		  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_UNOP, l ); }
-#line 10386 "y.tab.c" /* yacc.c:1646  */
+#line 10388 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 626:
@@ -10393,7 +10395,7 @@ yyreduce:
 	  		  append_symbol(l, (yyvsp[-2].sym));
 	  		  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10397 "y.tab.c" /* yacc.c:1646  */
+#line 10399 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 627:
@@ -10404,7 +10406,7 @@ yyreduce:
 	  		  append_symbol(l, (yyvsp[-2].sym));
 	  		  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10408 "y.tab.c" /* yacc.c:1646  */
+#line 10410 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 628:
@@ -10415,7 +10417,7 @@ yyreduce:
 	  		  append_symbol(l, (yyvsp[-2].sym));
 	  		  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10419 "y.tab.c" /* yacc.c:1646  */
+#line 10421 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 629:
@@ -10426,13 +10428,13 @@ yyreduce:
 	  		  append_symbol(l, (yyvsp[-2].sym));
 	  		  append_symbol(l, (yyvsp[0].sym));
 	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10430 "y.tab.c" /* yacc.c:1646  */
+#line 10432 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 630:
 #line 3593 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 10436 "y.tab.c" /* yacc.c:1646  */
+#line 10438 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 631:
@@ -10461,45 +10463,45 @@ yyreduce:
 	  		  	(yyval.sym) = _symbol_create_list( SQL_UNOP, l ); 
 			  }
 			}
-#line 10465 "y.tab.c" /* yacc.c:1646  */
+#line 10467 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 632:
 #line 3619 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[-1].sym); }
-#line 10471 "y.tab.c" /* yacc.c:1646  */
+#line 10473 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 633:
 #line 3623 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 10477 "y.tab.c" /* yacc.c:1646  */
+#line 10479 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 636:
 #line 3629 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_COLUMN, 
 			  append_string(L(), sa_strdup(SA, "current_user"))); }
-#line 10484 "y.tab.c" /* yacc.c:1646  */
+#line 10486 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 637:
 #line 3631 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_COLUMN, 
 			  append_string(L(), sa_strdup(SA, "current_role"))); }
-#line 10491 "y.tab.c" /* yacc.c:1646  */
+#line 10493 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 639:
 #line 3634 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_COLUMN, (yyvsp[0].l)); }
-#line 10497 "y.tab.c" /* yacc.c:1646  */
+#line 10499 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 643:
 #line 3638 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_NEXT, (yyvsp[0].l)); }
-#line 10503 "y.tab.c" /* yacc.c:1646  */
+#line 10505 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 651:
@@ -10510,176 +10512,176 @@ yyreduce:
 	  sql_add_param(m, NULL, NULL);
 	  (yyval.sym) = _symbol_create_int( SQL_PARAMETER, nr ); 
 	}
-#line 10514 "y.tab.c" /* yacc.c:1646  */
+#line 10516 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 652:
 #line 3720 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_RANK, 
 		append_list(append_symbol(L(), (yyvsp[-4].sym)), (yyvsp[-1].l))); }
-#line 10521 "y.tab.c" /* yacc.c:1646  */
+#line 10523 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 653:
 #line 3725 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_RANK, (yyvsp[-2].l) ); }
-#line 10527 "y.tab.c" /* yacc.c:1646  */
+#line 10529 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 655:
 #line 3731 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(append_symbol(append_symbol(L(), (yyvsp[-2].sym)), (yyvsp[-1].sym)), (yyvsp[0].sym)); }
-#line 10533 "y.tab.c" /* yacc.c:1646  */
+#line 10535 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 656:
 #line 3735 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 10539 "y.tab.c" /* yacc.c:1646  */
+#line 10541 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 657:
 #line 3737 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_GROUPBY, (yyvsp[0].l) ); }
-#line 10545 "y.tab.c" /* yacc.c:1646  */
+#line 10547 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 658:
 #line 3741 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 10551 "y.tab.c" /* yacc.c:1646  */
+#line 10553 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 659:
 #line 3743 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_ORDERBY, (yyvsp[0].l) ); }
-#line 10557 "y.tab.c" /* yacc.c:1646  */
+#line 10559 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 660:
 #line 3747 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 10563 "y.tab.c" /* yacc.c:1646  */
+#line 10565 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 661:
 #line 3749 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_FRAME, append_int(append_int((yyvsp[-1].l), (yyvsp[-2].i_val)), (yyvsp[0].i_val))); }
-#line 10569 "y.tab.c" /* yacc.c:1646  */
+#line 10571 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 662:
 #line 3753 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = FRAME_ROWS; }
-#line 10575 "y.tab.c" /* yacc.c:1646  */
+#line 10577 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 663:
 #line 3754 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = FRAME_RANGE; }
-#line 10581 "y.tab.c" /* yacc.c:1646  */
+#line 10583 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 664:
 #line 3758 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(append_symbol(L(), (yyvsp[0].sym)), _symbol_create_int(SQL_FRAME, -1)); }
-#line 10587 "y.tab.c" /* yacc.c:1646  */
+#line 10589 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 665:
 #line 3759 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = (yyvsp[0].l); }
-#line 10593 "y.tab.c" /* yacc.c:1646  */
+#line 10595 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 666:
 #line 3763 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_int(SQL_FRAME, -1); }
-#line 10599 "y.tab.c" /* yacc.c:1646  */
+#line 10601 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 667:
 #line 3764 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 10605 "y.tab.c" /* yacc.c:1646  */
+#line 10607 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 668:
 #line 3765 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_int(SQL_FRAME, 0); }
-#line 10611 "y.tab.c" /* yacc.c:1646  */
+#line 10613 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 669:
 #line 3769 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[-1].sym); }
-#line 10617 "y.tab.c" /* yacc.c:1646  */
+#line 10619 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 670:
 #line 3774 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(append_symbol(L(), (yyvsp[-2].sym)), (yyvsp[0].sym)); }
-#line 10623 "y.tab.c" /* yacc.c:1646  */
+#line 10625 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 671:
 #line 3778 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_int(SQL_FRAME, -1); }
-#line 10629 "y.tab.c" /* yacc.c:1646  */
+#line 10631 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 672:
 #line 3779 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 10635 "y.tab.c" /* yacc.c:1646  */
+#line 10637 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 673:
 #line 3780 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_int(SQL_FRAME, 0); }
-#line 10641 "y.tab.c" /* yacc.c:1646  */
+#line 10643 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 674:
 #line 3784 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[-1].sym); }
-#line 10647 "y.tab.c" /* yacc.c:1646  */
+#line 10649 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 675:
 #line 3788 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = EXCLUDE_NONE; }
-#line 10653 "y.tab.c" /* yacc.c:1646  */
+#line 10655 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 676:
 #line 3789 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = EXCLUDE_CURRENT_ROW; }
-#line 10659 "y.tab.c" /* yacc.c:1646  */
+#line 10661 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 677:
 #line 3790 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = EXCLUDE_GROUP; }
-#line 10665 "y.tab.c" /* yacc.c:1646  */
+#line 10667 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 678:
 #line 3791 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = EXCLUDE_TIES; }
-#line 10671 "y.tab.c" /* yacc.c:1646  */
+#line 10673 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 679:
 #line 3792 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = EXCLUDE_NO_OTHERS; }
-#line 10677 "y.tab.c" /* yacc.c:1646  */
+#line 10679 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 680:
 #line 3796 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create( SQL_NAME, (yyvsp[0].sval) ); }
-#line 10683 "y.tab.c" /* yacc.c:1646  */
+#line 10685 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 681:
@@ -10687,7 +10689,7 @@ yyreduce:
     { dlist *l = L();
   	  append_list(l, (yyvsp[-2].l));
 	  (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
-#line 10691 "y.tab.c" /* yacc.c:1646  */
+#line 10693 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 682:
@@ -10706,44 +10708,44 @@ yyreduce:
 	  	(yyval.sym) = _symbol_create_list( SQL_NOP, l ); 
 	  }
 	}
-#line 10710 "y.tab.c" /* yacc.c:1646  */
+#line 10712 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 683:
 #line 3832 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(L(), (yyvsp[0].sval)); }
-#line 10716 "y.tab.c" /* yacc.c:1646  */
+#line 10718 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 684:
 #line 3833 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(
 					append_string(L(), (yyvsp[-2].sval)), (yyvsp[0].sval));}
-#line 10723 "y.tab.c" /* yacc.c:1646  */
+#line 10725 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 685:
 #line 3838 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 10729 "y.tab.c" /* yacc.c:1646  */
+#line 10731 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 686:
 #line 3839 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "left"); }
-#line 10735 "y.tab.c" /* yacc.c:1646  */
+#line 10737 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 687:
 #line 3840 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "right"); }
-#line 10741 "y.tab.c" /* yacc.c:1646  */
+#line 10743 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 688:
 #line 3841 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "insert"); }
-#line 10747 "y.tab.c" /* yacc.c:1646  */
+#line 10749 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 689:
@@ -10754,7 +10756,7 @@ yyreduce:
   		  	  	append_string(L(), sa_strdup(SA, ident)));
   		  	  append_symbol(l, (yyvsp[-1].sym));
 		  	  (yyval.sym) = _symbol_create_list( SQL_UNOP, l ); }
-#line 10758 "y.tab.c" /* yacc.c:1646  */
+#line 10760 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 690:
@@ -10763,7 +10765,7 @@ yyreduce:
 			  append_list(l,
 			  	append_string(L(), sa_strdup(SA, "current_date")));
 	  		  (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
-#line 10767 "y.tab.c" /* yacc.c:1646  */
+#line 10769 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 691:
@@ -10772,7 +10774,7 @@ yyreduce:
 			  append_list(l,
 			  	append_string(L(), sa_strdup(SA, "current_time")));
 	  		  (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
-#line 10776 "y.tab.c" /* yacc.c:1646  */
+#line 10778 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 692:
@@ -10781,7 +10783,7 @@ yyreduce:
 			  append_list(l,
 			  	append_string(L(), sa_strdup(SA, "current_timestamp")));
 	  		  (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
-#line 10785 "y.tab.c" /* yacc.c:1646  */
+#line 10787 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 693:
@@ -10790,7 +10792,7 @@ yyreduce:
 			  append_list(l,
 			  	append_string(L(), sa_strdup(SA, "localtime")));
 	  		  (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
-#line 10794 "y.tab.c" /* yacc.c:1646  */
+#line 10796 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 694:
@@ -10799,19 +10801,19 @@ yyreduce:
 			  append_list(l,
 			  	append_string(L(), sa_strdup(SA, "localtimestamp")));
 	  		  (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
-#line 10803 "y.tab.c" /* yacc.c:1646  */
+#line 10805 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 695:
 #line 3880 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 0; }
-#line 10809 "y.tab.c" /* yacc.c:1646  */
+#line 10811 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 696:
 #line 3881 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 1; }
-#line 10815 "y.tab.c" /* yacc.c:1646  */
+#line 10817 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 697:
@@ -10825,7 +10827,7 @@ yyreduce:
   		  	  append_symbol(ops, (yyvsp[-1].sym));
 			  append_list(l, ops);
 		  	  (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
-#line 10829 "y.tab.c" /* yacc.c:1646  */
+#line 10831 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 698:
@@ -10839,7 +10841,7 @@ yyreduce:
   		  	  append_symbol(ops, (yyvsp[-1].sym));
 			  append_list(l, ops);
 		  	  (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
-#line 10843 "y.tab.c" /* yacc.c:1646  */
+#line 10845 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 699:
@@ -10850,7 +10852,7 @@ yyreduce:
   		  	  append_symbol(l, (yyvsp[-3].sym));
   		  	  append_symbol(l, (yyvsp[-1].sym));
 		  	  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10854 "y.tab.c" /* yacc.c:1646  */
+#line 10856 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 700:
@@ -10861,7 +10863,7 @@ yyreduce:
   		  	  append_symbol(l, (yyvsp[-3].sym));
   		  	  append_symbol(l, (yyvsp[-1].sym));
 		  	  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10865 "y.tab.c" /* yacc.c:1646  */
+#line 10867 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 701:
@@ -10872,7 +10874,7 @@ yyreduce:
   		  	  append_symbol(l, (yyvsp[-3].sym));
   		  	  append_symbol(l, (yyvsp[-1].sym));
 		  	  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10876 "y.tab.c" /* yacc.c:1646  */
+#line 10878 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 702:
@@ -10883,7 +10885,7 @@ yyreduce:
   		  	  append_symbol(l, (yyvsp[-2].sym));
   		  	  append_symbol(l, (yyvsp[0].sym));
 		  	  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 10887 "y.tab.c" /* yacc.c:1646  */
+#line 10889 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 703:
@@ -10897,19 +10899,19 @@ yyreduce:
   		  	  append_symbol(ops, (yyvsp[-1].sym));
 			  append_list(l, ops);
 		  	  (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
-#line 10901 "y.tab.c" /* yacc.c:1646  */
+#line 10903 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 704:
 #line 3946 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym) ); }
-#line 10907 "y.tab.c" /* yacc.c:1646  */
+#line 10909 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 705:
 #line 3948 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-2].l), (yyvsp[0].sym) ); }
-#line 10913 "y.tab.c" /* yacc.c:1646  */
+#line 10915 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 706:
@@ -10918,7 +10920,7 @@ yyreduce:
   		  append_string(l, NULL);
   		  append_string(l, NULL);
   		  (yyval.sym) = _symbol_create_list( SQL_TABLE, l ); }
-#line 10922 "y.tab.c" /* yacc.c:1646  */
+#line 10924 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 707:
@@ -10927,7 +10929,7 @@ yyreduce:
   		  append_string(l, (yyvsp[-2].sval));
   		  append_string(l, NULL);
   		  (yyval.sym) = _symbol_create_list( SQL_TABLE, l ); }
-#line 10931 "y.tab.c" /* yacc.c:1646  */
+#line 10933 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 708:
@@ -10936,7 +10938,7 @@ yyreduce:
   		  append_symbol(l, (yyvsp[-2].sym));
   		  append_string(l, NULL);
   		  (yyval.sym) = _symbol_create_list( SQL_TABLE, l ); }
-#line 10940 "y.tab.c" /* yacc.c:1646  */
+#line 10942 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 709:
@@ -10945,19 +10947,19 @@ yyreduce:
   		  append_symbol(l, (yyvsp[-1].sym));
   		  append_string(l, (yyvsp[0].sval));
   		  (yyval.sym) = _symbol_create_list( SQL_COLUMN, l ); }
-#line 10949 "y.tab.c" /* yacc.c:1646  */
+#line 10951 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 710:
 #line 3975 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = NULL; }
-#line 10955 "y.tab.c" /* yacc.c:1646  */
+#line 10957 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 711:
 #line 3976 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 10961 "y.tab.c" /* yacc.c:1646  */
+#line 10963 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 712:
@@ -10980,46 +10982,46 @@ yyreduce:
 		(yyval.sym) = (yyvsp[0].sym);
 	   }
 	}
-#line 10984 "y.tab.c" /* yacc.c:1646  */
+#line 10986 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 713:
 #line 4002 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(L(), (yyvsp[0].sval)); }
-#line 10990 "y.tab.c" /* yacc.c:1646  */
+#line 10992 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 714:
 #line 4003 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(
 			  append_string(L(), (yyvsp[-2].sval)), (yyvsp[0].sval));}
-#line 10997 "y.tab.c" /* yacc.c:1646  */
+#line 10999 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 715:
 #line 4008 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(L(), (yyvsp[0].sval)); }
-#line 11003 "y.tab.c" /* yacc.c:1646  */
+#line 11005 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 716:
 #line 4009 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(
 			  append_string(L(), (yyvsp[-2].sval)), (yyvsp[0].sval));}
-#line 11010 "y.tab.c" /* yacc.c:1646  */
+#line 11012 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 717:
 #line 4014 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(L(), (yyvsp[0].sval)); }
-#line 11016 "y.tab.c" /* yacc.c:1646  */
+#line 11018 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 718:
 #line 4015 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(
 			  append_string(L(), (yyvsp[-2].sval)), (yyvsp[0].sval));}
-#line 11023 "y.tab.c" /* yacc.c:1646  */
+#line 11025 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 719:
@@ -11029,7 +11031,7 @@ yyreduce:
   		  append_int(l, FALSE);
   		  append_symbol(l, NULL);
 		  (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
-#line 11033 "y.tab.c" /* yacc.c:1646  */
+#line 11035 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 720:
@@ -11039,7 +11041,7 @@ yyreduce:
   		  append_int(l, FALSE);
   		  append_symbol(l, NULL);
 		  (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
-#line 11043 "y.tab.c" /* yacc.c:1646  */
+#line 11045 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 721:
@@ -11049,7 +11051,7 @@ yyreduce:
   		  append_int(l, TRUE);
   		  append_symbol(l, (yyvsp[-1].sym));
 		  (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
-#line 11053 "y.tab.c" /* yacc.c:1646  */
+#line 11055 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 722:
@@ -11059,7 +11061,7 @@ yyreduce:
   		  append_int(l, FALSE);
   		  append_symbol(l, (yyvsp[-1].sym));
 		  (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
-#line 11063 "y.tab.c" /* yacc.c:1646  */
+#line 11065 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 723:
@@ -11069,7 +11071,7 @@ yyreduce:
   		  append_int(l, FALSE);
   		  append_symbol(l, (yyvsp[-1].sym));
 		  (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
-#line 11073 "y.tab.c" /* yacc.c:1646  */
+#line 11075 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 724:
@@ -11080,67 +11082,67 @@ yyreduce:
   		  append_symbol(l, (yyvsp[-3].sym));
   		  append_symbol(l, (yyvsp[-1].sym));
 		  (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
-#line 11084 "y.tab.c" /* yacc.c:1646  */
+#line 11086 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 726:
 #line 4062 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 11090 "y.tab.c" /* yacc.c:1646  */
+#line 11092 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 727:
 #line 4063 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = -1; }
-#line 11096 "y.tab.c" /* yacc.c:1646  */
+#line 11098 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 728:
 #line 4064 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 11102 "y.tab.c" /* yacc.c:1646  */
+#line 11104 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 729:
 #line 4068 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 1; }
-#line 11108 "y.tab.c" /* yacc.c:1646  */
+#line 11110 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 730:
 #line 4069 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.bval) = 0; }
-#line 11114 "y.tab.c" /* yacc.c:1646  */
+#line 11116 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 731:
 #line 4080 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[-1].i_val)+1; }
-#line 11120 "y.tab.c" /* yacc.c:1646  */
+#line 11122 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 732:
 #line 4082 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0+1; }
-#line 11126 "y.tab.c" /* yacc.c:1646  */
+#line 11128 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 733:
 #line 4086 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[-1].i_val)+1; }
-#line 11132 "y.tab.c" /* yacc.c:1646  */
+#line 11134 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 734:
 #line 4088 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 6+1; }
-#line 11138 "y.tab.c" /* yacc.c:1646  */
+#line 11140 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 735:
 #line 4092 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "date", 0, 0); }
-#line 11144 "y.tab.c" /* yacc.c:1646  */
+#line 11146 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 736:
@@ -11150,7 +11152,7 @@ yyreduce:
 			  else
 				sql_find_subtype(&(yyval.type), "time", (yyvsp[-1].i_val), 0); 
 			}
-#line 11154 "y.tab.c" /* yacc.c:1646  */
+#line 11156 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 737:
@@ -11160,91 +11162,91 @@ yyreduce:
 			  else
 				sql_find_subtype(&(yyval.type), "timestamp", (yyvsp[-1].i_val), 0); 
 			}
-#line 11164 "y.tab.c" /* yacc.c:1646  */
+#line 11166 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 738:
 #line 4108 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = iyear; }
-#line 11170 "y.tab.c" /* yacc.c:1646  */
+#line 11172 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 739:
 #line 4109 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = imonth; }
-#line 11176 "y.tab.c" /* yacc.c:1646  */
+#line 11178 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 740:
 #line 4110 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = iday; }
-#line 11182 "y.tab.c" /* yacc.c:1646  */
+#line 11184 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 741:
 #line 4111 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = ihour; }
-#line 11188 "y.tab.c" /* yacc.c:1646  */
+#line 11190 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 742:
 #line 4112 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = imin; }
-#line 11194 "y.tab.c" /* yacc.c:1646  */
+#line 11196 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 744:
 #line 4117 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = isec; }
-#line 11200 "y.tab.c" /* yacc.c:1646  */
+#line 11202 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 745:
 #line 4122 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_int(
 			 	append_int( L(), (yyvsp[-1].i_val)), (yyvsp[0].i_val)-1);  }
-#line 11207 "y.tab.c" /* yacc.c:1646  */
+#line 11209 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 746:
 #line 4128 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_int(
 			 	append_int( L(), (yyvsp[0].i_val)), 0);  }
-#line 11214 "y.tab.c" /* yacc.c:1646  */
+#line 11216 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 747:
 #line 4131 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_int(
 			 	append_int( L(), isec), (yyvsp[0].i_val)-1);  }
-#line 11221 "y.tab.c" /* yacc.c:1646  */
+#line 11223 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 748:
 #line 4137 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_int(
 			 	append_int( L(), (yyvsp[-1].i_val)), (yyvsp[0].i_val)-1);  }
-#line 11228 "y.tab.c" /* yacc.c:1646  */
+#line 11230 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 749:
 #line 4140 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_int(
 			 	append_int( L(), isec), (yyvsp[0].i_val)-1);  }
-#line 11235 "y.tab.c" /* yacc.c:1646  */
+#line 11237 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 750:
 #line 4146 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) =  append_list(
 			append_list( L(), (yyvsp[-2].l)), (yyvsp[0].l) ); }
-#line 11242 "y.tab.c" /* yacc.c:1646  */
+#line 11244 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 751:
 #line 4149 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) =  append_list( L(), (yyvsp[0].l)); }
-#line 11248 "y.tab.c" /* yacc.c:1646  */
+#line 11250 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 752:
@@ -11266,7 +11268,7 @@ yyreduce:
 			}
 	  	}
 	}
-#line 11270 "y.tab.c" /* yacc.c:1646  */
+#line 11272 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 756:
@@ -11276,7 +11278,7 @@ yyreduce:
 		  sql_subtype t;
 		  sql_find_subtype(&t, "char", len, 0 );
 		  (yyval.sym) = _newAtomNode( _atom_string(&t, s)); }
-#line 11280 "y.tab.c" /* yacc.c:1646  */
+#line 11282 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 757:
@@ -11345,7 +11347,7 @@ yyreduce:
 			(yyval.sym) = _newAtomNode( atom_int(SA, &t, res));
 		  }
 		}
-#line 11349 "y.tab.c" /* yacc.c:1646  */
+#line 11351 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 758:
@@ -11380,7 +11382,7 @@ yyreduce:
 		  	(yyval.sym) = _newAtomNode( atom_int(SA, &t, value));
 		  }
 		}
-#line 11384 "y.tab.c" /* yacc.c:1646  */
+#line 11386 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 759:
@@ -11435,7 +11437,7 @@ yyreduce:
 		  	(yyval.sym) = _newAtomNode( atom_int(SA, &t, value));
 		  }
 		}
-#line 11439 "y.tab.c" /* yacc.c:1646  */
+#line 11441 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 760:
@@ -11478,7 +11480,7 @@ yyreduce:
 		  	(yyval.sym) = _newAtomNode(atom_float(SA, &t, val));
 		   }
 		}
-#line 11482 "y.tab.c" /* yacc.c:1646  */
+#line 11484 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 761:
@@ -11499,7 +11501,7 @@ yyreduce:
 		  }
 		  sql_find_subtype(&t, "double", 51, 0 );
 		  (yyval.sym) = _newAtomNode(atom_float(SA, &t, val)); }
-#line 11503 "y.tab.c" /* yacc.c:1646  */
+#line 11505 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 762:
@@ -11519,7 +11521,7 @@ yyreduce:
 		  } else {
 		  	(yyval.sym) = _newAtomNode(a);
 		} }
-#line 11523 "y.tab.c" /* yacc.c:1646  */
+#line 11525 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 763:
@@ -11539,7 +11541,7 @@ yyreduce:
 		  } else {
 		  	(yyval.sym) = _newAtomNode(a);
 		} }
-#line 11543 "y.tab.c" /* yacc.c:1646  */
+#line 11545 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 764:
@@ -11559,7 +11561,7 @@ yyreduce:
 		  } else {
 		  	(yyval.sym) = _newAtomNode(a);
 		} }
-#line 11563 "y.tab.c" /* yacc.c:1646  */
+#line 11565 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 766:
@@ -11580,7 +11582,7 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 11584 "y.tab.c" /* yacc.c:1646  */
+#line 11586 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 767:
@@ -11601,7 +11603,7 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 11605 "y.tab.c" /* yacc.c:1646  */
+#line 11607 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 768:
@@ -11622,7 +11624,7 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 11626 "y.tab.c" /* yacc.c:1646  */
+#line 11628 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 769:
@@ -11647,7 +11649,7 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 11651 "y.tab.c" /* yacc.c:1646  */
+#line 11653 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 770:
@@ -11655,7 +11657,7 @@ yyreduce:
     { sql_subtype t;
 		  sql_find_subtype(&t, "boolean", 0, 0 );
 		  (yyval.sym) = _newAtomNode( atom_bool(SA, &t, FALSE)); }
-#line 11659 "y.tab.c" /* yacc.c:1646  */
+#line 11661 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 771:
@@ -11663,7 +11665,7 @@ yyreduce:
     { sql_subtype t;
 		  sql_find_subtype(&t, "boolean", 0, 0 );
 		  (yyval.sym) = _newAtomNode( atom_bool(SA, &t, TRUE)); }
-#line 11667 "y.tab.c" /* yacc.c:1646  */
+#line 11669 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 772:
@@ -11708,13 +11710,13 @@ yyreduce:
 	  		(yyval.sym) = _newAtomNode( atom_int(SA, &t, i));
 	  	}
 	}
-#line 11712 "y.tab.c" /* yacc.c:1646  */
+#line 11714 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 773:
 #line 4564 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(L(), (yyvsp[0].sval)); }
-#line 11718 "y.tab.c" /* yacc.c:1646  */
+#line 11720 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 774:
@@ -11723,7 +11725,7 @@ yyreduce:
 				  m->scanner.schema = (yyvsp[-2].sval);
 				  (yyval.l) = append_string(
 					append_string(L(), (yyvsp[-2].sval)), (yyvsp[0].sval));}
-#line 11727 "y.tab.c" /* yacc.c:1646  */
+#line 11729 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 775:
@@ -11736,14 +11738,14 @@ yyreduce:
 						(yyvsp[-2].sval)), 
 					(yyvsp[0].sval))
 				;}
-#line 11740 "y.tab.c" /* yacc.c:1646  */
+#line 11742 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 776:
 #line 4580 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(
 				L(), (yyvsp[0].sval)); }
-#line 11747 "y.tab.c" /* yacc.c:1646  */
+#line 11749 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 777:
@@ -11751,7 +11753,7 @@ yyreduce:
     { (yyval.l) = append_string(
 				append_string(
 				 L(), (yyvsp[-2].sval)), (yyvsp[0].sval));}
-#line 11755 "y.tab.c" /* yacc.c:1646  */
+#line 11757 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 778:
@@ -11760,7 +11762,7 @@ yyreduce:
 				append_string(
 				 append_string(
 				  L(), (yyvsp[-4].sval)), (yyvsp[-2].sval)), (yyvsp[0].sval));}
-#line 11764 "y.tab.c" /* yacc.c:1646  */
+#line 11766 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 779:
@@ -11769,7 +11771,7 @@ yyreduce:
 	  append_symbol(l, (yyvsp[-3].sym));
 	  append_type(l, &(yyvsp[-1].type));
 	  (yyval.sym) = _symbol_create_list( SQL_CAST, l ); }
-#line 11773 "y.tab.c" /* yacc.c:1646  */
+#line 11775 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 780:
@@ -11778,7 +11780,7 @@ yyreduce:
 	  append_symbol(l, (yyvsp[-3].sym));
 	  append_type(l, &(yyvsp[-1].type));
 	  (yyval.sym) = _symbol_create_list( SQL_CAST, l ); }
-#line 11782 "y.tab.c" /* yacc.c:1646  */
+#line 11784 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 782:
@@ -11787,13 +11789,13 @@ yyreduce:
 		   append_symbol(
 		    append_symbol(
 		     L(), (yyvsp[-3].sym)), (yyvsp[-1].sym))); }
-#line 11791 "y.tab.c" /* yacc.c:1646  */
+#line 11793 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 783:
 #line 4619 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list(SQL_COALESCE, (yyvsp[-1].l)); }
-#line 11797 "y.tab.c" /* yacc.c:1646  */
+#line 11799 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 784:
@@ -11803,7 +11805,7 @@ yyreduce:
 		    append_list(
 		     append_symbol(
 		      L(),(yyvsp[-3].sym)),(yyvsp[-2].l)),(yyvsp[-1].sym))); }
-#line 11807 "y.tab.c" /* yacc.c:1646  */
+#line 11809 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 785:
@@ -11812,19 +11814,19 @@ yyreduce:
 		   append_symbol(
 		    append_list(
 		     L(),(yyvsp[-2].l)),(yyvsp[-1].sym))); }
-#line 11816 "y.tab.c" /* yacc.c:1646  */
+#line 11818 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 786:
 #line 4635 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( L(), (yyvsp[0].sym)); }
-#line 11822 "y.tab.c" /* yacc.c:1646  */
+#line 11824 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 787:
 #line 4637 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-2].l), (yyvsp[0].sym)); }
-#line 11828 "y.tab.c" /* yacc.c:1646  */
+#line 11830 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 788:
@@ -11832,13 +11834,13 @@ yyreduce:
     { (yyval.l) = append_symbol( L(), (yyvsp[-2].sym));
 			  (yyval.l) = append_symbol( (yyval.l), (yyvsp[0].sym));
 			}
-#line 11836 "y.tab.c" /* yacc.c:1646  */
+#line 11838 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 789:
 #line 4646 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-2].l), (yyvsp[0].sym)); }
-#line 11842 "y.tab.c" /* yacc.c:1646  */
+#line 11844 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 790:
@@ -11847,19 +11849,19 @@ yyreduce:
 			   append_symbol(
 			    append_symbol(
 			     L(), (yyvsp[-2].sym)),(yyvsp[0].sym))); }
-#line 11851 "y.tab.c" /* yacc.c:1646  */
+#line 11853 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 791:
 #line 4660 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( L(), (yyvsp[0].sym));}
-#line 11857 "y.tab.c" /* yacc.c:1646  */
+#line 11859 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 792:
 #line 4662 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-1].l), (yyvsp[0].sym)); }
-#line 11863 "y.tab.c" /* yacc.c:1646  */
+#line 11865 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 793:
@@ -11868,31 +11870,31 @@ yyreduce:
 			   append_symbol(
 			    append_symbol(
 			     L(), (yyvsp[-2].sym)),(yyvsp[0].sym))); }
-#line 11872 "y.tab.c" /* yacc.c:1646  */
+#line 11874 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 794:
 #line 4675 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( L(), (yyvsp[0].sym)); }
-#line 11878 "y.tab.c" /* yacc.c:1646  */
+#line 11880 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 795:
 #line 4677 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol( (yyvsp[-1].l), (yyvsp[0].sym)); }
-#line 11884 "y.tab.c" /* yacc.c:1646  */
+#line 11886 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 796:
 #line 4681 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 11890 "y.tab.c" /* yacc.c:1646  */
+#line 11892 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 797:
 #line 4682 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 11896 "y.tab.c" /* yacc.c:1646  */
+#line 11898 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 799:
@@ -11904,7 +11906,7 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 11908 "y.tab.c" /* yacc.c:1646  */
+#line 11910 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 800:
@@ -11916,7 +11918,7 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 11920 "y.tab.c" /* yacc.c:1646  */
+#line 11922 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 801:
@@ -11928,7 +11930,7 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 11932 "y.tab.c" /* yacc.c:1646  */
+#line 11934 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 802:
@@ -11940,7 +11942,7 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 11944 "y.tab.c" /* yacc.c:1646  */
+#line 11946 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 803:
@@ -11952,7 +11954,7 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 11956 "y.tab.c" /* yacc.c:1646  */
+#line 11958 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 804:
@@ -11964,13 +11966,13 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 11968 "y.tab.c" /* yacc.c:1646  */
+#line 11970 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 805:
 #line 4755 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "char", 1, 0); }
-#line 11974 "y.tab.c" /* yacc.c:1646  */
+#line 11976 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 806:
@@ -11979,25 +11981,25 @@ yyreduce:
 			  yyerror(m, "CHARACTER VARYING needs a mandatory length specification");
 			  YYABORT;
 			}
-#line 11983 "y.tab.c" /* yacc.c:1646  */
+#line 11985 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 807:
 #line 4761 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "clob", 0, 0); }
-#line 11989 "y.tab.c" /* yacc.c:1646  */
+#line 11991 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 808:
 #line 4763 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "char", (yyvsp[-1].i_val), 0); }
-#line 11995 "y.tab.c" /* yacc.c:1646  */
+#line 11997 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 809:
 #line 4765 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "varchar", (yyvsp[-1].i_val), 0); }
-#line 12001 "y.tab.c" /* yacc.c:1646  */
+#line 12003 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 810:
@@ -12010,13 +12012,13 @@ yyreduce:
 			   *       See p. 125 SQL-99
 			   */
 			}
-#line 12014 "y.tab.c" /* yacc.c:1646  */
+#line 12016 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 811:
 #line 4775 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "blob", 0, 0); }
-#line 12020 "y.tab.c" /* yacc.c:1646  */
+#line 12022 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 812:
@@ -12029,43 +12031,43 @@ yyreduce:
 			   *       See p. 85 SQL-99
 			   */
 			}
-#line 12033 "y.tab.c" /* yacc.c:1646  */
+#line 12035 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 813:
 #line 4785 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "tinyint", 0, 0); }
-#line 12039 "y.tab.c" /* yacc.c:1646  */
+#line 12041 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 814:
 #line 4786 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "smallint", 0, 0); }
-#line 12045 "y.tab.c" /* yacc.c:1646  */
+#line 12047 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 815:
 #line 4787 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "int", 0, 0); }
-#line 12051 "y.tab.c" /* yacc.c:1646  */
+#line 12053 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 816:
 #line 4788 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "bigint", 0, 0); }
-#line 12057 "y.tab.c" /* yacc.c:1646  */
+#line 12059 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 817:
 #line 4789 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "hugeint", 0, 0); }
-#line 12063 "y.tab.c" /* yacc.c:1646  */
+#line 12065 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 818:
 #line 4791 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "decimal", 18, 3); }
-#line 12069 "y.tab.c" /* yacc.c:1646  */
+#line 12071 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 819:
@@ -12082,7 +12084,7 @@ yyreduce:
 			        sql_find_subtype(&(yyval.type), "decimal", d, 0); 
 			  }
 			}
-#line 12086 "y.tab.c" /* yacc.c:1646  */
+#line 12088 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 820:
@@ -12104,13 +12106,13 @@ yyreduce:
 				sql_find_subtype(&(yyval.type), "decimal", d, s);
 			  }
 			}
-#line 12108 "y.tab.c" /* yacc.c:1646  */
+#line 12110 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 821:
 #line 4823 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "double", 0, 0); }
-#line 12114 "y.tab.c" /* yacc.c:1646  */
+#line 12116 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 822:
@@ -12128,7 +12130,7 @@ yyreduce:
 				YYABORT;
 			  }
 			}
-#line 12132 "y.tab.c" /* yacc.c:1646  */
+#line 12134 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 823:
@@ -12152,49 +12154,49 @@ yyreduce:
 				YYABORT;
 			  }
 			}
-#line 12156 "y.tab.c" /* yacc.c:1646  */
+#line 12158 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 824:
 #line 4858 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "double", 0, 0); }
-#line 12162 "y.tab.c" /* yacc.c:1646  */
+#line 12164 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 825:
 #line 4859 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "double", 0, 0); }
-#line 12168 "y.tab.c" /* yacc.c:1646  */
+#line 12170 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 826:
 #line 4860 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), "real", 0, 0); }
-#line 12174 "y.tab.c" /* yacc.c:1646  */
+#line 12176 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 829:
 #line 4863 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), (yyvsp[0].sval), 0, 0); }
-#line 12180 "y.tab.c" /* yacc.c:1646  */
+#line 12182 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 830:
 #line 4865 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), (yyvsp[-3].sval), (yyvsp[-1].i_val), 0); }
-#line 12186 "y.tab.c" /* yacc.c:1646  */
+#line 12188 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 831:
 #line 4866 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), (yyvsp[0].sval), 0, 0); }
-#line 12192 "y.tab.c" /* yacc.c:1646  */
+#line 12194 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 832:
 #line 4868 "sql_parser.y" /* yacc.c:1646  */
     { sql_find_subtype(&(yyval.type), (yyvsp[-3].sval), (yyvsp[-1].i_val), 0); }
-#line 12198 "y.tab.c" /* yacc.c:1646  */
+#line 12200 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 833:
@@ -12210,7 +12212,7 @@ yyreduce:
 			 	sql_find_subtype(&(yyval.type), (yyvsp[-5].sval), (yyvsp[-3].i_val), (yyvsp[-1].i_val));
 			  }
 			}
-#line 12214 "y.tab.c" /* yacc.c:1646  */
+#line 12216 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 834:
@@ -12228,7 +12230,7 @@ yyreduce:
 				sql_init_subtype(&(yyval.type), t, 0, 0);
 			  }
 			}
-#line 12232 "y.tab.c" /* yacc.c:1646  */
+#line 12234 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 835:
@@ -12246,7 +12248,7 @@ yyreduce:
 				sql_init_subtype(&(yyval.type), t, (yyvsp[-1].i_val), 0);
 			  }
 			}
-#line 12250 "y.tab.c" /* yacc.c:1646  */
+#line 12252 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 836:
@@ -12262,571 +12264,571 @@ yyreduce:
 		}
 		(yyval.sval) = t;
 	}
-#line 12266 "y.tab.c" /* yacc.c:1646  */
+#line 12268 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 837:
 #line 4928 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12272 "y.tab.c" /* yacc.c:1646  */
+#line 12274 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 838:
 #line 4929 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[-1].sval); }
-#line 12278 "y.tab.c" /* yacc.c:1646  */
+#line 12280 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 839:
 #line 4933 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12284 "y.tab.c" /* yacc.c:1646  */
+#line 12286 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 840:
 #line 4934 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12290 "y.tab.c" /* yacc.c:1646  */
+#line 12292 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 841:
 #line 4935 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[-2].sval); }
-#line 12296 "y.tab.c" /* yacc.c:1646  */
+#line 12298 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 842:
 #line 4938 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12302 "y.tab.c" /* yacc.c:1646  */
+#line 12304 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 843:
 #line 4939 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[-2].sval); }
-#line 12308 "y.tab.c" /* yacc.c:1646  */
+#line 12310 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 846:
 #line 4947 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12314 "y.tab.c" /* yacc.c:1646  */
+#line 12316 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 847:
 #line 4948 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12320 "y.tab.c" /* yacc.c:1646  */
+#line 12322 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 848:
 #line 4949 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12326 "y.tab.c" /* yacc.c:1646  */
+#line 12328 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 849:
 #line 4950 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12332 "y.tab.c" /* yacc.c:1646  */
+#line 12334 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 850:
 #line 4951 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12338 "y.tab.c" /* yacc.c:1646  */
+#line 12340 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 851:
 #line 4952 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12344 "y.tab.c" /* yacc.c:1646  */
+#line 12346 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 852:
 #line 4956 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12350 "y.tab.c" /* yacc.c:1646  */
+#line 12352 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 853:
 #line 4957 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12356 "y.tab.c" /* yacc.c:1646  */
+#line 12358 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 854:
 #line 4958 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12362 "y.tab.c" /* yacc.c:1646  */
+#line 12364 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 855:
 #line 4959 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12368 "y.tab.c" /* yacc.c:1646  */
+#line 12370 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 856:
 #line 4960 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12374 "y.tab.c" /* yacc.c:1646  */
+#line 12376 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 857:
 #line 4961 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12380 "y.tab.c" /* yacc.c:1646  */
+#line 12382 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 858:
 #line 4962 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12386 "y.tab.c" /* yacc.c:1646  */
+#line 12388 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 860:
 #line 4967 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "large"); }
-#line 12392 "y.tab.c" /* yacc.c:1646  */
+#line 12394 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 861:
 #line 4968 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "name"); }
-#line 12398 "y.tab.c" /* yacc.c:1646  */
+#line 12400 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 862:
 #line 4969 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "object"); }
-#line 12404 "y.tab.c" /* yacc.c:1646  */
+#line 12406 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 863:
 #line 4970 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "password"); }
-#line 12410 "y.tab.c" /* yacc.c:1646  */
+#line 12412 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 864:
 #line 4971 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "path"); }
-#line 12416 "y.tab.c" /* yacc.c:1646  */
+#line 12418 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 865:
 #line 4972 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "precision"); }
-#line 12422 "y.tab.c" /* yacc.c:1646  */
+#line 12424 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 866:
 #line 4973 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "privileges"); }
-#line 12428 "y.tab.c" /* yacc.c:1646  */
+#line 12430 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 867:
 #line 4974 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "role"); }
-#line 12434 "y.tab.c" /* yacc.c:1646  */
+#line 12436 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 868:
 #line 4975 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "size"); }
-#line 12440 "y.tab.c" /* yacc.c:1646  */
+#line 12442 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 869:
 #line 4976 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "type"); }
-#line 12446 "y.tab.c" /* yacc.c:1646  */
+#line 12448 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 870:
 #line 4977 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "release"); }
-#line 12452 "y.tab.c" /* yacc.c:1646  */
+#line 12454 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 871:
 #line 4978 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "value"); }
-#line 12458 "y.tab.c" /* yacc.c:1646  */
+#line 12460 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 872:
 #line 4979 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "zone"); }
-#line 12464 "y.tab.c" /* yacc.c:1646  */
+#line 12466 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 873:
 #line 4981 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "action"); }
-#line 12470 "y.tab.c" /* yacc.c:1646  */
+#line 12472 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 874:
 #line 4982 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "as"); }
-#line 12476 "y.tab.c" /* yacc.c:1646  */
+#line 12478 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 875:
 #line 4983 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "authorization"); }
-#line 12482 "y.tab.c" /* yacc.c:1646  */
+#line 12484 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 876:
 #line 4984 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "column"); }
-#line 12488 "y.tab.c" /* yacc.c:1646  */
+#line 12490 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 877:
 #line 4985 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "cycle"); }
-#line 12494 "y.tab.c" /* yacc.c:1646  */
+#line 12496 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 878:
 #line 4986 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "distinct"); }
-#line 12500 "y.tab.c" /* yacc.c:1646  */
+#line 12502 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 879:
 #line 4987 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "increment"); }
-#line 12506 "y.tab.c" /* yacc.c:1646  */
+#line 12508 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 880:
 #line 4988 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "maxvalue"); }
-#line 12512 "y.tab.c" /* yacc.c:1646  */
+#line 12514 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 881:
 #line 4989 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "minvalue"); }
-#line 12518 "y.tab.c" /* yacc.c:1646  */
+#line 12520 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 882:
 #line 4990 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "plan"); }
-#line 12524 "y.tab.c" /* yacc.c:1646  */
+#line 12526 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 883:
 #line 4991 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "schema"); }
-#line 12530 "y.tab.c" /* yacc.c:1646  */
+#line 12532 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 884:
 #line 4992 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "start"); }
-#line 12536 "y.tab.c" /* yacc.c:1646  */
+#line 12538 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 885:
 #line 4993 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "statement"); }
-#line 12542 "y.tab.c" /* yacc.c:1646  */
+#line 12544 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 886:
 #line 4994 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "table"); }
-#line 12548 "y.tab.c" /* yacc.c:1646  */
+#line 12550 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 887:
 #line 4996 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "cache"); }
-#line 12554 "y.tab.c" /* yacc.c:1646  */
+#line 12556 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 888:
 #line 4997 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "data"); }
-#line 12560 "y.tab.c" /* yacc.c:1646  */
+#line 12562 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 889:
 #line 4998 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "diagnostics"); }
-#line 12566 "y.tab.c" /* yacc.c:1646  */
+#line 12568 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 890:
 #line 4999 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "match"); }
-#line 12572 "y.tab.c" /* yacc.c:1646  */
+#line 12574 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 891:
 #line 5000 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "options"); }
-#line 12578 "y.tab.c" /* yacc.c:1646  */
+#line 12580 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 892:
 #line 5001 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "row"); }
-#line 12584 "y.tab.c" /* yacc.c:1646  */
+#line 12586 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 893:
 #line 5002 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "key"); }
-#line 12590 "y.tab.c" /* yacc.c:1646  */
+#line 12592 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 894:
 #line 5003 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "language"); }
-#line 12596 "y.tab.c" /* yacc.c:1646  */
+#line 12598 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 895:
 #line 5004 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "level"); }
-#line 12602 "y.tab.c" /* yacc.c:1646  */
+#line 12604 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 896:
 #line 5005 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "session"); }
-#line 12608 "y.tab.c" /* yacc.c:1646  */
+#line 12610 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 897:
 #line 5006 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "date"); }
-#line 12614 "y.tab.c" /* yacc.c:1646  */
+#line 12616 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 898:
 #line 5007 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "time"); }
-#line 12620 "y.tab.c" /* yacc.c:1646  */
+#line 12622 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 899:
 #line 5008 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "timestamp"); }
-#line 12626 "y.tab.c" /* yacc.c:1646  */
+#line 12628 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 900:
 #line 5009 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "interval"); }
-#line 12632 "y.tab.c" /* yacc.c:1646  */
+#line 12634 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 901:
 #line 5011 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "prepare"); }
-#line 12638 "y.tab.c" /* yacc.c:1646  */
+#line 12640 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 902:
 #line 5012 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "execute"); }
-#line 12644 "y.tab.c" /* yacc.c:1646  */
+#line 12646 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 903:
 #line 5013 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "explain"); }
-#line 12650 "y.tab.c" /* yacc.c:1646  */
+#line 12652 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 904:
 #line 5014 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "dot"); }
-#line 12656 "y.tab.c" /* yacc.c:1646  */
+#line 12658 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 905:
 #line 5015 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "debug"); }
-#line 12662 "y.tab.c" /* yacc.c:1646  */
+#line 12664 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 906:
 #line 5016 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "trace"); }
-#line 12668 "y.tab.c" /* yacc.c:1646  */
+#line 12670 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 907:
 #line 5017 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "text"); }
-#line 12674 "y.tab.c" /* yacc.c:1646  */
+#line 12676 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 908:
 #line 5018 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "auto_commit"); }
-#line 12680 "y.tab.c" /* yacc.c:1646  */
+#line 12682 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 909:
 #line 5019 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "no"); }
-#line 12686 "y.tab.c" /* yacc.c:1646  */
+#line 12688 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 910:
 #line 5021 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "strip"); }
-#line 12692 "y.tab.c" /* yacc.c:1646  */
+#line 12694 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 911:
 #line 5022 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "whitespace"); }
-#line 12698 "y.tab.c" /* yacc.c:1646  */
+#line 12700 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 912:
 #line 5023 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "passing"); }
-#line 12704 "y.tab.c" /* yacc.c:1646  */
+#line 12706 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 913:
 #line 5024 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "nil"); }
-#line 12710 "y.tab.c" /* yacc.c:1646  */
+#line 12712 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 914:
 #line 5025 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "ref"); }
-#line 12716 "y.tab.c" /* yacc.c:1646  */
+#line 12718 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 915:
 #line 5026 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "absent"); }
-#line 12722 "y.tab.c" /* yacc.c:1646  */
+#line 12724 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 916:
 #line 5027 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "empty"); }
-#line 12728 "y.tab.c" /* yacc.c:1646  */
+#line 12730 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 917:
 #line 5028 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "document"); }
-#line 12734 "y.tab.c" /* yacc.c:1646  */
+#line 12736 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 918:
 #line 5029 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "element"); }
-#line 12740 "y.tab.c" /* yacc.c:1646  */
+#line 12742 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 919:
 #line 5030 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "content"); }
-#line 12746 "y.tab.c" /* yacc.c:1646  */
+#line 12748 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 920:
 #line 5031 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "namespace"); }
-#line 12752 "y.tab.c" /* yacc.c:1646  */
+#line 12754 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 921:
 #line 5032 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "returning"); }
-#line 12758 "y.tab.c" /* yacc.c:1646  */
+#line 12760 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 922:
 #line 5033 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "location"); }
-#line 12764 "y.tab.c" /* yacc.c:1646  */
+#line 12766 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 923:
 #line 5034 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "id"); }
-#line 12770 "y.tab.c" /* yacc.c:1646  */
+#line 12772 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 924:
 #line 5035 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "according"); }
-#line 12776 "y.tab.c" /* yacc.c:1646  */
+#line 12778 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 925:
 #line 5036 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "uri"); }
-#line 12782 "y.tab.c" /* yacc.c:1646  */
+#line 12784 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 926:
 #line 5037 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "filter"); }
-#line 12788 "y.tab.c" /* yacc.c:1646  */
+#line 12790 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 927:
 #line 5038 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "temporary"); }
-#line 12794 "y.tab.c" /* yacc.c:1646  */
+#line 12796 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 928:
 #line 5039 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "temp"); }
-#line 12800 "y.tab.c" /* yacc.c:1646  */
+#line 12802 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 929:
 #line 5040 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "analyze"); }
-#line 12806 "y.tab.c" /* yacc.c:1646  */
+#line 12808 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 930:
 #line 5041 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "MinMax"); }
-#line 12812 "y.tab.c" /* yacc.c:1646  */
+#line 12814 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 931:
 #line 5042 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = sa_strdup(SA, "storage"); }
-#line 12818 "y.tab.c" /* yacc.c:1646  */
+#line 12820 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 932:
 #line 5046 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string(L(), (yyvsp[0].sval)); }
-#line 12824 "y.tab.c" /* yacc.c:1646  */
+#line 12826 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 933:
 #line 5048 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_string((yyvsp[-2].l), (yyvsp[0].sval)); }
-#line 12830 "y.tab.c" /* yacc.c:1646  */
+#line 12832 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 934:
@@ -12846,7 +12848,7 @@ yyreduce:
 #endif
 		(yyval.w_val) = (wrd) l;
 	}
-#line 12850 "y.tab.c" /* yacc.c:1646  */
+#line 12852 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 935:
@@ -12870,7 +12872,7 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 12874 "y.tab.c" /* yacc.c:1646  */
+#line 12876 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 936:
@@ -12894,7 +12896,7 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 12898 "y.tab.c" /* yacc.c:1646  */
+#line 12900 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 937:
@@ -12928,13 +12930,13 @@ yyreduce:
 			YYABORT;
 		  }
 		}
-#line 12932 "y.tab.c" /* yacc.c:1646  */
+#line 12934 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 938:
 #line 5145 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 12938 "y.tab.c" /* yacc.c:1646  */
+#line 12940 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 939:
@@ -12943,7 +12945,7 @@ yyreduce:
 	 	  (yyval.sval) = sa_strdup(SA, s);	
 		  _DELETE(s);
 		}
-#line 12947 "y.tab.c" /* yacc.c:1646  */
+#line 12949 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 940:
@@ -12951,7 +12953,7 @@ yyreduce:
     {
 		  m->emode = m_execute;
 		  (yyval.sym) = (yyvsp[0].sym); }
-#line 12955 "y.tab.c" /* yacc.c:1646  */
+#line 12957 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 941:
@@ -12960,7 +12962,7 @@ yyreduce:
   	  append_int(l, (yyvsp[-2].i_val));
   	  append_list(l, NULL);
 	  (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
-#line 12964 "y.tab.c" /* yacc.c:1646  */
+#line 12966 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 942:
@@ -12969,31 +12971,31 @@ yyreduce:
   	  append_int(l, (yyvsp[-3].i_val));
   	  append_list(l, (yyvsp[-1].l));
 	  (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
-#line 12973 "y.tab.c" /* yacc.c:1646  */
+#line 12975 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 943:
 #line 5181 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 12979 "y.tab.c" /* yacc.c:1646  */
+#line 12981 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 945:
 #line 5186 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = _symbol_create_list( SQL_PATH, (yyvsp[0].l)); }
-#line 12985 "y.tab.c" /* yacc.c:1646  */
+#line 12987 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 948:
 #line 5197 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym)); }
-#line 12991 "y.tab.c" /* yacc.c:1646  */
+#line 12993 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 949:
 #line 5199 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-2].l), (yyvsp[0].sym)); }
-#line 12997 "y.tab.c" /* yacc.c:1646  */
+#line 12999 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 961:
@@ -13002,7 +13004,7 @@ yyreduce:
 	  append_symbol(l, (yyvsp[-2].sym));
 	  append_int(l, (yyvsp[-1].i_val));
 	  (yyval.sym) = _symbol_create_list( SQL_XMLCOMMENT, l); }
-#line 13006 "y.tab.c" /* yacc.c:1646  */
+#line 13008 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 962:
@@ -13011,7 +13013,7 @@ yyreduce:
 	  append_list(l, (yyvsp[-2].l));
 	  append_int(l, (yyvsp[-1].i_val));
 	  (yyval.sym) = _symbol_create_list( SQL_XMLCONCAT, l); }
-#line 13015 "y.tab.c" /* yacc.c:1646  */
+#line 13017 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 963:
@@ -13020,7 +13022,7 @@ yyreduce:
 	  append_symbol(l, (yyvsp[-2].sym));
 	  append_int(l, (yyvsp[-1].i_val));
 	  (yyval.sym) = _symbol_create_list( SQL_XMLDOCUMENT, l); }
-#line 13024 "y.tab.c" /* yacc.c:1646  */
+#line 13026 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 964:
@@ -13031,13 +13033,13 @@ yyreduce:
 	  append_int(l, (yyvsp[-1].i_val));
 	  (yyval.sym) = _symbol_create_list( SQL_XMLELEMENT, l);
 	}
-#line 13035 "y.tab.c" /* yacc.c:1646  */
+#line 13037 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 965:
 #line 5257 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = NULL; }
-#line 13041 "y.tab.c" /* yacc.c:1646  */
+#line 13043 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 966:
@@ -13045,7 +13047,7 @@ yyreduce:
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym));
 	  (yyval.l) = append_symbol((yyval.l), NULL);
 	  (yyval.l) = append_list((yyval.l), NULL); }
-#line 13049 "y.tab.c" /* yacc.c:1646  */
+#line 13051 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 967:
@@ -13053,7 +13055,7 @@ yyreduce:
     { (yyval.l) = append_symbol(L(), (yyvsp[-2].sym));
 	  (yyval.l) = append_symbol((yyval.l), (yyvsp[0].sym));
 	  (yyval.l) = append_list((yyval.l), NULL); }
-#line 13057 "y.tab.c" /* yacc.c:1646  */
+#line 13059 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 968:
@@ -13061,7 +13063,7 @@ yyreduce:
     { (yyval.l) = append_symbol(L(), (yyvsp[-4].sym));
 	  (yyval.l) = append_symbol((yyval.l), (yyvsp[-2].sym));
 	  (yyval.l) = append_list((yyval.l), (yyvsp[0].l)); }
-#line 13065 "y.tab.c" /* yacc.c:1646  */
+#line 13067 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 969:
@@ -13069,7 +13071,7 @@ yyreduce:
     { (yyval.l) = append_symbol(L(), (yyvsp[-2].sym));
 	  (yyval.l) = append_symbol((yyval.l), NULL);
 	  (yyval.l) = append_list((yyval.l), (yyvsp[0].l)); }
-#line 13073 "y.tab.c" /* yacc.c:1646  */
+#line 13075 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 970:
@@ -13077,7 +13079,7 @@ yyreduce:
     { (yyval.l) = append_symbol(L(), NULL);
 	  (yyval.l) = append_symbol((yyval.l), (yyvsp[0].sym));
 	  (yyval.l) = append_list((yyval.l), NULL); }
-#line 13081 "y.tab.c" /* yacc.c:1646  */
+#line 13083 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 971:
@@ -13085,7 +13087,7 @@ yyreduce:
     { (yyval.l) = append_symbol(L(), NULL);
 	  (yyval.l) = append_symbol((yyval.l), (yyvsp[-2].sym));
 	  (yyval.l) = append_list((yyval.l), (yyvsp[0].l)); }
-#line 13089 "y.tab.c" /* yacc.c:1646  */
+#line 13091 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 972:
@@ -13093,19 +13095,19 @@ yyreduce:
     { (yyval.l) = append_symbol(L(), NULL);
 	  (yyval.l) = append_symbol((yyval.l), NULL);
 	  (yyval.l) = append_list((yyval.l), (yyvsp[0].l)); }
-#line 13097 "y.tab.c" /* yacc.c:1646  */
+#line 13099 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 974:
 #line 5293 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[-1].sym); }
-#line 13103 "y.tab.c" /* yacc.c:1646  */
+#line 13105 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 975:
 #line 5297 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 13109 "y.tab.c" /* yacc.c:1646  */
+#line 13111 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 976:
@@ -13116,7 +13118,7 @@ yyreduce:
 	  	  append_symbol(l, (yyvsp[-2].sym));
 	  	  append_symbol(l, (yyvsp[0].sym));
 	  	  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 13120 "y.tab.c" /* yacc.c:1646  */
+#line 13122 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 977:
@@ -13125,19 +13127,19 @@ yyreduce:
 	  append_string(l, (yyvsp[0].sval));
 	  append_symbol(l, (yyvsp[-1].sym));
 	  (yyval.sym) = _symbol_create_list( SQL_XMLATTRIBUTE, l ); }
-#line 13129 "y.tab.c" /* yacc.c:1646  */
+#line 13131 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 978:
 #line 5316 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = NULL; }
-#line 13135 "y.tab.c" /* yacc.c:1646  */
+#line 13137 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 979:
 #line 5317 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 13141 "y.tab.c" /* yacc.c:1646  */
+#line 13143 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 982:
@@ -13145,61 +13147,61 @@ yyreduce:
     { (yyval.l) = L();
 		  (yyval.l) = append_list((yyval.l), (yyvsp[-1].l));
 		  (yyval.l) = append_int((yyval.l), (yyvsp[0].i_val)); 	}
-#line 13149 "y.tab.c" /* yacc.c:1646  */
+#line 13151 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 983:
 #line 5337 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[0].sym)); }
-#line 13155 "y.tab.c" /* yacc.c:1646  */
+#line 13157 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 984:
 #line 5339 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol((yyvsp[-2].l), (yyvsp[0].sym)); }
-#line 13161 "y.tab.c" /* yacc.c:1646  */
+#line 13163 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 986:
 #line 5347 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 13167 "y.tab.c" /* yacc.c:1646  */
+#line 13169 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 987:
 #line 5348 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = (yyvsp[0].i_val); }
-#line 13173 "y.tab.c" /* yacc.c:1646  */
+#line 13175 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 988:
 #line 5352 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 13179 "y.tab.c" /* yacc.c:1646  */
+#line 13181 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 989:
 #line 5353 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 13185 "y.tab.c" /* yacc.c:1646  */
+#line 13187 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 990:
 #line 5354 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 2; }
-#line 13191 "y.tab.c" /* yacc.c:1646  */
+#line 13193 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 991:
 #line 5355 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 3; }
-#line 13197 "y.tab.c" /* yacc.c:1646  */
+#line 13199 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 992:
 #line 5356 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 4; }
-#line 13203 "y.tab.c" /* yacc.c:1646  */
+#line 13205 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 993:
@@ -13211,62 +13213,62 @@ yyreduce:
 	  append_int(l, (yyvsp[-1].i_val));
 	  (yyval.sym) = _symbol_create_list( SQL_XMLFOREST, l);
 	}
-#line 13215 "y.tab.c" /* yacc.c:1646  */
+#line 13217 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 994:
 #line 5373 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 13221 "y.tab.c" /* yacc.c:1646  */
+#line 13223 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 995:
 #line 5374 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[-1].sym); }
-#line 13227 "y.tab.c" /* yacc.c:1646  */
+#line 13229 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 996:
 #line 5379 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_list(L(), (yyvsp[0].l)); }
-#line 13233 "y.tab.c" /* yacc.c:1646  */
+#line 13235 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 997:
 #line 5381 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_list((yyvsp[-2].l), (yyvsp[0].l)); }
-#line 13239 "y.tab.c" /* yacc.c:1646  */
+#line 13241 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 998:
 #line 5386 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.l) = append_symbol(L(), (yyvsp[-1].sym));
 		  (yyval.l) = append_string((yyval.l), (yyvsp[0].sval)); }
-#line 13246 "y.tab.c" /* yacc.c:1646  */
+#line 13248 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 999:
 #line 5391 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 13252 "y.tab.c" /* yacc.c:1646  */
+#line 13254 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1000:
 #line 5395 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = NULL; }
-#line 13258 "y.tab.c" /* yacc.c:1646  */
+#line 13260 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1001:
 #line 5396 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 13264 "y.tab.c" /* yacc.c:1646  */
+#line 13266 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1002:
 #line 5400 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sval) = (yyvsp[0].sval); }
-#line 13270 "y.tab.c" /* yacc.c:1646  */
+#line 13272 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1003:
@@ -13276,19 +13278,19 @@ yyreduce:
 	  append_symbol(l, (yyvsp[-2].sym));
 	  append_int(l, (yyvsp[-1].i_val));
 	  (yyval.sym) = _symbol_create_list( SQL_XMLPARSE, l); }
-#line 13280 "y.tab.c" /* yacc.c:1646  */
+#line 13282 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1004:
 #line 5414 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 13286 "y.tab.c" /* yacc.c:1646  */
+#line 13288 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1005:
 #line 5415 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 13292 "y.tab.c" /* yacc.c:1646  */
+#line 13294 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1006:
@@ -13298,25 +13300,25 @@ yyreduce:
 	  append_symbol(l, (yyvsp[-2].sym));
 	  append_int(l, (yyvsp[-1].i_val));
 	  (yyval.sym) = _symbol_create_list( SQL_XMLPI, l); }
-#line 13302 "y.tab.c" /* yacc.c:1646  */
+#line 13304 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1008:
 #line 5434 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 13308 "y.tab.c" /* yacc.c:1646  */
+#line 13310 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1009:
 #line 5436 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 13314 "y.tab.c" /* yacc.c:1646  */
+#line 13316 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1010:
 #line 5447 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 13320 "y.tab.c" /* yacc.c:1646  */
+#line 13322 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1025:
@@ -13325,61 +13327,61 @@ yyreduce:
 	  append_symbol(l, (yyvsp[-2].sym));
 	  append_int(l, (yyvsp[-1].i_val));
 	  (yyval.sym) = _symbol_create_list( SQL_XMLTEXT, l); }
-#line 13329 "y.tab.c" /* yacc.c:1646  */
+#line 13331 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1026:
 #line 5504 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 13335 "y.tab.c" /* yacc.c:1646  */
+#line 13337 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1028:
 #line 5509 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 2; }
-#line 13341 "y.tab.c" /* yacc.c:1646  */
+#line 13343 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1029:
 #line 5513 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 13347 "y.tab.c" /* yacc.c:1646  */
+#line 13349 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1030:
 #line 5514 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 13353 "y.tab.c" /* yacc.c:1646  */
+#line 13355 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1031:
 #line 5518 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 13359 "y.tab.c" /* yacc.c:1646  */
+#line 13361 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1032:
 #line 5519 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 0; }
-#line 13365 "y.tab.c" /* yacc.c:1646  */
+#line 13367 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1033:
 #line 5520 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.i_val) = 1; }
-#line 13371 "y.tab.c" /* yacc.c:1646  */
+#line 13373 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1034:
 #line 5535 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[-1].sym); }
-#line 13377 "y.tab.c" /* yacc.c:1646  */
+#line 13379 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1035:
 #line 5539 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = (yyvsp[0].sym); }
-#line 13383 "y.tab.c" /* yacc.c:1646  */
+#line 13385 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1036:
@@ -13390,7 +13392,7 @@ yyreduce:
 	  	  append_symbol(l, (yyvsp[-2].sym));
 	  	  append_symbol(l, (yyvsp[0].sym));
 	  	  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
-#line 13394 "y.tab.c" /* yacc.c:1646  */
+#line 13396 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1041:
@@ -13401,7 +13403,7 @@ yyreduce:
 				  _DELETE(s);
 	  			  append_symbol(l, (yyvsp[-2].sym));
 	  			  (yyval.sym) = _symbol_create_list( SQL_XMLATTRIBUTE, l ); }
-#line 13405 "y.tab.c" /* yacc.c:1646  */
+#line 13407 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1042:
@@ -13410,13 +13412,13 @@ yyreduce:
 	  			  append_string(l, sa_strdup(SA, "xmlns" ));
 	  			  append_symbol(l, (yyvsp[0].sym));
 	  			  (yyval.sym) = _symbol_create_list( SQL_XMLATTRIBUTE, l ); }
-#line 13414 "y.tab.c" /* yacc.c:1646  */
+#line 13416 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1043:
 #line 5577 "sql_parser.y" /* yacc.c:1646  */
     { (yyval.sym) = NULL; }
-#line 13420 "y.tab.c" /* yacc.c:1646  */
+#line 13422 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 1073:
@@ -13440,11 +13442,11 @@ yyreduce:
 	  /* int returning not used */
 	  (yyval.sym) = _symbol_create_list( SQL_AGGR, aggr);
 	}
-#line 13444 "y.tab.c" /* yacc.c:1646  */
+#line 13446 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 13448 "y.tab.c" /* yacc.c:1646  */
+#line 13450 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

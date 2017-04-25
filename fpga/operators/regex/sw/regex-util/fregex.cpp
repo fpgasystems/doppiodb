@@ -128,6 +128,10 @@ int parse_range(const char* regex_string, int pos, State* states, int* s_loc, To
 		states[(*s_loc)].out_cnt = 0;
 		states[(*s_loc)].is_accepting = false;
 
+		if (regex_string[cur_pos]==0) {
+			states[(*s_loc)].is_accepting = true;			
+		}
+
 	} else if (cnt>0 && is_range==false) {
 		int p;
 
@@ -148,6 +152,10 @@ int parse_range(const char* regex_string, int pos, State* states, int* s_loc, To
 		states[(*s_loc)].in_cnt = 0;
 		states[(*s_loc)].out_cnt = 0;
 		states[(*s_loc)].is_accepting = false;
+
+		if (regex_string[cur_pos]==0) {
+			states[(*s_loc)].is_accepting = true;			
+		}
 	}
 
 	return cur_pos;
@@ -206,6 +214,10 @@ int parse_choice(const char* regex_string, int pos, State* states, int* s_loc, T
 		states[(*s_loc)].in_cnt = 0;
 		states[(*s_loc)].out_cnt = 0;
 		states[(*s_loc)].is_accepting = false;
+
+		if (regex_string[cur_pos]==0) {
+			states[(*s_loc)].is_accepting = true;			
+		}
 	}
 
 	return cur_pos;
@@ -540,7 +552,7 @@ int fregex_get_config(const char* regex_string, int char_cnt, int state_cnt, uns
 		for (i=0; i<tokens[t].size; i++) {
 			ochars[cpos] = tokens[t].characters[i];
 			oseq[cpos] = (i>0 && !tokens[t].is_range) ? true : false;
-			orange[cpos] =  (i>0 && tokens[t].is_range) ? true : false;			
+			orange[cpos/2] =  (i>0 && tokens[t].is_range) ? true : false;			
 			cpos++;
 
 			if (cpos > char_cnt) {
