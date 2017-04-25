@@ -26,13 +26,13 @@ FthreadRec * fthread_percentage(FPGA * my_fpga, unsigned char * d_src, unsigned 
 
   afu_cfg->data_src = d_src;
   afu_cfg->pred_src = p_src;
-  afu_cfg->pDest    = my_fpga->malloc(3*sizeof(uint64_t));
+  afu_cfg->pDest    = dst;
   afu_cfg->num_cl   = (count*4 + 63) / 64;
   
   //---------------------------------- Thread allocation ----------------------------------------//
   
   return  my_fpga->create_fthread(PERCENTAGE_OP, reinterpret_cast<unsigned char*>(afu_cfg), 
-                                  sizeof(PERCENTAGE_AFU_CONFIG) , afu_cfg->pDest );
+                                  sizeof(PERCENTAGE_AFU_CONFIG));
  }
 
 uint32_t fthread_percentage()

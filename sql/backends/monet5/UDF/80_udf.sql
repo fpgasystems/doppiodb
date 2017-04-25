@@ -33,7 +33,11 @@ returns integer external name udf.regexcountfpga;
 
 -- Regex percentage function using fpga
 create function regexpercfpga(regex string, src1 string, src2 integer)
-returns bigint external name udf.regexpercfpga;
+returns real external name udf.regexpercfpga;
+
+-- Regex percentage function using fpga and cpu
+create function regexpercfpga_cpu(regex string, src1 string, src2 integer)
+returns real external name udf.regexpercfpga_cpu;
 
 -- Regex count function using fpga  and sw
 create function regexcountfpgasw(regex string, src string)
@@ -45,11 +49,11 @@ returns integer external name udf.testcountfpga;
 
 -- percentage function using fpga
 create function percentagefpga(src1 smallint, src2 integer)
-returns bigint external name udf.percentagefpga;
+returns real external name udf.percentagefpga;
 
 -- mull-add + percentage function using fpga
 create function madpercfpga(a integer, b integer, src1 smallint, src2 integer)
-returns bigint external name udf.madpercfpga;
+returns real external name udf.madpercfpga;
 
 -- hwselection function using fpga
 create function hwselection(one integer, selectionType1 string, lowerThreshold1 integer, upperThreshold1 integer)

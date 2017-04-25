@@ -60,6 +60,9 @@ wire  [511:0]               data_line;
 wire                        data_valid;
 wire                        data_last;
 
+reg  [31:0]                 data_rd_numcls;
+reg  [31:0]                 pred_rd_numcls;   
+
 assign um_rx_rd_ready = 1'b1;
 ///////////////////////////////////////////////////////////////////////////////////
 always @(posedge clk) begin
@@ -79,6 +82,9 @@ end
 always @(posedge clk) begin
     if (start_um) begin
         um_params_reg <= um_params;
+
+        data_rd_numcls <= um_params[223:192];
+        pred_rd_numcls <= {1'b0, um_params[223:193]} + um_params[192];
     end
 end
 /////////////////////// Write Result Back /////////////////////////////////////////
@@ -134,7 +140,7 @@ always @(posedge clk) begin
             um_tx_rd_tag   <= {1'b1, 7'b0};
             data_rd_done   <= 0;
 
-            if(data_rd_cnt_inc == um_params_reg[223:192]) begin 
+            if(data_rd_cnt_inc == data_rd_numcls) begin 
                 um_tx_rd_tag   <= {1'b1, 7'b0000001};
                 data_rd_done   <= 1'b1;
             end
@@ -153,7 +159,7 @@ always @(posedge clk) begin
             um_tx_rd_tag      <= {1'b0, 7'b0};
             pred_rd_done      <= 0;
 
-            if(pred_rd_cnt_inc == {1'b0, um_params_reg[223:193]}) begin 
+            if(pred_rd_cnt_inc == pred_rd_numcls) begin 
                 um_tx_rd_tag      <= {1'b0, 7'b0000001};
                 pred_rd_done      <= 1'b1;
             end

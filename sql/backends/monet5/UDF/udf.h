@@ -54,6 +54,7 @@ udf_export char * UDFBATcopyfpga(bat *ret, const bat *arg);
 udf_export char * UDFBATpercentagefpga(bat *ret, bat *arg1, const bat *arg2);
 udf_export char * UDFBATmacfpga(bat *ret, const sht* mularg, const int* addarg,  const bat *arg);
 udf_export char * UDFBATregexpercfpga(bat *ret, const char **regex, const bat *arg1, const bat *arg2);
+udf_export char * UDFBATregexpercfpga_cpu(bat *ret, const char **regex, const bat *arg1, const bat *arg2);
 
 udf_export char * UDFBATmadpercfpga(bat *ret, const int* alpha, const int* beta, bat *arg1, const bat *arg2);
 

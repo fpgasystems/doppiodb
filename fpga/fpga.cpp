@@ -94,7 +94,9 @@ void FPGAfree(void *blk)
 
   my_fpga->free(blk);
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //MAYBE add GDK_VAROFFSET
 void FPGAregex(void* base,
                void* vbase,
@@ -114,9 +116,9 @@ void FPGAregex(void* base,
   
   printf(" Accessing FPGA object: %p\n", my_fpga); fflush(stdout);
 
-  Fthread regexOp( fthread_regex(my_fpga, reinterpret_cast<btVirtAddr>(base), 
-                        reinterpret_cast<btVirtAddr>(vbase), 
-              reinterpret_cast<btVirtAddr>(retBase), count, width, regex) );
+  Fthread regexOp( fthread_regex(my_fpga, reinterpret_cast<unsigned char*>(base), 
+                        reinterpret_cast<unsigned char*>(vbase), 
+              reinterpret_cast<unsigned char*>(retBase), count, width, regex) );
   MSG("FPGA thread created...");
   regexOp.join();
 
@@ -139,7 +141,9 @@ void FPGAregex(void* base,
 
    return;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FPGAparallelRegex(void* base,
                void* vbase,
                unsigned int count,
@@ -206,7 +210,9 @@ void FPGAparallelRegex(void* base,
 
    return;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Test and Count
 int FPGAtestcount(void* base,
                unsigned int long count,
@@ -218,16 +224,16 @@ int FPGAtestcount(void* base,
   printf("base: %p\n", base);
   fflush(stdout);
 
-  int ret = 0;
+  int* ret_v = reinterpret_cast<int*>(my_fpga->malloc(sizeof(int)));
 
   auto start_time = std::chrono::high_resolution_clock::now();
   
   printf(" Accessing FPGA object: %p\n", my_fpga); fflush(stdout);
 
   Fthread testCount( fthread_testCount(my_fpga, reinterpret_cast<short int*>(base), 
-                     count, test, threshold) );
+                     count, test, threshold,ret_v) );
   MSG("FPGA thread created...");
-  void * ret_v = testCount.join();
+  testCount.join();
   
   testCount.printStatusLine();
  
@@ -246,28 +252,21 @@ int FPGAtestcount(void* base,
         opLocalTime);
   
   
-  ret = *(reinterpret_cast<int*>(ret_v));
-
-  my_fpga->free(ret_v);
-   
-  printf("testcount return value = %d, %d, at: %p\n", ret, (reinterpret_cast<int*>(ret_v))[0], ret_v); fflush(stdout);
-
-  my_fpga->free(ret_v);
   
-  return ret;
+  return *ret_v;
 }
-
-unsigned long int * FPGApercentage(void* base,
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void FPGApercentage(void* base,
                     void* pred,
                     void* dst,
                     unsigned int long count)
 {
   
   MSG("Processing on FPGA...");
-  printf("base: %p\n", base);
+  printf("base: %p, %p, %p\n", base, pred, dst);
   fflush(stdout);
-
-  int ret = 0;
 
   auto start_time = std::chrono::high_resolution_clock::now();
   
@@ -280,10 +279,13 @@ unsigned long int * FPGApercentage(void* base,
 
                                     
   MSG("FPGA thread created...");
-  void * ret_v = percentage.join();
- 
-  //MSG(" regex Done for thread");
+  percentage.join();
 
+  uint64_t sum  = reinterpret_cast<uint64_t*>(dst)[0];
+  uint64_t sumc = reinterpret_cast<uint64_t*>(dst)[1];
+
+  (reinterpret_cast<float*>(dst))[0] = float(sumc) / float(sum);
+  
   auto end_time = std::chrono::high_resolution_clock::now();
   double    execTime = (std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count())/1000.0;
 
@@ -298,19 +300,11 @@ unsigned long int * FPGApercentage(void* base,
         Throughput,
         opLocalTime);
   fflush(stdout);  
-  unsigned long int * res = new unsigned long int[3];
-  printf("copy result\n"); fflush(stdout);
-  memcpy(res, reinterpret_cast<unsigned long int*>(ret_v), 3*sizeof(unsigned long int));
-  printf("copy result succeeded\n"); fflush(stdout);
-
-  my_fpga->free(ret_v);
-  printf("copy result object freed\n"); fflush(stdout);
-
-  return res;
 }
-
-
-unsigned long int * FPGAmadperc(void* base,
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void FPGAmadperc(void* base,
                     void* pred,
                     void* dst,
                     unsigned int long count, int a, int b)
@@ -320,63 +314,37 @@ unsigned long int * FPGAmadperc(void* base,
   printf("base: %p\n", base);
   fflush(stdout);
 
-  int ret = 0;
-
   auto start_time = std::chrono::high_resolution_clock::now();
   
-//  printf(" Accessing FPGA object: %p\n", my_fpga); fflush(stdout);
+FPipe<int> * pipe_rsc = new FPipe<int>(my_fpga, MAC_OP, PERCENTAGE_OP );
 
-/*  Pipeline * pipe_rsc = my_fpga->get_pipeline_resource<int>(fthread_mac(), fthread_percentage() );
-
-  Fthread madperc( fthread_mac(my_fpga, reinterpret_cast<btVirtAddr>(base), reinterpret_cast<btVirtAddr>(pipe_rsc->ptr()), count, a, b),  
+  PipelineJob<int> madperc( fthread_mac(my_fpga, reinterpret_cast<unsigned char*>(base), reinterpret_cast<unsigned char*>(pipe_rsc->ptr()), count, a, b),  
                   pipe_rsc, 
                   fthread_percentage(my_fpga, reinterpret_cast<unsigned char*>(pipe_rsc->ptr()), reinterpret_cast<unsigned char*>(pred), 0, count)
                   );
   MSG("FPGA thread created...");
-  void * ret_v = madperc.join();
- */
+  madperc.join();
+ 
   //MSG(" regex Done for thread");
-  unsigned int long sum = 0, sumc = 0;
-  unsigned int mul1, mul2, mul3, mul4, mul5, mul6, mul7, mul8;
-  unsigned int* basei   = reinterpret_cast<unsigned int*>(base);
-  unsigned short* preds = reinterpret_cast<unsigned short*>(pred);
-  unsigned int long* dsti = reinterpret_cast<unsigned int long*>(dst);
-  for(unsigned int long i = 0; i < count; i+=2)
-  {
-     mul1 = basei[i+0]*a + b;
-     mul2 = basei[i+1]*a + b;
 
-     if(preds[i+0] != 0)  sumc += mul1;
-     if(preds[i+1] != 0)  sumc += mul1;
-
-     sum += mul1 + mul2;
-  }
-  //dsti[0] = sumc;
-  //dsti[1] = sum;
   auto end_time = std::chrono::high_resolution_clock::now();
   double    execTime = (std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count())/1000.0;
 
-  //madperc.printStatusLine();
+  madperc.printStatusLine();
   
   double Throughput  = 1000.0 * (double(count*4) / double(MB(1024))) / execTime; 
-  double opLocalTime = execTime; //madperc.timing();
+  double opLocalTime = madperc.timing();
   
   printf("%d,  %.10f, %.5f, %.10f\n", 
         count, 
         execTime,
         Throughput,
         opLocalTime);
-  
-  unsigned long int * res = new unsigned long int[3];
-  res[0] = sumc;                                                                                             
-  res[1] = sum;
- // memcpy(res, reinterpret_cast<unsigned long int*>(ret_v), 3*sizeof(unsigned long int));
-  
- // my_fpga->free(ret_v);
 
-  return res;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //MAYBE add GDK_VAROFFSET
 int FPGAregexcount(void* base,
                void* vbase,
@@ -392,18 +360,20 @@ int FPGAregexcount(void* base,
   fflush(stdout);
 
 
+  int* ret_v = reinterpret_cast<int*>(my_fpga->malloc(sizeof(int)));
+
   auto start_time = std::chrono::high_resolution_clock::now();
   
   printf(" Accessing FPGA object: %p\n", my_fpga); fflush(stdout);
 
-  Pipeline * pipe_rsc = my_fpga->get_pipeline_resource<short int>(fthread_regex(), fthread_testCount() );
+  FPipe<short int> * pipe_rsc = new FPipe<short int>(my_fpga, REGEX_OP, TEST_AND_COUNT_OP);
 
-  Fthread regexcountOp( fthread_regex(my_fpga, reinterpret_cast<btVirtAddr>(base), reinterpret_cast<btVirtAddr>(vbase), pipe_rsc->ptr(), count, width, regex),  
-                        pipe_rsc, fthread_testCount(my_fpga, reinterpret_cast<short int*>(pipe_rsc->ptr()), count, ">", 0)
+  PipelineJob<short int> regexcountOp( fthread_regex(my_fpga, reinterpret_cast<unsigned char*>(base), reinterpret_cast<unsigned char*>(vbase), pipe_rsc->ptr(), count, width, regex),  
+                        pipe_rsc, fthread_testCount(my_fpga, reinterpret_cast<short int*>(pipe_rsc->ptr()), count, ">", 0, ret_v )
                       );
 
   MSG("FPGA thread created...");
-  void * ret_v = regexcountOp.join();
+  regexcountOp.join();
 
   regexcountOp.printStatusLine();
  
@@ -421,56 +391,43 @@ int FPGAregexcount(void* base,
         Throughput,
         opLocalTime);
 
-
-  int ret = 0;
-  ret = *(reinterpret_cast<int*>(ret_v));
-
- printf("testcount return value = %d, %d, at: %p\n", ret, (reinterpret_cast<int*>(ret_v))[0], ret_v); fflush(stdout);
-
- my_fpga->free(ret_v);
-
-  return ret;
+  return *ret_v;
 }
-
-unsigned long int * FPGAregexperc(void* base, void* vbase, unsigned int count, unsigned int width, void* data, const char * regex)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void FPGAregexperc(void* base, void* vbase, unsigned int count, unsigned int width, void* data, void* dst, const char * regex)
 {
   MSG("Processing on FPGA...");
   printf("base: %p\n", base);
-  printf("base: %p\n", vbase);
+  printf("vbase: %p\n", vbase);
+  printf("data: %p\n", data);
+  printf("dst: %p\n", dst);
   fflush(stdout);
 
 
   auto start_time = std::chrono::high_resolution_clock::now();
+
+  FPipe<short> * pipe_rsc = new FPipe<short>(my_fpga, REGEX_OP, PERCENTAGE_OP);
+
+  printf("allocated pipe pointer: %p, %p, %i, %p\n", pipe_rsc, pipe_rsc->ptr(), pipe_rsc->isMemPipe(), pipe_rsc->getFIFOPtr()); fflush(stdout);
   
-  //printf(" Accessing FPGA object: %p\n", my_fpga); fflush(stdout);
-
-  //Pipeline * pipe_rsc = my_fpga->get_pipeline_resource<short int>(fthread_regex(), fthread_percentage() );
-
-  Pipeline * pipe_rsc = my_fpga->get_pipeline_resource<short int>(fthread_regex(), 0 );
-
-  Fthread regexpercOp( fthread_regex(my_fpga, reinterpret_cast<btVirtAddr>(base), reinterpret_cast<btVirtAddr>(vbase), pipe_rsc->ptr(), count, width, regex),  
-                        pipe_rsc//, 
-                        //fthread_percentage(my_fpga, reinterpret_cast<unsigned char*>(data), 
-                                                //     reinterpret_cast<unsigned char*>(pipe_rsc->ptr()), 0, count)
+if( pipe_rsc->isMemPipe() ) printf("fpipe is fqueue\n"); fflush(stdout);
+  PipelineJob<short> regexpercOp(  
+                        fthread_regex(my_fpga, reinterpret_cast<unsigned char*>(base), reinterpret_cast<unsigned char*>(vbase), pipe_rsc->ptr(), count, width, regex),  
+                        pipe_rsc, 
+                        fthread_percentage(my_fpga, reinterpret_cast<unsigned char*>(data), reinterpret_cast<unsigned char*>(pipe_rsc->ptr()), reinterpret_cast<unsigned char*>(dst), count)
                       );
 
   MSG("FPGA thread created...");
-
-  // start percentage
-  short int        entry;
-  unsigned int* datai   = reinterpret_cast<unsigned int*>(data);
-  unsigned int long sum = 0, sumc = 0;
-
-  for(unsigned int i = 0; i < count; i++)
-  {
-//    sum += datai[i];
-    pipe_rsc->pop(entry);
-
-    if(entry != 0)  sumc += datai[i];
-  }
-  void * ret_v = regexpercOp.join();
+  regexpercOp.join();
  
   //MSG(" regex Done for thread");
+
+  uint64_t sum  = reinterpret_cast<uint64_t*>(dst)[0];
+  uint64_t sumc = reinterpret_cast<uint64_t*>(dst)[1];
+
+  float perc = float(sumc) / float(sum);
 
   auto end_time = std::chrono::high_resolution_clock::now();
   double    execTime = (std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count())/1000.0;
@@ -486,17 +443,82 @@ unsigned long int * FPGAregexperc(void* base, void* vbase, unsigned int count, u
         Throughput,
         opLocalTime);
 
-
-  unsigned long int * res = new unsigned long int[3];
-  res[0] = sumc;
-  res[1] = sum;
-  //memcpy(res, reinterpret_cast<unsigned long int*>(ret_v), 3*sizeof(unsigned long int));
   
-  //my_fpga->free(ret_v);
 
-  return res;
+  printf("sum = %d, sumc = %d, perc = %.10f\n", sum, sumc, perc); fflush(stdout);
+
+  (reinterpret_cast<float*>(dst))[0] = perc;
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void FPGAregexperc_sw(void* base, void* vbase, unsigned int count, unsigned int width, void* data, void* dst, const char * regex)
+{
+  MSG("Processing on FPGA...");
+  printf("base: %p\n", base);
+  printf("base: %p\n", vbase);
+  fflush(stdout);
 
+
+  auto start_time = std::chrono::high_resolution_clock::now();
+  uint16_t psize = 1024;
+
+  FPipe<struct page1kB> * pipe_rsc = new FPipe<struct page1kB>(my_fpga, REGEX_OP, 0, psize);
+
+  PipelineJob<struct page1kB> regexpercOp(  
+                        fthread_regex(my_fpga, reinterpret_cast<unsigned char*>(base), reinterpret_cast<unsigned char*>(vbase), pipe_rsc->ptr(), count, width, regex),  
+                        pipe_rsc
+                        );
+
+  MSG("FPGA thread created...");
+
+  // start percentage
+  page1kB          qpage;
+  short int*       dpage = reinterpret_cast<short int*>(&qpage);
+  unsigned int*    datai = reinterpret_cast<unsigned int*>(data);
+  uint64_t         sumc = 0, sum = 0;
+  uint32_t         totalBytes = count*sizeof(short int);
+  uint32_t         numPages   = (totalBytes + 1023)/(1024);
+  uint32_t         numPageEls = 512;
+
+  int              remEles = count;
+
+  for (int p = 0; p < numPages; p++)
+  {
+    pipe_rsc->pop(qpage);
+    
+    printf("page %d poped\n", p); fflush(stdout);
+    numPageEls = (remEles > 512)? 512 : remEles;
+    for(unsigned int i = 0; i < numPageEls; i++)
+    {
+      sum += datai[p*512 + i];
+
+      if(dpage[i] != 0)  sumc += datai[i];
+    }
+    remEles -=  512;
+  }
+  
+  regexpercOp.join();
+ 
+  auto end_time = std::chrono::high_resolution_clock::now();
+  double    execTime = (std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count())/1000.0;
+  
+  regexpercOp.printStatusLine();
+
+  double Throughput  = 1000.0 * (double(count*64) / double(MB(1024))) / execTime; 
+  double opLocalTime = regexpercOp.timing();
+  
+  printf("regexpercOp Titming: %d,  %.10f, %.5f, %.10f\n", 
+        count, 
+        execTime,
+        Throughput,
+        opLocalTime);
+
+  (reinterpret_cast<float*>(dst))[0] = float(sumc) / float(sum);
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int FPGAregexcount_sw(void* base,
                void* vbase,
                unsigned int count,
@@ -513,11 +535,10 @@ int FPGAregexcount_sw(void* base,
 
   auto start_time = std::chrono::high_resolution_clock::now();
   
-  printf(" Accessing FPGA object: %p\n", my_fpga); fflush(stdout);
+  FPipe<short int> * pipe_rsc = new FPipe<short int>(my_fpga, REGEX_OP, 0 );
 
-  Pipeline * pipe_rsc = my_fpga->get_pipeline_resource<short int>(fthread_regex(), 0 );
-
-  Fthread regexcountOp( fthread_regex(my_fpga, reinterpret_cast<btVirtAddr>(base), reinterpret_cast<btVirtAddr>(vbase), pipe_rsc->ptr(), count, width, regex),  
+  PipelineJob<short int> regexcountOp( 
+                        fthread_regex(my_fpga, reinterpret_cast<unsigned char*>(base), reinterpret_cast<unsigned char*>(vbase), pipe_rsc->ptr(), count, width, regex),  
                         pipe_rsc
                       );
   
@@ -538,8 +559,6 @@ int FPGAregexcount_sw(void* base,
   regexcountOp.join();
 
   regexcountOp.printStatusLine();
- 
-  //MSG(" regex Done for thread");
 
   auto end_time = std::chrono::high_resolution_clock::now();
   double    execTime = (std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count())/1000.0;
@@ -553,13 +572,11 @@ int FPGAregexcount_sw(void* base,
         Throughput,
         opLocalTime);
 
-
-  int ret = matches;
-
- printf("testcount return value = %d\n", ret); fflush(stdout);
-  return ret;
+  return matches;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FPGAcopy(void* base,
                unsigned int count,
                void* retBase)
@@ -594,7 +611,9 @@ void FPGAcopy(void* base,
 
    return;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FPGAmac(void* base,
                unsigned int count,
                void* retBase,
@@ -634,7 +653,9 @@ void FPGAmac(void* base,
 
    return;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int FPGAselection(int* base1, const char* selectionType1, int lowerThreshold1, int upperThreshold1,
                   int countTuples, int* destination)
 {
@@ -642,45 +663,51 @@ int FPGAselection(int* base1, const char* selectionType1, int lowerThreshold1, i
   Fthread selection (fthread_selection(my_fpga, (int*)0xFFFFFFFF, base1, destination, selectionType1, lowerThreshold1, upperThreshold1, countTuples));
 
   MSG("FPGA thread created...");
-  void* ret_v = selection.join();
+  selection.join();
 
   selection.printStatusLine();
 
   return 0;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int FPGAselection2( int* base1, const char* selectionType1, int lowerThreshold1, int upperThreshold1,
                     int* base2, const char* selectionType2, int lowerThreshold2, int upperThreshold2,
                     int countTuples, int* destination)
 {
 
-  //int* intermediateDestination = (int*)my_fpga->malloc(sizeof(int)*countTuples);
+  FPipe<int> * pipe_rsc = new FPipe<int>(my_fpga, SELECTION_OP, SELECTION_OP);
 
-  Pipeline * pipe_rsc = my_fpga->get_pipeline_resource<int>(fthread_selection(), fthread_selection());
-
-  Fthread selection2 (fthread_selection(my_fpga, (int*)0xFFFFFFFF, base1, (int*)pipe_rsc->ptr(), selectionType1, lowerThreshold1, upperThreshold1, countTuples), pipe_rsc,
+  PipelineJob<int> selection2(
+                      fthread_selection(my_fpga, (int*)0xFFFFFFFF, base1, (int*)pipe_rsc->ptr(), selectionType1, lowerThreshold1, upperThreshold1, countTuples), 
+                      pipe_rsc,
                       fthread_selection(my_fpga, (int*)pipe_rsc->ptr(), base2, destination, selectionType2, lowerThreshold2, upperThreshold2, countTuples));
 
   MSG("FPGA thread created...");
-  void* ret_v = selection2.join();
+  selection2.join();
 
   selection2.printStatusLine();
 
   return 0;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int FPGAminmaxsum(int* base, int countTuples, int* destination)
 {
   Fthread minmaxsum ( fthread_minmaxsum(my_fpga, base, destination, countTuples) );
 
   MSG("FPGA thread created...");
-  void* ret_v = minmaxsum.join();
+  minmaxsum.join();
 
   minmaxsum.printStatusLine();
 
   return 0;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //TODO why is this here??
 void SWskyline(void* dims[], uint32_t numDims, uint32_t numTuples, void* retBase)
 {
@@ -925,7 +952,9 @@ void SWskyline(void* dims[], uint32_t numDims, uint32_t numTuples, void* retBase
    int* stats       = reinterpret_cast<int*>(retBase);
    stats[0] = numskylinepts;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FPGAskyline(void* tupleDims[],
                  unsigned int numDims,
                  unsigned int numTuples,
@@ -991,7 +1020,9 @@ void FPGAskyline(void* tupleDims[],
                 status->afu_counters[6],
                 status->afu_counters[7]);*/
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FPGAsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter, unsigned int gatherDepth)
 {
   printf("Starting FPGAsgd_column\n");
@@ -1008,7 +1039,7 @@ void FPGAsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int
   Fthread sgd_column ( fthread_sgd(my_fpga, ab, 1, gatherDepth, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
 
   MSG("FPGA thread created...");
-  void* ret_v = sgd_column.join();
+  sgd_column.join();
 
   float x_history[(numIterations+1)][numFeatures];
   for (int j = 0; j < numFeatures; j++) {
@@ -1043,7 +1074,9 @@ void FPGAsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int
 
   printf("End of FPGAsgd_column\n");
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void SWsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter)
 {
   printf("Starting SWsgd_column\n");
@@ -1094,7 +1127,9 @@ void SWsgd_column(void* _a[], void* _b, unsigned int numFeatures, unsigned int n
 
   printf("End of SWsgd_column\n");
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FPGAsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter) 
 {
   printf("Starting FPGAsgd_row\n");
@@ -1108,7 +1143,7 @@ void FPGAsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, vo
   Fthread sgd_row ( fthread_sgd(my_fpga, ab, 0, 0, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
 
   MSG("FPGA thread created...");
-  void* ret_v = sgd_row.join();
+  sgd_row.join();
 
   float x_history[(numIterations+1)][numFeatures];
   for (int j = 0; j < numFeatures; j++) {
@@ -1144,7 +1179,9 @@ void FPGAsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, vo
 
   printf("End of FPGAsgd_row\n");
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void SWsgd_row(void* _ab, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter)
 {
   printf("Starting SWsgd_row\n");

@@ -22,14 +22,14 @@ struct TESTCOUNT_AFU_CONFIG {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //template <typename T>
 FthreadRec * fthread_testCount(FPGA * my_fpga, short int* src, unsigned int long count, 
-                              const char * test, short int threshold){
+                              const char * test, short int threshold, int* dst){
   
 
   //----------------------------- Operator specific configuration -------------------------------//
   TESTCOUNT_AFU_CONFIG * afu_cfg = (struct TESTCOUNT_AFU_CONFIG*)(my_fpga->malloc( sizeof(TESTCOUNT_AFU_CONFIG) ));
 
   afu_cfg->pSource      = reinterpret_cast<unsigned char*>(src);
-  afu_cfg->pDest        = my_fpga->malloc(sizeof(int));
+  afu_cfg->pDest        = dst;
   afu_cfg->num_cls      = ((count*sizeof(short int) + 63) / 64);
   afu_cfg->tuples_count = count;
 
