@@ -1120,13 +1120,13 @@ void sgd(void* _ab, void* _a[], void* _b, unsigned int numFeatures, unsigned int
     if (doGather == 1) {
       Fthread sgd_column ( fthread_sgd(my_fpga, ab, 1, gatherDepth, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
       MSG("FPGA thread created...");
-      void* ret_v = sgd_column.join();
+      sgd_column.join();
       sgd_column.printStatusLine();
     }
     else {
       Fthread sgd_row ( fthread_sgd(my_fpga, ab, 0, 0, numIterations, numFeatures, numTuples, (double)1.0/(1 << stepSizeShifter), x_historyi) );
       MSG("FPGA thread created...");
-      void* ret_v = sgd_row.join();
+      sgd_row.join();
       sgd_row.printStatusLine();
     }
     
