@@ -56,21 +56,27 @@ comment "FPGA MAC on a BAT of integers";
 
 # BAT MAL signatures
 module batudf;
-command percentagefpga(a:bat[:oid,:sht], b:bat[:oid,:int]):bat[:oid,:lng]
+command percentagefpga(a:bat[:oid,:sht], b:bat[:oid,:int]):bat[:oid,:flt]
 address UDFBATpercentagefpga
 comment "Compute percentage of values matching certain predicate";
 
 # BAT MAL signatures
 module batudf;
-command madpercfpga(alpha: int, beta: int, a:bat[:oid,:sht], b:bat[:oid,:int]):bat[:oid,:lng]
+command madpercfpga(alpha: int, beta: int, a:bat[:oid,:sht], b:bat[:oid,:int]):bat[:oid,:flt]
 address UDFBATmadpercfpga
 comment "Compute percentage of values matching certain predicate after applying a mul-add operation";
 
 # BAT MAL signatures
 module batudf;
-command regexpercfpga(regex:str, b:bat[:oid,:str], c:bat[:oid,:int]):bat[:oid,:lng]
+command regexpercfpga(regex:str, b:bat[:oid,:str], c:bat[:oid,:int]):bat[:oid,:flt]
 address UDFBATregexpercfpga
-comment "FPGA regex on a BAT of strings returns percentage";
+comment "FPGA regex on a BAT of strings returns percentage using FPGA";
+
+# BAT MAL signatures
+module batudf;
+command regexpercfpga_cpu(regex:str, b:bat[:oid,:str], c:bat[:oid,:int]):bat[:oid,:flt]
+address UDFBATregexpercfpga_cpu
+comment "FPGA regex on a BAT of strings returns percentage using CPU";
 
 # BAT MAL signatures
 module batudf;

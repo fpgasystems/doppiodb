@@ -8,7 +8,7 @@ COR_SRC_DIR = $(CT_DIR)/core
 OPR_SRC_DIR = $(SRC_DIR)/operators
 PLT_SRC_DIR = $(CT_DIR)/platform
 
-INC_DIR     = $(COR_SRC_DIR) $(OPR_SRC_DIR) $(PLT_SRC_DIR) $(MON_SRC_DIR)
+INC_DIR     = $(COR_SRC_DIR) $(OPR_SRC_DIR) $(PLT_SRC_DIR) $(MON_SRC_DIR) $(CT_DIR)
 
 OBJ_DIR = 
 

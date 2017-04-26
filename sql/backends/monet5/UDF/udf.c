@@ -1726,7 +1726,7 @@ UDFBATpercentagefpga_(BAT **ret, BAT *p_src, BAT *d_src)
 		throw(MAL, "batudf.percentagefpga", RUNTIME_OBJECT_MISSING);
     
     // allocate result BAT 
-	bn = BATnew(d_src->htype, TYPE_lng, 3, TRANSIENT);
+	bn = BATnew(d_src->htype, TYPE_flt, d_src->batCount, TRANSIENT);
 	if (bn == NULL) {
 		throw(MAL, "batudf.percentagefpga", MAL_MALLOC_FAIL);
 	}
@@ -1737,24 +1737,22 @@ UDFBATpercentagefpga_(BAT **ret, BAT *p_src, BAT *d_src)
    //unsigned short* res;
 
    // copy OIDS
-   memcpy(bn->H->heap.base, d_src->H->heap.base, (d_src->H->width * 3));
+   memcpy(bn->H->heap.base, d_src->H->heap.base, (d_src->H->width * d_src->batCount));
    //update free pointer
-   bn->H->heap.free += (bn->H->width * 3);
-   bn->T->heap.free += (bn->T->width * 3);
+   bn->H->heap.free += (bn->H->width * d_src->batCount);
+   bn->T->heap.free += (bn->T->width * d_src->batCount);
    //set dirty bit, not sure if necessary
    bn->H->heap.dirty = 1;
    bn->T->heap.dirty = 1;
    //set count
-   BATsetcount(bn, 3);
+   BATsetcount(bn, 1);
 
    //Call FPGA
-   unsigned long int * res = FPGApercentage(d_src->T->heap.base,
+   FPGApercentage(d_src->T->heap.base,
                             p_src->T->heap.base,
                             bn->T->heap.base,
                				d_src->batCount);
 
-
-    memcpy(bn->T->heap.base, res, 3*sizeof(unsigned long int));
     *ret = bn;
 }
 
@@ -1814,7 +1812,7 @@ UDFBATmadpercfpga_(BAT **ret, BAT *p_src, BAT *d_src, int a, int b)
 		throw(MAL, "batudf.madpercfpga", RUNTIME_OBJECT_MISSING);
     
     // allocate result BAT 
-	bn = BATnew(d_src->htype, TYPE_lng, 3, TRANSIENT);
+	bn = BATnew(d_src->htype, TYPE_flt, d_src->batCount, TRANSIENT);
 	if (bn == NULL) {
 		throw(MAL, "batudf.madpercfpga", MAL_MALLOC_FAIL);
 	}
@@ -1825,24 +1823,23 @@ UDFBATmadpercfpga_(BAT **ret, BAT *p_src, BAT *d_src, int a, int b)
    //unsigned short* res;
 
    // copy OIDS
-   memcpy(bn->H->heap.base, d_src->H->heap.base, (d_src->H->width * 3));
+   memcpy(bn->H->heap.base, d_src->H->heap.base, (d_src->H->width * d_src->batCount));
    //update free pointer
-   bn->H->heap.free += (bn->H->width * 3);
-   bn->T->heap.free += (bn->T->width * 3);
+   bn->H->heap.free += (bn->H->width * d_src->batCount);
+   bn->T->heap.free += (bn->T->width * d_src->batCount);
    //set dirty bit, not sure if necessary
    bn->H->heap.dirty = 1;
    bn->T->heap.dirty = 1;
    //set count
-   BATsetcount(bn, 3);
+   BATsetcount(bn, 1);
 
    //Call FPGA
-   unsigned long int * res = FPGAmadperc(d_src->T->heap.base,
+   FPGAmadperc(d_src->T->heap.base,
                             p_src->T->heap.base,
                             bn->T->heap.base,
                				d_src->batCount, a, b);
 
 
-    memcpy(bn->T->heap.base, res, 3*sizeof(unsigned long int));
     *ret = bn;
 
 	return MAL_SUCCEED;
@@ -1905,7 +1902,7 @@ UDFBATregexpercfpga_(BAT **ret, BAT *src_int, BAT *src_str, const char *regex)
 		throw(MAL, "batudf.regexpercfpga", RUNTIME_OBJECT_MISSING);
     
     // allocate result BAT 
-	bn = BATnew(src_int->htype, TYPE_lng, 3, TRANSIENT);
+	bn = BATnew(src_int->htype, TYPE_flt, src_int->batCount, TRANSIENT);
 	if (bn == NULL) {
 		throw(MAL, "batudf.regexpercfpga", MAL_MALLOC_FAIL);
 	}
@@ -1916,26 +1913,26 @@ UDFBATregexpercfpga_(BAT **ret, BAT *src_int, BAT *src_str, const char *regex)
    //unsigned short* res;
 
    // copy OIDS
-   memcpy(bn->H->heap.base, src_int->H->heap.base, (src_int->H->width * 3));
+   memcpy(bn->H->heap.base, src_int->H->heap.base, (src_int->H->width * src_int->batCount));
    //update free pointer
-   bn->H->heap.free += (bn->H->width * 3);
-   bn->T->heap.free += (bn->T->width * 3);
+   bn->H->heap.free += (bn->H->width * src_int->batCount);
+   bn->T->heap.free += (bn->T->width * src_int->batCount);
    //set dirty bit, not sure if necessary
    bn->H->heap.dirty = 1;
    bn->T->heap.dirty = 1;
    //set count
-   BATsetcount(bn, 3);
+   BATsetcount(bn, 1);
 
    //memset(bn->T->heap.base, 0, sizeof(int));
    //Call FPGA
-   unsigned long int * res = FPGAregexperc(src_str->T->heap.base,
-               src_str->T->vheap->base,
-               src_str->batCount,
-               src_str->T->width,
-               src_int->T->heap.base,
-               regex);
+   FPGAregexperc(src_str->T->heap.base,
+                       src_str->T->vheap->base,
+                       src_str->batCount,
+                       src_str->T->width,
+                       src_int->T->heap.base,
+                       bn->T->heap.base,
+                       regex);
 
-	memcpy(bn->T->heap.base, res, 3*sizeof(unsigned long int));
     *ret = bn;
 
 	return MAL_SUCCEED;
@@ -1962,6 +1959,95 @@ UDFBATregexpercfpga(bat *ret, const char **regex, const bat *arg1, const bat *ar
 
 	// do the work
 	msg = UDFBATregexpercfpga_ ( &res, src_int, src_str, *regex );
+
+	// release input BAT-descriptor
+	BBPunfix(src_int->batCacheid);
+	BBPunfix(src_str->batCacheid);
+
+	if (msg == MAL_SUCCEED) {
+		// register result BAT in buffer pool
+		BBPkeepref((*ret = res->batCacheid));
+	}
+
+	return msg;
+}
+
+/* actual implementation */
+static char *
+UDFBATregexpercfpga_cpu_(BAT **ret, BAT *src_int, BAT *src_str, const char *regex)
+{
+    BATiter li;
+	BAT *bn = NULL;
+	BUN p = 0, q = 0;
+
+	assert(ret != NULL);
+
+
+	// handle NULL pointer
+	if (src_str == NULL)
+		throw(MAL, "batudf.regexpercfpga", RUNTIME_OBJECT_MISSING);
+
+	if (src_int == NULL)
+		throw(MAL, "batudf.regexpercfpga", RUNTIME_OBJECT_MISSING);
+    
+    // allocate result BAT 
+	bn = BATnew(src_int->htype, TYPE_flt, src_int->batCount, TRANSIENT);
+	if (bn == NULL) {
+		throw(MAL, "batudf.regexpercfpga", MAL_MALLOC_FAIL);
+	}
+   // Set seq/key base for new BAT, TODO adapt keyness???
+	BATseqbase(bn, src_int->hseqbase);
+
+   int i = 0;
+   //unsigned short* res;
+
+   // copy OIDS
+   memcpy(bn->H->heap.base, src_int->H->heap.base, (src_int->H->width * src_int->batCount));
+   //update free pointer
+   bn->H->heap.free += (bn->H->width * src_int->batCount);
+   bn->T->heap.free += (bn->T->width * src_int->batCount);
+   //set dirty bit, not sure if necessary
+   bn->H->heap.dirty = 1;
+   bn->T->heap.dirty = 1;
+   //set count
+   BATsetcount(bn, 1);
+
+   //memset(bn->T->heap.base, 0, sizeof(int));
+   //Call FPGA
+   FPGAregexperc_sw(src_str->T->heap.base,
+                       src_str->T->vheap->base,
+                       src_str->batCount,
+                       src_str->T->width,
+                       src_int->T->heap.base,
+                       bn->T->heap.base,
+                       regex);
+
+    *ret = bn;
+
+	return MAL_SUCCEED;
+}
+
+/* MAL wrapper */
+char *
+UDFBATregexpercfpga_cpu(bat *ret, const char **regex, const bat *arg1, const bat *arg2)
+{
+	BAT *res = NULL, *src_str = NULL, *src_int = NULL;
+	char *msg = NULL;
+
+	// assert calling sanity
+	assert(ret != NULL && arg1 != NULL && arg2 != NULL);
+   printf("regex: %s\n", *regex); //TODO check for NULL
+
+
+	// bat-id -> BAT-descriptor
+	if ((src_str = BATdescriptor(*arg1)) == NULL)
+		throw(MAL, "batudf.regexpercfpga", RUNTIME_OBJECT_MISSING);
+
+	if ((src_int = BATdescriptor(*arg2)) == NULL)
+		throw(MAL, "batudf.regexpercfpga", RUNTIME_OBJECT_MISSING);
+
+	// do the work
+	msg = UDFBATregexpercfpga_cpu_ ( &res, src_int, src_str, *regex );
 
 	// release input BAT-descriptor
 	BBPunfix(src_int->batCacheid);

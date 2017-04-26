@@ -2,7 +2,7 @@
 #ifndef __HWOPERATORS_H__
 #define __HWOPERATORS_H__
 
-#include "fpgaapi.h" 
+#include "centaur.h" 
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////      OPERATORS OPCODES       //////////////////////////////
@@ -41,7 +41,7 @@ uint32_t fthread_regex();
 
 //template <typename T>
 FthreadRec* fthread_testCount(FPGA * my_fpga, short int* src, unsigned int long count, 
-                              const char * test, short int threshold);
+                              const char * test, short int threshold, int* dst);
 
 uint32_t fthread_testCount();
 
