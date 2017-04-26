@@ -428,7 +428,8 @@ if( pipe_rsc->isMemPipe() ) printf("fpipe is fqueue\n"); fflush(stdout);
   uint64_t sumc = reinterpret_cast<uint64_t*>(dst)[1];
 
   float perc = float(sumc) / float(sum);
-
+  
+  (reinterpret_cast<float*>(dst))[0] = perc;
   auto end_time = std::chrono::high_resolution_clock::now();
   double    execTime = (std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count())/1000.0;
   
@@ -447,7 +448,7 @@ if( pipe_rsc->isMemPipe() ) printf("fpipe is fqueue\n"); fflush(stdout);
 
   printf("sum = %d, sumc = %d, perc = %.10f\n", sum, sumc, perc); fflush(stdout);
 
-  (reinterpret_cast<float*>(dst))[0] = perc;
+  //(reinterpret_cast<float*>(dst))[0] = perc;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -462,8 +463,9 @@ void FPGAregexperc_sw(void* base, void* vbase, unsigned int count, unsigned int 
 
   auto start_time = std::chrono::high_resolution_clock::now();
   uint16_t psize = 1024;
+  uint32_t qsize = count*2;
 
-  FPipe<struct page1kB> * pipe_rsc = new FPipe<struct page1kB>(my_fpga, REGEX_OP, 0, psize);
+  FPipe<struct page1kB> * pipe_rsc = new FPipe<struct page1kB>(my_fpga, REGEX_OP, 0, psize, qsize);
 
   PipelineJob<struct page1kB> regexpercOp(  
                         fthread_regex(my_fpga, reinterpret_cast<unsigned char*>(base), reinterpret_cast<unsigned char*>(vbase), pipe_rsc->ptr(), count, width, regex),  
@@ -487,16 +489,18 @@ void FPGAregexperc_sw(void* base, void* vbase, unsigned int count, unsigned int 
   {
     pipe_rsc->pop(qpage);
     
-    printf("page %d poped\n", p); fflush(stdout);
+   // printf("page %d poped\n", p); fflush(stdout);
     numPageEls = (remEles > 512)? 512 : remEles;
     for(unsigned int i = 0; i < numPageEls; i++)
     {
       sum += datai[p*512 + i];
 
-      if(dpage[i] != 0)  sumc += datai[i];
+      if(dpage[i] != 0)  sumc += datai[p*512+i];
     }
     remEles -=  512;
   }
+
+  (reinterpret_cast<float*>(dst))[0] = float(sumc) / float(sum);
   
   regexpercOp.join();
  
@@ -513,8 +517,8 @@ void FPGAregexperc_sw(void* base, void* vbase, unsigned int count, unsigned int 
         execTime,
         Throughput,
         opLocalTime);
-
-  (reinterpret_cast<float*>(dst))[0] = float(sumc) / float(sum);
+  printf("sum = %d, sumc = %d\n", sum, sumc); fflush(stdout); 
+  //(reinterpret_cast<float*>(dst))[0] = float(sumc) / float(sum);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1754,6 +1754,8 @@ UDFBATpercentagefpga_(BAT **ret, BAT *p_src, BAT *d_src)
                				d_src->batCount);
 
     *ret = bn;
+
+    return MAL_SUCCEED;
 }
 
 /* MAL wrapper */
