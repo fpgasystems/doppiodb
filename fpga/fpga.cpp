@@ -1158,12 +1158,12 @@ void sgd(void* _ab, void* _a[], void* _b, unsigned int numFeatures, unsigned int
 
 
   // Calculate Loss
-  //float* loss_history = reinterpret_cast<float*>(retBase);
-  //calculate_loss(loss_history, x_history, ab, numIterations+1, numFeatures, numTuples);
+  float* loss_history = reinterpret_cast<float*>(retBase);
+  calculate_loss(loss_history, x_history, ab, numIterations+1, numFeatures, numTuples);
   
   // Calculate accuracy
-  float* accuracy_history = reinterpret_cast<float*>(retBase);
-  calculate_accuracy(accuracy_history, x_history, ab, numIterations+1, numFeatures, numTuples);
+  //float* accuracy_history = reinterpret_cast<float*>(retBase);
+  //calculate_accuracy(accuracy_history, x_history, ab, numIterations+1, numFeatures, numTuples);
 
 
   //if (global_x != NULL)
@@ -1189,6 +1189,11 @@ void infer(void* _ar, void* _ac[], unsigned int numFeatures, unsigned int numTup
   if (global_x_dimension != numFeatures) {
     printf("global_x_dimension does NOT match numFeatures!!!\n");
     return;
+  }
+
+  printf("This is global_x with global_x_dimension: %d\n", global_x_dimension);
+  for(int j = 0; j < numFeatures; j++) {
+    printf("global_x[%d]: %.10f\n", j, global_x[j]);
   }
 
   if (_ar == NULL) {
@@ -1227,6 +1232,53 @@ void infer(void* _ar, void* _ac[], unsigned int numFeatures, unsigned int numTup
     }
 
     printf("labels[0] %d\n", labels[0]);
+  }
+}
+
+void predict(void* _ar, void* _ac[], unsigned int numFeatures, unsigned int numTuples, void* retBase)
+{
+  if (global_x == NULL) {
+    printf("global_x is NULL!!!\n");
+    return;
+  }
+  if (global_x_dimension != numFeatures) {
+    printf("global_x_dimension does NOT match numFeatures!!!\n");
+    return;
+  }
+
+  printf("This is global_x with global_x_dimension: %d\n", global_x_dimension);
+  for(int j = 0; j < numFeatures; j++) {
+    printf("global_x[%d]: %.10f\n", j, global_x[j]);
+  }
+
+  if (_ar == NULL) {
+    float* a[numFeatures];
+    for (int j = 0; j < numFeatures; j++) {
+      a[j] = reinterpret_cast<float*>(_ac[j]);
+    }
+    int* predictions = reinterpret_cast<int*>(retBase);
+
+    for (int i = 0; i < numTuples; i++) {
+      float dot = 0.0;
+      for (int j = 0; j < numFeatures; j++) {
+        dot += global_x[j]*a[j][i];
+      }
+      predictions[i] = (int)dot;
+    }
+  }
+  else {
+    float* a;
+    a = reinterpret_cast<float*>(_ar);
+    int* predictions = reinterpret_cast<int*>(retBase);
+
+    for (int i = 0; i < numTuples; i++) {
+      float dot = 0;
+      int offset = i*(numFeatures);
+      for (int j = 0; j < numFeatures; j++) {
+        dot += global_x[j]*a[offset + j];
+      }
+      predictions[i] = (int)dot;
+    }
   }
 }
 

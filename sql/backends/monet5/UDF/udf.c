@@ -1473,7 +1473,7 @@ UDFBATsgdsw_row(bat *ret, const int* numFeatures, const int* numIterations, cons
 
 //Inference
 char *
-UDFBATinfersw_column(bat *ret, const int* numFeatures, const bat *a1, const bat *a2, const bat *a3, const bat *a4, const bat *a5, const bat *a6, const bat *a7, const bat *a8, const bat *a9, const bat *a10, const bat *a11, const bat *a12, const bat *a13, const bat *a14, const bat *a15)
+UDFBATinfersw_column(bat *ret, const int* type, const int* numFeatures, const bat *a1, const bat *a2, const bat *a3, const bat *a4, const bat *a5, const bat *a6, const bat *a7, const bat *a8, const bat *a9, const bat *a10, const bat *a11, const bat *a12, const bat *a13, const bat *a14, const bat *a15)
 {
 	printf("Starting UDFBATinfersw_column\n");
 
@@ -1511,8 +1511,16 @@ UDFBATinfersw_column(bat *ret, const int* numFeatures, const bat *a1, const bat 
 			throw(MAL, "batudf.sgd", RUNTIME_OBJECT_MISSING);
 	}
 
+	int numReturnTuples;
+	if (*type == 1) { // Classification positive count
+		numReturnTuples = 1;
+	}
+	else if (*type == 2) { // Regression predict values
+		numReturnTuples = _a[0]->batCount;
+	}
+
 	// allocate result BAT 
-	bn = BATnew(TYPE_void, TYPE_int, 1, TRANSIENT);
+	bn = BATnew(TYPE_void, TYPE_int, numReturnTuples, TRANSIENT);
 	if (bn == NULL) {
 		throw(MAL, "batudf.sgd", MAL_MALLOC_FAIL);
 	}
@@ -1520,13 +1528,13 @@ UDFBATinfersw_column(bat *ret, const int* numFeatures, const bat *a1, const bat 
 	BATseqbase(bn, _a[0]->hseqbase);
 
 	//update free pointer
-	bn->H->heap.free += (bn->H->width * 1 );
-	bn->T->heap.free += (bn->T->width * 1 );
+	bn->H->heap.free += (bn->H->width * numReturnTuples );
+	bn->T->heap.free += (bn->T->width * numReturnTuples );
 	//set dirty bit, not sure if necessary
 	bn->H->heap.dirty = 1;
 	bn->T->heap.dirty = 1;
 	//set count
-	BATsetcount(bn, 1);
+	BATsetcount(bn, numReturnTuples);
 
 	void* _aBase[*numFeatures];
 	for(i = 0; i < *numFeatures; i++)
@@ -1534,7 +1542,11 @@ UDFBATinfersw_column(bat *ret, const int* numFeatures, const bat *a1, const bat 
 		_aBase[i] = _a[i]->T->heap.base;
 	}
 
-	infer(NULL, _aBase, *numFeatures, _a[0]->batCount, bn->T->heap.base);
+	if (*type == 1)
+		infer(NULL, _aBase, *numFeatures, _a[0]->batCount, bn->T->heap.base);
+	else if (*type == 2)
+		predict(NULL, _aBase, *numFeatures, _a[0]->batCount, bn->T->heap.base);
+
 	res = bn;
 
 	// release input BAT-descriptor
@@ -1553,7 +1565,7 @@ UDFBATinfersw_column(bat *ret, const int* numFeatures, const bat *a1, const bat 
 
 //Inference
 char *
-UDFBATinfersw_row(bat *ret, const int* numFeatures, const bat *a)
+UDFBATinfersw_row(bat *ret, const int* type, const int* numFeatures, const bat *a)
 {
 	printf("Starting UDFBATinfersw_row\n");
 
@@ -1571,8 +1583,16 @@ UDFBATinfersw_row(bat *ret, const int* numFeatures, const bat *a)
 	if (_a == NULL)
 		throw(MAL, "batudf.sgd", RUNTIME_OBJECT_MISSING);
 	
+	int numReturnTuples;
+	if (*type == 1) { // Classification positive count
+		numReturnTuples = 1;
+	}
+	else if (*type == 2) { // Regression predict values
+		numReturnTuples = _a->batCount;
+	}
+
 	// allocate result BAT 
-	bn = BATnew(TYPE_void, TYPE_int, 1, TRANSIENT);
+	bn = BATnew(TYPE_void, TYPE_int, numReturnTuples, TRANSIENT);
 	if (bn == NULL) {
 		throw(MAL, "batudf.sgd", MAL_MALLOC_FAIL);
 	}
@@ -1580,17 +1600,21 @@ UDFBATinfersw_row(bat *ret, const int* numFeatures, const bat *a)
 	BATseqbase(bn, _a->hseqbase);
 
 	//update free pointer
-	bn->H->heap.free += (bn->H->width * 1 );
-	bn->T->heap.free += (bn->T->width * 1 );
+	bn->H->heap.free += (bn->H->width * numReturnTuples );
+	bn->T->heap.free += (bn->T->width * numReturnTuples );
 	//set dirty bit, not sure if necessary
 	bn->H->heap.dirty = 1;
 	bn->T->heap.dirty = 1;
 	//set count
-	BATsetcount(bn, 1);
+	BATsetcount(bn, numReturnTuples);
 
 	void* _aBase = _a->T->heap.base;
 
-	infer(_aBase, NULL, (*numFeatures), _a->batCount/(*numFeatures + 1), bn->T->heap.base);
+	if (*type == 1)
+		infer(_aBase, NULL, (*numFeatures), _a->batCount/(*numFeatures + 1), bn->T->heap.base);
+	else if (*type == 2)
+		predict(_aBase, NULL, (*numFeatures), _a->batCount/(*numFeatures + 1), bn->T->heap.base);
+
 	res = bn;
 
 	// release input BAT-descriptor

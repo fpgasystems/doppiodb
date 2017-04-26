@@ -29,6 +29,7 @@ extern "C" {
 //SGD
   extern void sgd(void* _ab, void* _a[], void* _b, unsigned int numFeatures, unsigned int numTuples, void* retBase, unsigned int numIterations, unsigned int stepSizeShifter, unsigned int gatherDepth);
   extern void infer(void* _ar, void* _ac[], unsigned int numFeatures, unsigned int numTuples, void* retBase);
+  extern void predict(void* _ar, void* _ac[], unsigned int numFeatures, unsigned int numTuples, void* retBase);
 
 #ifdef __cplusplus
 }

@@ -43,8 +43,8 @@ udf_export char * UDFBATsgdsw_column(bat *ret, const int* numFeatures, const int
 udf_export char * UDFBATsgdfpga_row(bat *ret, const int* numFeatures, const int* numIterations, const int* stepSizeShifter, const bat *ab);
 udf_export char * UDFBATsgdsw_row(bat *ret, const int* numFeatures, const int* numIterations, const int* stepSizeShifter, const bat *ab);
 
-udf_export char * UDFBATinfersw_column(bat *ret, const int* numFeatures, const bat *a1, const bat *a2, const bat *a3, const bat *a4, const bat *a5, const bat *a6, const bat *a7, const bat *a8, const bat *a9, const bat *a10, const bat *a11, const bat *a12, const bat *a13, const bat *a14, const bat *a15);
-udf_export char * UDFBATinfersw_row(bat *ret, const int* numFeatures, const bat *a);
+udf_export char * UDFBATinfersw_column(bat *ret, const int* type, const int* numFeatures, const bat *a1, const bat *a2, const bat *a3, const bat *a4, const bat *a5, const bat *a6, const bat *a7, const bat *a8, const bat *a9, const bat *a10, const bat *a11, const bat *a12, const bat *a13, const bat *a14, const bat *a15);
+udf_export char * UDFBATinfersw_row(bat *ret, const int* type, const int* numFeatures, const bat *a);
 
 //Regex
 udf_export char * UDFparregexfpga(sht *ret, const char **regex, const char **arg);

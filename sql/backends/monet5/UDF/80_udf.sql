@@ -88,10 +88,10 @@ create function sgdsw_row(numFeatures integer, numIterations integer, stepSizeSh
 returns real external name udf.sgdsw_row;
 
 --Inference using sw
-create function infersw_column(numFeatures integer, a1 real, a2 real, a3 real, a4 real, a5 real, a6 real, a7 real, a8 real, a9 real, a10 real, a11 real, a12 real, a13 real, a14 real, a15 real)
+create function infersw_column(type integer, numFeatures integer, a1 real, a2 real, a3 real, a4 real, a5 real, a6 real, a7 real, a8 real, a9 real, a10 real, a11 real, a12 real, a13 real, a14 real, a15 real)
 returns integer external name udf.infersw_column;
 
-create function infersw_row(numFeatures integer, a real)
+create function infersw_row(type integer, numFeatures integer, a real)
 returns integer external name udf.infersw_row;
 
 --create function calc_test(one double, two double)
