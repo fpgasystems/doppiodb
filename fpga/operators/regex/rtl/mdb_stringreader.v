@@ -412,7 +412,7 @@ module mdb_stringreader
 								end
 								
 								// Check if remainingWords, TODO what about last one??
-								if (((curStrOffset[63:38] != curStrOffset[31:6]) && offset_jdx != 31) || (offset_jdx == 15 && (nextStrOffset[31:6] != curStrOffset[31:6]))) begin
+								if (((curStrOffset[63:38] != curStrOffset[31:6]) && offset_jdx != 15) || (offset_jdx == 15 && (nextStrOffset[31:6] != curStrOffset[31:6]))) begin
 									/*m_axis_read_req_valid <= 0; //TODO improve, req next cache line
 									if (~gfifo_outputPrep_i_almostfull && ~gfifo_string_metadata_almostfull) begin
 										m_axis_read_req_valid <= 1;
