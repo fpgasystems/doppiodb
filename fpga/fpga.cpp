@@ -39,15 +39,6 @@ void* FPGAmalloc(size_t size)
   {
     fpga_init();
   }
- /* else if(use_sw != NULL)
-  {
-    printf("allocate %d Bytes\n", size); fflush(stdout);  
-    void *ptr =  malloc(size);
-
-    if(ptr == NULL) printf("allocation failed\n");
-    printf("allocated pointer: %p\n", ptr);
-    return ptr;
-  }*/
 
   return my_fpga->malloc(size);
 }
@@ -59,18 +50,7 @@ void* FPGAmallocmax(size_t size, size_t *maxsize, int emergency)
   {
     fpga_init();
   }
- /* else if(use_sw != NULL)
-  {
-   printf("allocate %d Bytes\n", size); fflush(stdout);
-    *maxsize = size;
-    void *ptr =  malloc(size);
-    if(ptr == NULL) printf("allocation failed\n"); 
-    printf("allocated pointer: %p\n", ptr);
-    return ptr;
-
-  }
-  */ 
-return my_fpga->malloc(size, maxsize);
+   return my_fpga->malloc(size, maxsize);
 }
 
 void* FPGAreallocmax(void* ptr, size_t size, size_t *psize, int emergency)
@@ -94,9 +74,7 @@ void FPGAfree(void *blk)
 
   my_fpga->free(blk);
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //MAYBE add GDK_VAROFFSET
 void FPGAregex(void* base,
                void* vbase,
@@ -141,9 +119,6 @@ void FPGAregex(void* base,
 
    return;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FPGAparallelRegex(void* base,
                void* vbase,
                unsigned int count,
@@ -153,9 +128,6 @@ void FPGAparallelRegex(void* base,
 {
   
    //MSG("Parallel Processing on FPGA..."<<pthread_self());
-  /*printf("base: %p\n", base);
-  printf("base: %p\n", vbase);
-  fflush(stdout);*/
 
 
    Fthread* ts[NUM_ENGINES];
@@ -190,6 +162,7 @@ void FPGAparallelRegex(void* base,
    for (int i = 0; i < NUM_ENGINES; i++)
    {
       ts[i]->join();
+      delete ts[i];
    }
 
  
@@ -207,12 +180,8 @@ void FPGAparallelRegex(void* base,
         Throughput,
         opLocalTime);*/
    //MSG("Processing on FPGA done."<<pthread_self());
-
-   return;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /// Test and Count
 int FPGAtestcount(void* base,
                unsigned int long count,
@@ -255,9 +224,7 @@ int FPGAtestcount(void* base,
   
   return *ret_v;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void FPGApercentage(void* base,
                     void* pred,
                     void* dst,
@@ -301,9 +268,7 @@ void FPGApercentage(void* base,
         opLocalTime);
   fflush(stdout);  
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void FPGAmadperc(void* base,
                     void* pred,
                     void* dst,
@@ -340,11 +305,10 @@ FPipe<int> * pipe_rsc = new FPipe<int>(my_fpga, MAC_OP, PERCENTAGE_OP );
         execTime,
         Throughput,
         opLocalTime);
+   delete pipe_rsc;
 
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //MAYBE add GDK_VAROFFSET
 int FPGAregexcount(void* base,
                void* vbase,
@@ -391,11 +355,10 @@ int FPGAregexcount(void* base,
         Throughput,
         opLocalTime);
 
+   delete pipe_rsc;
   return *ret_v;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void FPGAregexperc(void* base, void* vbase, unsigned int count, unsigned int width, void* data, void* dst, const char * regex)
 {
   MSG("Processing on FPGA...");
@@ -448,11 +411,9 @@ if( pipe_rsc->isMemPipe() ) printf("fpipe is fqueue\n"); fflush(stdout);
 
   printf("sum = %d, sumc = %d, perc = %.10f\n", sum, sumc, perc); fflush(stdout);
 
-  //(reinterpret_cast<float*>(dst))[0] = perc;
+   delete pipe_rsc;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void FPGAregexperc_sw(void* base, void* vbase, unsigned int count, unsigned int width, void* data, void* dst, const char * regex)
 {
   MSG("Processing on FPGA...");
@@ -465,7 +426,7 @@ void FPGAregexperc_sw(void* base, void* vbase, unsigned int count, unsigned int 
   uint16_t psize = 1024;
   uint32_t qsize = count*2;
 
-  FPipe<struct page1kB> * pipe_rsc = new FPipe<struct page1kB>(my_fpga, REGEX_OP, 0, psize, qsize);
+  FPipe<struct page1kB> * pipe_rsc = new FPipe<struct page1kB>(my_fpga, REGEX_OP, 0, qsize, psize);
 
   PipelineJob<struct page1kB> regexpercOp(  
                         fthread_regex(my_fpga, reinterpret_cast<unsigned char*>(base), reinterpret_cast<unsigned char*>(vbase), pipe_rsc->ptr(), count, width, regex),  
@@ -489,7 +450,7 @@ void FPGAregexperc_sw(void* base, void* vbase, unsigned int count, unsigned int 
   {
     pipe_rsc->pop(qpage);
     
-   // printf("page %d poped\n", p); fflush(stdout);
+    printf("page %d poped\n", p); fflush(stdout);
     numPageEls = (remEles > 512)? 512 : remEles;
     for(unsigned int i = 0; i < numPageEls; i++)
     {
@@ -518,11 +479,9 @@ void FPGAregexperc_sw(void* base, void* vbase, unsigned int count, unsigned int 
         Throughput,
         opLocalTime);
   printf("sum = %d, sumc = %d\n", sum, sumc); fflush(stdout); 
-  //(reinterpret_cast<float*>(dst))[0] = float(sumc) / float(sum);
+   delete pipe_rsc;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 int FPGAregexcount_sw(void* base,
                void* vbase,
                unsigned int count,
@@ -576,11 +535,10 @@ int FPGAregexcount_sw(void* base,
         Throughput,
         opLocalTime);
 
-  return matches;
+   delete pipe_rsc;
+   return matches;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void FPGAcopy(void* base,
                unsigned int count,
                void* retBase)
@@ -615,9 +573,7 @@ void FPGAcopy(void* base,
 
    return;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void FPGAmac(void* base,
                unsigned int count,
                void* retBase,
@@ -657,9 +613,7 @@ void FPGAmac(void* base,
 
    return;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 int FPGAselection(int* base1, const char* selectionType1, int lowerThreshold1, int upperThreshold1,
                   int countTuples, int* destination)
 {
@@ -673,9 +627,7 @@ int FPGAselection(int* base1, const char* selectionType1, int lowerThreshold1, i
 
   return 0;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 int FPGAselection2( int* base1, const char* selectionType1, int lowerThreshold1, int upperThreshold1,
                     int* base2, const char* selectionType2, int lowerThreshold2, int upperThreshold2,
                     int countTuples, int* destination)
@@ -693,11 +645,10 @@ int FPGAselection2( int* base1, const char* selectionType1, int lowerThreshold1,
 
   selection2.printStatusLine();
 
-  return 0;
+   delete pipe_rsc;
+   return 0;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 int FPGAminmaxsum(int* base, int countTuples, int* destination)
 {
   Fthread minmaxsum ( fthread_minmaxsum(my_fpga, base, destination, countTuples) );
@@ -709,10 +660,7 @@ int FPGAminmaxsum(int* base, int countTuples, int* destination)
 
   return 0;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//TODO why is this here??
+
 void SWskyline(void* dims[], uint32_t numDims, uint32_t numTuples, void* retBase)
 {
 
@@ -753,7 +701,7 @@ void SWskyline(void* dims[], uint32_t numDims, uint32_t numTuples, void* retBase
   wprevious = NULL;
   wcount = 0;
 
-   printf("Entering Skyline SW implementation\n");
+   //printf("Entering Skyline SW implementation\n");
   
   //
   pointcnt = 0;
@@ -955,10 +903,10 @@ void SWskyline(void* dims[], uint32_t numDims, uint32_t numTuples, void* retBase
 
    int* stats       = reinterpret_cast<int*>(retBase);
    stats[0] = numskylinepts;
+   free(dstart);
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 void FPGAskyline(void* tupleDims[],
                  unsigned int numDims,
                  unsigned int numTuples,
@@ -1097,7 +1045,7 @@ void sgd(void* _ab, void* _a[], void* _b, unsigned int numFeatures, unsigned int
   float* ab[numFeatures+1];
   if (_ab == NULL) {
     doGather = 1;
-    for (int i = 0; i < numFeatures; i++) {
+    for (unsigned int i = 0; i < numFeatures; i++) {
       ab[i] = reinterpret_cast<float*>(_a[i]);
     }
     ab[numFeatures] = reinterpret_cast<float*>(_b);
@@ -1111,10 +1059,10 @@ void sgd(void* _ab, void* _a[], void* _b, unsigned int numFeatures, unsigned int
   printf("doGather: %d and gatherDepth: %d\n", doGather, gatherDepth);
 
   float* x_history[(numIterations+1)];
-  for(int iteration = 0; iteration < numIterations+1; iteration++) {
+  for(unsigned int iteration = 0; iteration < numIterations+1; iteration++) {
     x_history[iteration] = (float*)malloc(numFeatures*sizeof(float));
   }
-  for (int j = 0; j < numFeatures; j++) {
+  for (unsigned int j = 0; j < numFeatures; j++) {
     x_history[0][j] = 0.0;
   }
 
@@ -1134,9 +1082,9 @@ void sgd(void* _ab, void* _a[], void* _b, unsigned int numFeatures, unsigned int
       sgd_row.printStatusLine();
     }
     
-    for (int iteration = 0; iteration < numIterations; iteration++) {
+    for (unsigned int iteration = 0; iteration < numIterations; iteration++) {
       uint32_t offset = iteration*numCLsForX*16;
-      for (int j = 0; j < numFeatures; j++) {
+      for (unsigned int j = 0; j < numFeatures; j++) {
         int32_t temp = x_historyi[offset + j];
         x_history[iteration+1][j] = (float)temp;
         x_history[iteration+1][j] /= (float)0x00800000;
@@ -1146,41 +1094,41 @@ void sgd(void* _ab, void* _a[], void* _b, unsigned int numFeatures, unsigned int
   else { // CPU
     float stepSize = 1.0/(float)(1 << stepSizeShifter);
     float x[numFeatures];
-    for (int j = 0; j < numFeatures; j++) {
+    for (unsigned int j = 0; j < numFeatures; j++) {
       x[j] = 0.0;
     }
     if (doGather == 1) {
-      for(int iteration = 0; iteration < numIterations; iteration++) {
+      for(unsigned int iteration = 0; iteration < numIterations; iteration++) {
         // Update x
-        for (int i = 0; i < numTuples; i++) {
+        for (unsigned int i = 0; i < numTuples; i++) {
           float dot = 0;
-          for (int j = 0; j < numFeatures; j++) {
+          for (unsigned int j = 0; j < numFeatures; j++) {
             dot += x[j]*ab[j][i];
           }
-          for (int j = 0; j < numFeatures; j++) {
+          for (unsigned int j = 0; j < numFeatures; j++) {
             x[j] -= stepSize*(dot - ab[numFeatures][i])*ab[j][i];
           }
         }
 
-        for (int j = 0; j < numFeatures; j++) {
+        for (unsigned int j = 0; j < numFeatures; j++) {
           x_history[iteration+1][j] = x[j];
         }
       }
     }
     else {
-      for(int iteration = 0; iteration < numIterations; iteration++) {
+      for(unsigned int iteration = 0; iteration < numIterations; iteration++) {
         // Update x
-        for (int i = 0; i < numTuples; i++) {
+        for (unsigned int i = 0; i < numTuples; i++) {
           float dot = 0;
           int offset = i*(numFeatures+1);
-          for (int j = 0; j < numFeatures; j++) {
+          for (unsigned int j = 0; j < numFeatures; j++) {
             dot += x[j]*ab[0][offset + j];
           }
-          for (int j = 0; j < numFeatures; j++) {
+          for (unsigned int j = 0; j < numFeatures; j++) {
             x[j] -= stepSize*(dot - ab[0][offset + numFeatures])*ab[0][offset + j];
           }
         }
-        for (int j = 0; j < numFeatures; j++) {
+        for (unsigned int j = 0; j < numFeatures; j++) {
           x_history[iteration+1][j] = x[j];
         }
       }
@@ -1201,14 +1149,12 @@ void sgd(void* _ab, void* _a[], void* _b, unsigned int numFeatures, unsigned int
   //  free(global_x);
   global_x_dimension = numFeatures;
   global_x = (float*)malloc(numFeatures*sizeof(float));
-  for (int j = 0; j < numFeatures; j++) {
+  for (unsigned int j = 0; j < numFeatures; j++) {
     global_x[j] = x_history[numIterations][j];
   }
-  /*
-  for(int iteration = 0; iteration < numIterations+1; iteration++) {
-    free(x_history);
+  for(unsigned int iteration = 0; iteration < numIterations+1; iteration++) {
+    free(x_history[iteration]);
   }
-  */
 }
 
 void infer(void* _ar, void* _ac[], unsigned int numFeatures, unsigned int numTuples, void* retBase)
@@ -1223,21 +1169,21 @@ void infer(void* _ar, void* _ac[], unsigned int numFeatures, unsigned int numTup
   }
 
   printf("This is global_x with global_x_dimension: %d\n", global_x_dimension);
-  for(int j = 0; j < numFeatures; j++) {
+  for(unsigned int j = 0; j < numFeatures; j++) {
     printf("global_x[%d]: %.10f\n", j, global_x[j]);
   }
 
   if (_ar == NULL) {
     float* a[numFeatures];
-    for (int j = 0; j < numFeatures; j++) {
+    for (unsigned int j = 0; j < numFeatures; j++) {
       a[j] = reinterpret_cast<float*>(_ac[j]);
     }
     int* labels = reinterpret_cast<int*>(retBase);
     labels[0] = 0;
 
-    for (int i = 0; i < numTuples; i++) {
+    for (unsigned int i = 0; i < numTuples; i++) {
       float dot = 0.0;
-      for (int j = 0; j < numFeatures; j++) {
+      for (unsigned int j = 0; j < numFeatures; j++) {
         dot += global_x[j]*a[j][i];
       }
       if (dot >= 0)
@@ -1252,10 +1198,10 @@ void infer(void* _ar, void* _ac[], unsigned int numFeatures, unsigned int numTup
     int* labels = reinterpret_cast<int*>(retBase);
     labels[0] = 0;
 
-    for (int i = 0; i < numTuples; i++) {
+    for (unsigned int i = 0; i < numTuples; i++) {
       float dot = 0;
       int offset = i*(numFeatures);
-      for (int j = 0; j < numFeatures; j++) {
+      for (unsigned int j = 0; j < numFeatures; j++) {
         dot += global_x[j]*a[offset + j];
       }
       if (dot >= 0)
@@ -1278,20 +1224,20 @@ void predict(void* _ar, void* _ac[], unsigned int numFeatures, unsigned int numT
   }
 
   printf("This is global_x with global_x_dimension: %d\n", global_x_dimension);
-  for(int j = 0; j < numFeatures; j++) {
+  for(unsigned int j = 0; j < numFeatures; j++) {
     printf("global_x[%d]: %.10f\n", j, global_x[j]);
   }
 
   if (_ar == NULL) {
     float* a[numFeatures];
-    for (int j = 0; j < numFeatures; j++) {
+    for (unsigned int j = 0; j < numFeatures; j++) {
       a[j] = reinterpret_cast<float*>(_ac[j]);
     }
     int* predictions = reinterpret_cast<int*>(retBase);
 
-    for (int i = 0; i < numTuples; i++) {
+    for (unsigned int i = 0; i < numTuples; i++) {
       float dot = 0.0;
-      for (int j = 0; j < numFeatures; j++) {
+      for (unsigned int j = 0; j < numFeatures; j++) {
         dot += global_x[j]*a[j][i];
       }
       predictions[i] = (int)dot;
@@ -1302,10 +1248,10 @@ void predict(void* _ar, void* _ac[], unsigned int numFeatures, unsigned int numT
     a = reinterpret_cast<float*>(_ar);
     int* predictions = reinterpret_cast<int*>(retBase);
 
-    for (int i = 0; i < numTuples; i++) {
+    for (unsigned int i = 0; i < numTuples; i++) {
       float dot = 0;
       int offset = i*(numFeatures);
-      for (int j = 0; j < numFeatures; j++) {
+      for (unsigned int j = 0; j < numFeatures; j++) {
         dot += global_x[j]*a[offset + j];
       }
       predictions[i] = (int)dot;

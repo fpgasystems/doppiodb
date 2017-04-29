@@ -1059,7 +1059,7 @@ UDFBATskylinefpga(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, c
    if (dim < 2)
       throw (MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
 
-   printf("-------------- DIMENSIONS: %i --------------\n", dim);
+   //printf("-------------- DIMENSIONS: %i --------------\n", dim);
 
 	msg = UDFBATskylineGen_( &res, srcs, dim, true);
 
@@ -1165,7 +1165,7 @@ UDFBATskylinesw(bat *ret, const bat *arg1, const bat *arg2, const bat *arg3, con
    if (dim < 2)
       throw (MAL, "batudf.skyline", RUNTIME_OBJECT_MISSING);
 
-   printf("-------------- DIMENSIONS: %i --------------\n", dim);
+   //printf("-------------- DIMENSIONS: %i --------------\n", dim);
 
 	msg = UDFBATskylineGen_( &res, srcs, dim, false);
 
