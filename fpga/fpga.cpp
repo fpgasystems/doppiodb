@@ -193,6 +193,7 @@ int FPGAtestcount(void* base,
   printf("base: %p\n", base);
   fflush(stdout);
 
+  //TODO this is not freed ever...
   int* ret_v = reinterpret_cast<int*>(my_fpga->malloc(sizeof(int)));
 
   auto start_time = std::chrono::high_resolution_clock::now();
@@ -1090,6 +1091,8 @@ void sgd(void* _ab, void* _a[], void* _b, unsigned int numFeatures, unsigned int
         x_history[iteration+1][j] /= (float)0x00800000;
       }
     }
+    //Free fpga memory
+    my_fpga->free(x_historyi);
   }
   else { // CPU
     float stepSize = 1.0/(float)(1 << stepSizeShifter);
