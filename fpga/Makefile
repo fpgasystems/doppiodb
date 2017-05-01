@@ -12,14 +12,14 @@ INC_DIR     = $(COR_SRC_DIR) $(OPR_SRC_DIR) $(PLT_SRC_DIR) $(MON_SRC_DIR) $(CT_D
 
 OBJ_DIR = 
 
-COR_SRCS = $(COR_SRC_DIR)/fpgaapi.cpp $(COR_SRC_DIR)/utils.cpp $(COR_SRC_DIR)/memory_manager.cpp $(COR_SRC_DIR)/workload_manager.cpp $(COR_SRC_DIR)/fthread.cpp
+COR_SRCS = $(COR_SRC_DIR)/fpgaapi.cpp $(COR_SRC_DIR)/utils.cpp $(COR_SRC_DIR)/memory_manager.cpp $(COR_SRC_DIR)/workload_manager.cpp $(COR_SRC_DIR)/fthread.cpp $(COR_SRC_DIR)/fthreadRec.cpp
 OPR_SRCS = $(OPR_SRC_DIR)/regex/sw/regex_operator.cpp $(OPR_SRC_DRIR)/regex/sw/regex-util/fregex.cpp $(OPR_SRC_DIR)/copy/sw/copy_operator.cpp $(OPR_SRC_DIR)/testcount/sw/testcount_operator.cpp $(OPR_SRC_DIR)/percentage/sw/percentage_operator.cpp $(OPR_SRC_DIR)/addmul/sw/addmul_operator.cpp $(OPR_SRC_DIR)/selection/sw/selection_operator.cpp $(OPR_SRC_DIR)/minmaxsum/sw/minmaxsum_operator.cpp $(OPR_SRC_DIR)/skyline/sw/skyline.cpp $(OPR_SRC_DIR)/sgd/sw/sgd_operator.cpp
 PLT_SRCS = $(PLT_SRC_DIR)/platform.cpp
 MON_SRCS = $(MON_SRC_DIR)/fpga.cpp 
 
 SRCS     =  $(MON_SRCS) $(COR_SRCS) $(OPR_SRCS) $(PLT_SRCS)
 
-COR_OBJS = $(COR_SRC_DIR)/fpgaapi.lo $(COR_SRC_DIR)/utils.lo $(COR_SRC_DIR)/memory_manager.lo $(COR_SRC_DIR)/workload_manager.lo $(COR_SRC_DIR)/fthread.lo
+COR_OBJS = $(COR_SRC_DIR)/fpgaapi.lo $(COR_SRC_DIR)/utils.lo $(COR_SRC_DIR)/memory_manager.lo $(COR_SRC_DIR)/workload_manager.lo $(COR_SRC_DIR)/fthread.lo $(COR_SRC_DIR)/fthreadRec.lo
 OPR_OBJS = $(OPR_SRC_DIR)/regex/sw/regex_operator.lo $(OPR_SRC_DIR)/regex/sw/regex-util/fregex.lo $(OPR_SRC_DIR)/copy/sw/copy_operator.lo $(OPR_SRC_DIR)/testcount/sw/testcount_operator.lo $(OPR_SRC_DIR)/percentage/sw/percentage_operator.lo $(OPR_SRC_DIR)/addmul/sw/addmul_operator.lo $(OPR_SRC_DIR)/selection/sw/selection_operator.lo $(OPR_SRC_DIR)/minmaxsum/sw/minmaxsum_operator.lo $(OPR_SRC_DIR)/skyline/sw/skyline.lo $(OPR_SRC_DIR)/sgd/sw/sgd_operator.lo
 PLT_OBJS = $(PLT_SRC_DIR)/platform.lo
 MON_OBJS = $(MON_SRC_DIR)/fpga.lo 
